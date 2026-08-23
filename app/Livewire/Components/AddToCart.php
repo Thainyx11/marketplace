@@ -2,8 +2,8 @@
 
 namespace App\Livewire\Components;
 
-use App\Models\Cart;
 use App\Models\Product;
+use App\Services\CartManager;
 use Livewire\Attributes\Locked;
 use Livewire\Component;
 
@@ -23,14 +23,8 @@ class AddToCart extends Component
 
     public function add(): void
     {
-        if (! auth()->check()) {
-            $this->redirect(route('login'), navigate: true);
-
-            return;
-        }
-
-        if (! auth()->user()->isAcheteur()) {
-            $this->status = __("Seuls les comptes acheteur peuvent ajouter des articles au panier.");
+        if (auth()->check() && ! auth()->user()->isAcheteur()) {
+            $this->status = __('Seuls les comptes acheteur peuvent ajouter des articles au panier.');
 
             return;
         }
@@ -43,11 +37,7 @@ class AddToCart extends Component
             return;
         }
 
-        $cart = Cart::firstOrCreate(['user_id' => auth()->id()]);
-
-        $item = $cart->items()->firstOrNew(['product_id' => $this->product->id]);
-        $item->quantity = min($this->product->stock, ($item->exists ? $item->quantity : 0) + $quantity);
-        $item->save();
+        (new CartManager(auth()->user()))->add($this->product, $quantity);
 
         $this->status = __('Article ajouté au panier.');
         $this->dispatch('cart-updated');

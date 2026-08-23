@@ -1,10 +1,25 @@
 <?php
 
 use App\Livewire\Actions\Logout;
+use App\Services\CartManager;
+use Livewire\Attributes\On;
 use Livewire\Volt\Component;
 
 new class extends Component
 {
+    public int $cartCount = 0;
+
+    public function mount(): void
+    {
+        $this->cartCount = (new CartManager(auth()->user()))->count();
+    }
+
+    #[On('cart-updated')]
+    public function refreshCartCount(): void
+    {
+        $this->cartCount = (new CartManager(auth()->user()))->count();
+    }
+
     /**
      * Log the current user out of the application.
      */
@@ -52,11 +67,9 @@ new class extends Component
             <!-- Settings Dropdown -->
             <div class="hidden sm:flex sm:items-center sm:ms-6">
                 @auth
-                    @if (Route::has('cart.show'))
-                        <a href="{{ route('cart.show') }}" wire:navigate class="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 me-4">
-                            {{ __('Panier') }}
-                        </a>
-                    @endif
+                    <a href="{{ route('cart.show') }}" wire:navigate class="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 me-4">
+                        {{ __('Panier') }}@if ($cartCount) <span class="ms-1 inline-flex items-center justify-center bg-indigo-600 text-white text-xs rounded-full w-5 h-5">{{ $cartCount }}</span>@endif
+                    </a>
 
                     <x-dropdown align="right" width="48">
                         <x-slot name="trigger">

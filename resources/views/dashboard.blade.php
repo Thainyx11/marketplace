@@ -30,6 +30,19 @@
                     </p>
                 </div>
             </div>
+
+            @if ($user->isAcheteur())
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <a href="{{ route('orders.index') }}" class="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-5 hover:shadow-md transition">
+                        <p class="font-medium text-gray-900 dark:text-gray-100">{{ __('Mes commandes') }}</p>
+                        <p class="text-sm text-gray-500 dark:text-gray-400">{{ __('Suivre mes achats et mes factures') }}</p>
+                    </a>
+                    <a href="{{ route('cart.show') }}" wire:navigate class="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-5 hover:shadow-md transition">
+                        <p class="font-medium text-gray-900 dark:text-gray-100">{{ __('Mon panier') }}</p>
+                        <p class="text-sm text-gray-500 dark:text-gray-400">{{ __('Finaliser mes achats en cours') }}</p>
+                    </a>
+                </div>
+            @endif
         </div>
     </div>
 </x-app-layout>

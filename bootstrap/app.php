@@ -16,6 +16,10 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'role' => \Spatie\Permission\Middleware\RoleMiddleware::class,
         ]);
+
+        // Stripe posts here without a Laravel session/CSRF token; the payload
+        // signature (services.stripe.webhook_secret) is verified instead.
+        $middleware->validateCsrfTokens(except: ['webhook/stripe']);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->shouldRenderJsonWhen(
