@@ -1,6 +1,9 @@
 <div class="mt-4">
     @if ($sent)
-        <p class="text-sm text-green-600 dark:text-green-400">{{ __('Message envoyé !') }}</p>
+        <p class="text-sm text-green-600 dark:text-green-400">
+            {{ __('Message envoyé !') }}
+            <a href="{{ route('messages.show', [$product, $product->seller]) }}" wire:navigate class="underline">{{ __('Voir la conversation') }}</a>
+        </p>
     @else
         <form wire:submit="send" class="space-y-2">
             <textarea wire:model="content" rows="3" placeholder="{{ __('Votre message au vendeur...') }}"

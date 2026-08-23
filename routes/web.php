@@ -27,8 +27,19 @@ Route::middleware(['auth'])->group(function () {
     Route::get('commandes/{order}', [OrderController::class, 'show'])->name('orders.show');
     Route::get('commandes/{order}/facture', [OrderController::class, 'invoice'])->name('orders.invoice');
 
+    Volt::route('messages', 'pages.messages.index')->name('messages.index');
+    Volt::route('messages/{product}/{user}', 'pages.messages.show')->name('messages.show');
+
     Route::view('dashboard', 'dashboard')->name('dashboard');
     Route::view('profile', 'profile')->name('profile');
+});
+
+Route::middleware(['auth', 'role:vendeur'])->prefix('vendeur')->name('vendor.')->group(function () {
+    Volt::route('/', 'pages.vendor.dashboard')->name('dashboard');
+    Volt::route('produits', 'pages.vendor.products.index')->name('products.index');
+    Volt::route('produits/creer', 'pages.vendor.products.form')->name('products.create');
+    Volt::route('produits/{product}/modifier', 'pages.vendor.products.form')->name('products.edit');
+    Volt::route('commandes', 'pages.vendor.orders')->name('orders');
 });
 
 require __DIR__.'/auth.php';

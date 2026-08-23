@@ -40,4 +40,12 @@ class Message extends Model
     {
         return $this->hasMany(MessageReport::class);
     }
+
+    public static function threadChannel(int $productId, int $userIdA, int $userIdB): string
+    {
+        $ids = [$userIdA, $userIdB];
+        sort($ids);
+
+        return "chat.{$productId}.{$ids[0]}.{$ids[1]}";
+    }
 }

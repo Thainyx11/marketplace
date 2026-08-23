@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Components;
 
+use App\Events\MessageSent;
 use App\Models\Message;
 use App\Models\Product;
 use Illuminate\Support\Facades\Gate;
@@ -28,12 +29,14 @@ class ContactSeller extends Component
 
         $this->validate(['content' => ['required', 'string', 'max:2000']]);
 
-        Message::create([
+        $message = Message::create([
             'sender_id' => auth()->id(),
             'receiver_id' => $this->product->user_id,
             'product_id' => $this->product->id,
             'content' => $this->content,
         ]);
+
+        broadcast(new MessageSent($message))->toOthers();
 
         $this->content = '';
         $this->sent = true;

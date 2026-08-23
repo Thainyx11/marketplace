@@ -55,6 +55,14 @@ new class extends Component
                         <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" wire:navigate>
                             {{ __('Tableau de bord') }}
                         </x-nav-link>
+                        @if (auth()->user()->isVendeur())
+                            <x-nav-link :href="route('vendor.dashboard')" :active="request()->routeIs('vendor.*')" wire:navigate>
+                                {{ __('Espace vendeur') }}
+                            </x-nav-link>
+                        @endif
+                        <x-nav-link :href="route('messages.index')" :active="request()->routeIs('messages.*')" wire:navigate>
+                            {{ __('Messages') }}
+                        </x-nav-link>
                         @if (auth()->user()->isAdmin() && Route::has('admin.dashboard'))
                             <x-nav-link :href="route('admin.dashboard')" :active="request()->routeIs('admin.*')" wire:navigate>
                                 {{ __('Administration') }}
@@ -131,6 +139,17 @@ new class extends Component
             @auth
                 <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" wire:navigate>
                     {{ __('Tableau de bord') }}
+                </x-responsive-nav-link>
+                @if (auth()->user()->isVendeur())
+                    <x-responsive-nav-link :href="route('vendor.dashboard')" :active="request()->routeIs('vendor.*')" wire:navigate>
+                        {{ __('Espace vendeur') }}
+                    </x-responsive-nav-link>
+                @endif
+                <x-responsive-nav-link :href="route('messages.index')" :active="request()->routeIs('messages.*')" wire:navigate>
+                    {{ __('Messages') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('cart.show')" :active="request()->routeIs('cart.show')" wire:navigate>
+                    {{ __('Panier') }}
                 </x-responsive-nav-link>
             @endauth
         </div>
