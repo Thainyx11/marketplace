@@ -42,4 +42,18 @@ Route::middleware(['auth', 'role:vendeur'])->prefix('vendeur')->name('vendor.')-
     Volt::route('commandes', 'pages.vendor.orders')->name('orders');
 });
 
+Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
+    Volt::route('/', 'pages.admin.dashboard')->name('dashboard');
+    Volt::route('utilisateurs', 'pages.admin.users.index')->name('users.index');
+    Volt::route('vendeurs', 'pages.admin.vendors')->name('vendors');
+    Volt::route('categories', 'pages.admin.categories')->name('categories');
+    Volt::route('produits', 'pages.admin.products')->name('products');
+    Volt::route('commandes', 'pages.admin.orders.index')->name('orders.index');
+    Volt::route('commandes/{order}', 'pages.admin.orders.show')->name('orders.show');
+    Volt::route('avis', 'pages.admin.reviews')->name('reviews');
+    Volt::route('signalements', 'pages.admin.message-reports')->name('message-reports');
+    Volt::route('codes-promo', 'pages.admin.promo-codes')->name('promo-codes');
+    Volt::route('parametres', 'pages.admin.settings')->name('settings');
+});
+
 require __DIR__.'/auth.php';
