@@ -15,14 +15,14 @@
                 </div>
             @endif
 
-            <div class="bg-gradient-to-br from-violet-600 to-fuchsia-600 rounded-2xl shadow-sm overflow-hidden text-white">
+            <div class="bg-gradient-to-br from-brand-800 to-brand-900 rounded-2xl shadow-sm overflow-hidden text-white">
                 <div class="p-6 flex items-center gap-4">
                     <span class="grid place-items-center h-14 w-14 rounded-2xl bg-white/15 font-extrabold text-2xl shrink-0">
                         {{ Str::upper(Str::substr($user->name, 0, 1)) }}
                     </span>
                     <div>
                         <p class="text-lg font-bold">{{ __('Bonjour :name', ['name' => $user->name]) }}</p>
-                        <p class="text-sm text-violet-100 mt-0.5">
+                        <p class="text-sm text-brand-100 mt-0.5">
                             {{ ['acheteur' => 'Compte acheteur', 'vendeur' => 'Compte vendeur', 'admin' => 'Compte administrateur'][$user->role] ?? $user->role }}
                         </p>
                     </div>

@@ -39,14 +39,14 @@ new #[Layout('layouts.app')] class extends Component
             <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35M18 10.5a7.5 7.5 0 11-15 0 7.5 7.5 0 0115 0z" />
         </svg>
         <input type="text" wire:model.live.debounce.400ms="search" placeholder="{{ __('Rechercher une boutique...') }}"
-               class="w-full rounded-full border-gray-300 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-100 text-sm pl-10 focus:border-violet-500 focus:ring-violet-500">
+               class="w-full rounded-full border-gray-300 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-100 text-sm pl-10 focus:border-brand-500 focus:ring-brand-500">
     </div>
 
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
         @foreach ($sellers as $seller)
             <a href="{{ route('sellers.show', $seller->shop_slug) }}" wire:navigate
                class="flex items-start gap-4 bg-white dark:bg-gray-800 rounded-2xl shadow-sm p-5 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200">
-                <span class="grid place-items-center h-12 w-12 rounded-full bg-gradient-to-br from-violet-500 to-fuchsia-600 text-white font-bold text-lg shrink-0">
+                <span class="grid place-items-center h-12 w-12 rounded-full bg-gradient-to-br from-brand-700 to-brand-900 text-white font-bold text-lg shrink-0">
                     {{ Str::upper(Str::substr($seller->shop_name ?? $seller->name, 0, 1)) }}
                 </span>
                 <div class="min-w-0">
@@ -54,7 +54,7 @@ new #[Layout('layouts.app')] class extends Component
                     @if ($seller->bio)
                         <p class="text-sm text-gray-500 dark:text-gray-400 mt-0.5 line-clamp-2">{{ $seller->bio }}</p>
                     @endif
-                    <x-badge color="violet" class="mt-2">{{ __(':count articles', ['count' => $seller->products_count]) }}</x-badge>
+                    <x-badge color="brand" class="mt-2">{{ __(':count articles', ['count' => $seller->products_count]) }}</x-badge>
                 </div>
             </a>
         @endforeach

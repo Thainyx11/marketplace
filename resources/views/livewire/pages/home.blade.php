@@ -10,10 +10,10 @@ new #[Layout('layouts.app')] class extends Component
 {
     public function with(): array
     {
-        $popular = Product::active()->with(['images', 'seller'])
+        $popular = Product::active()->with(['images', 'seller', 'category'])
             ->withCount('orderItems')->orderByDesc('order_items_count')->take(3)->get();
 
-        $latest = Product::active()->with(['images', 'seller'])->latest()->take(4)->get();
+        $latest = Product::active()->with(['images', 'seller', 'category'])->latest()->take(4)->get();
 
         return [
             'categories' => Category::withCount(['products' => fn ($q) => $q->active()])->whereNull('parent_id')->get(),
@@ -26,16 +26,16 @@ new #[Layout('layouts.app')] class extends Component
 }; ?>
 
 <div>
-    <div class="relative overflow-hidden bg-gradient-to-br from-violet-950 via-gray-950 to-gray-900 text-white">
-        <div class="absolute inset-0 opacity-20" style="background-image: radial-gradient(circle at 20% 20%, #a855f7 0, transparent 35%), radial-gradient(circle at 80% 60%, #f59e0b 0, transparent 30%);"></div>
+    <div class="relative overflow-hidden bg-gradient-to-br from-brand-950 via-gray-950 to-gray-900 text-white">
+        <div class="absolute inset-0 opacity-20" style="background-image: radial-gradient(circle at 20% 20%, #5082F1 0, transparent 35%), radial-gradient(circle at 80% 60%, #012169 0, transparent 30%);"></div>
 
         <div class="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 sm:pt-20 pb-10 text-center">
-            <span class="inline-flex items-center gap-1.5 bg-white/10 text-violet-200 text-xs font-semibold px-3 py-1 rounded-full mb-6">
+            <span class="inline-flex items-center gap-1.5 bg-white/10 text-brand-200 text-xs font-semibold px-3 py-1 rounded-full mb-6">
                 ✨ {{ __('Cartes, jeux rétro, figurines & plus') }}
             </span>
 
             <h1 class="text-4xl sm:text-5xl font-extrabold tracking-tight">
-                {{ __('La marketplace des passionnés de') }} <span class="bg-gradient-to-r from-violet-400 to-amber-400 bg-clip-text text-transparent">{{ __('pop culture') }}</span>
+                {{ __('La marketplace des passionnés de') }} <span class="bg-gradient-to-r from-brand-300 to-brand-500 bg-clip-text text-transparent">{{ __('pop culture') }}</span>
             </h1>
             <p class="mt-5 text-gray-300 max-w-xl mx-auto">
                 {{ __('Achetez et vendez entre particuliers en toute confiance : cartes à collectionner, jeux vidéo rétro, figurines, manga et goodies.') }}
@@ -47,8 +47,8 @@ new #[Layout('layouts.app')] class extends Component
                         <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35M18 10.5a7.5 7.5 0 11-15 0 7.5 7.5 0 0115 0z" />
                     </svg>
                     <input type="text" name="q" placeholder="{{ __('Rechercher un Charizard, une Switch...') }}"
-                           class="w-full bg-white text-gray-900 placeholder-gray-400 rounded-full pl-12 pr-32 py-4 shadow-xl focus:ring-2 focus:ring-violet-400 border-transparent">
-                    <button type="submit" class="absolute right-1.5 top-1.5 bottom-1.5 bg-violet-600 hover:bg-violet-500 text-white font-semibold px-5 rounded-full transition">
+                           class="w-full bg-white text-gray-900 placeholder-gray-400 rounded-full pl-12 pr-32 py-4 shadow-xl focus:ring-2 focus:ring-brand-400 border-transparent">
+                    <button type="submit" class="absolute right-1.5 top-1.5 bottom-1.5 bg-brand-800 hover:bg-brand-700 text-white font-semibold px-5 rounded-full transition">
                         {{ __('Rechercher') }}
                     </button>
                 </div>
@@ -74,12 +74,12 @@ new #[Layout('layouts.app')] class extends Component
                                     @endif
                                 </div>
                                 <div>
-                                    <span class="inline-flex items-center gap-1 bg-gradient-to-r from-violet-500 to-fuchsia-600 text-white text-xs font-bold px-3 py-1 rounded-full">
+                                    <span class="inline-flex items-center gap-1 bg-gradient-to-r from-brand-700 to-brand-900 text-white text-xs font-bold px-3 py-1 rounded-full">
                                         {{ $index < 3 && $product->order_items_count > 0 ? '🔥 '.__('Populaire') : '🆕 '.__('Nouveauté') }}
                                     </span>
                                     <h2 class="text-2xl sm:text-3xl font-extrabold mt-3">{{ $product->title }}</h2>
                                     <p class="text-gray-300 text-sm mt-1">{{ $product->seller->shop_name ?? $product->seller->name }}</p>
-                                    <p class="text-3xl font-extrabold mt-4 bg-gradient-to-r from-violet-400 to-amber-400 bg-clip-text text-transparent">
+                                    <p class="text-3xl font-extrabold mt-4 bg-gradient-to-r from-brand-300 to-brand-500 bg-clip-text text-transparent">
                                         {{ number_format($product->price, 2, ',', ' ') }} €
                                     </p>
                                     <span class="inline-block mt-5 bg-white text-gray-900 font-semibold px-5 py-2.5 rounded-full text-sm">
@@ -110,7 +110,7 @@ new #[Layout('layouts.app')] class extends Component
                 <a href="{{ route('products.index', ['categorie' => $category->slug]) }}" wire:navigate
                    class="group bg-white dark:bg-gray-800 rounded-2xl shadow-sm p-5 text-center hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200">
                     <span class="text-3xl">{{ $icons[$category->slug] ?? '📦' }}</span>
-                    <p class="font-semibold text-gray-900 dark:text-gray-100 mt-2 group-hover:text-violet-600 dark:group-hover:text-violet-400 transition">{{ $category->name }}</p>
+                    <p class="font-semibold text-gray-900 dark:text-gray-100 mt-2 group-hover:text-brand-600 dark:group-hover:text-brand-400 transition">{{ $category->name }}</p>
                     <p class="text-xs text-gray-500 dark:text-gray-400">{{ $category->products_count }} {{ __('articles') }}</p>
                 </a>
             @endforeach
@@ -120,7 +120,7 @@ new #[Layout('layouts.app')] class extends Component
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
         <div class="flex items-center justify-between mb-5">
             <h2 class="text-lg font-bold text-gray-900 dark:text-gray-100">{{ __('Nouveautés') }}</h2>
-            <a href="{{ route('products.index') }}" wire:navigate class="text-sm font-semibold text-violet-600 dark:text-violet-400 hover:underline">
+            <a href="{{ route('products.index') }}" wire:navigate class="text-sm font-semibold text-brand-600 dark:text-brand-400 hover:underline">
                 {{ __('Voir tout →') }}
             </a>
         </div>
@@ -159,7 +159,7 @@ new #[Layout('layouts.app')] class extends Component
                             <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">{{ __('Suivez votre livraison puis laissez un avis pour aider la communauté.') }}</p>
                         </div>
                     </div>
-                    <p class="text-center text-sm font-semibold text-violet-600 dark:text-violet-400 mt-6">{{ __('Pour les acheteurs') }}</p>
+                    <p class="text-center text-sm font-semibold text-brand-600 dark:text-brand-400 mt-6">{{ __('Pour les acheteurs') }}</p>
                 </x-carousel-slide>
 
                 <x-carousel-slide>
@@ -180,7 +180,7 @@ new #[Layout('layouts.app')] class extends Component
                             <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">{{ __('Une commission raisonnable est prélevée par vente, le reste est à vous.') }}</p>
                         </div>
                     </div>
-                    <p class="text-center text-sm font-semibold text-violet-600 dark:text-violet-400 mt-6">{{ __('Pour les vendeurs') }}</p>
+                    <p class="text-center text-sm font-semibold text-brand-600 dark:text-brand-400 mt-6">{{ __('Pour les vendeurs') }}</p>
                 </x-carousel-slide>
             </x-carousel>
         </div>

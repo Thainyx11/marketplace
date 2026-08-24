@@ -16,7 +16,7 @@ new #[Layout('layouts.guest')] class extends Component
 
     <div class="grid gap-3">
         <a href="{{ route('register.acheteur') }}" wire:navigate
-           class="flex items-start gap-3 rounded-2xl border border-gray-200 dark:border-gray-700 p-4 hover:border-violet-400 hover:bg-violet-50 dark:hover:bg-gray-700 transition">
+           class="flex items-start gap-3 rounded-2xl border border-gray-200 dark:border-gray-700 p-4 hover:border-brand-400 hover:bg-brand-50 dark:hover:bg-gray-700 transition">
             <span class="text-2xl">🛍️</span>
             <div>
                 <p class="font-semibold text-gray-900 dark:text-gray-100">{{ __('Je suis acheteur') }}</p>
@@ -25,7 +25,7 @@ new #[Layout('layouts.guest')] class extends Component
         </a>
 
         <a href="{{ route('register.vendeur') }}" wire:navigate
-           class="flex items-start gap-3 rounded-2xl border border-gray-200 dark:border-gray-700 p-4 hover:border-violet-400 hover:bg-violet-50 dark:hover:bg-gray-700 transition">
+           class="flex items-start gap-3 rounded-2xl border border-gray-200 dark:border-gray-700 p-4 hover:border-brand-400 hover:bg-brand-50 dark:hover:bg-gray-700 transition">
             <span class="text-2xl">🏪</span>
             <div>
                 <p class="font-semibold text-gray-900 dark:text-gray-100">{{ __('Je suis vendeur') }}</p>
@@ -36,6 +36,6 @@ new #[Layout('layouts.guest')] class extends Component
 
     <div class="mt-6 text-center text-sm text-gray-600 dark:text-gray-400">
         {{ __('Déjà inscrit ?') }}
-        <a href="{{ route('login') }}" wire:navigate class="font-semibold text-violet-600 dark:text-violet-400 hover:underline">{{ __('Connectez-vous') }}</a>
+        <a href="{{ route('login') }}" wire:navigate class="font-semibold text-brand-600 dark:text-brand-400 hover:underline">{{ __('Connectez-vous') }}</a>
     </div>
 </div>
