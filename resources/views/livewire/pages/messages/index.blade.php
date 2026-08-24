@@ -42,7 +42,7 @@ new #[Layout('layouts.app')] class extends Component
         @forelse ($threads as $thread)
             <a href="{{ route('messages.show', [$thread['product'], $thread['other']]) }}" wire:navigate
                class="flex items-center gap-4 p-4 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition">
-                <span class="grid place-items-center h-11 w-11 rounded-full bg-gradient-to-br from-violet-500 to-fuchsia-600 text-white font-bold shrink-0">
+                <span class="grid place-items-center h-11 w-11 rounded-full bg-gradient-to-br from-brand-700 to-brand-900 text-white font-bold shrink-0">
                     {{ Str::upper(Str::substr($thread['other']->shop_name ?? $thread['other']->name, 0, 1)) }}
                 </span>
 
@@ -57,7 +57,7 @@ new #[Layout('layouts.app')] class extends Component
                 <div class="text-right shrink-0">
                     <p class="text-xs text-gray-400 dark:text-gray-500">{{ $thread['last_message']->created_at->diffForHumans() }}</p>
                     @if ($thread['unread'] > 0)
-                        <span class="inline-flex items-center justify-center bg-violet-600 text-white text-xs font-bold rounded-full w-5 h-5 mt-1">{{ $thread['unread'] }}</span>
+                        <span class="inline-flex items-center justify-center bg-brand-800 text-white text-xs font-bold rounded-full w-5 h-5 mt-1">{{ $thread['unread'] }}</span>
                     @endif
                 </div>
             </a>

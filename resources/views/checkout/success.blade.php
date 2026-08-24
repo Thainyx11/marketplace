@@ -16,7 +16,7 @@
                     {{ __("Votre commande est en cours de traitement. Vous la retrouverez dans quelques instants dans « Mes commandes ».") }}
                 </p>
                 <a href="{{ route('orders.index') }}" wire:navigate
-                   class="inline-block mt-6 bg-violet-600 hover:bg-violet-500 text-white font-semibold px-6 py-3 rounded-full transition">
+                   class="inline-block mt-6 bg-brand-800 hover:bg-brand-700 text-white font-semibold px-6 py-3 rounded-full transition">
                     {{ __('Voir mes commandes') }}
                 </a>
             </div>

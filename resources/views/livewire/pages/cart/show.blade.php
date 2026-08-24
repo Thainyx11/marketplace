@@ -60,7 +60,7 @@ new #[Layout('layouts.app')] class extends Component
         <div class="py-16 text-center">
             <div class="text-5xl mb-3">🛒</div>
             <p class="text-gray-500 dark:text-gray-400">{{ __('Votre panier est vide.') }}</p>
-            <a href="{{ route('products.index') }}" wire:navigate class="inline-block mt-4 text-sm font-semibold text-violet-600 dark:text-violet-400 hover:underline">
+            <a href="{{ route('products.index') }}" wire:navigate class="inline-block mt-4 text-sm font-semibold text-brand-600 dark:text-brand-400 hover:underline">
                 {{ __('Parcourir le catalogue →') }}
             </a>
         </div>
@@ -76,7 +76,7 @@ new #[Layout('layouts.app')] class extends Component
                     </div>
 
                     <div class="flex-1 min-w-0">
-                        <a href="{{ route('products.show', $product->slug) }}" wire:navigate class="font-semibold text-gray-900 dark:text-gray-100 hover:text-violet-600 dark:hover:text-violet-400 truncate block">
+                        <a href="{{ route('products.show', $product->slug) }}" wire:navigate class="font-semibold text-gray-900 dark:text-gray-100 hover:text-brand-600 dark:hover:text-brand-400 truncate block">
                             {{ $product->title }}
                         </a>
                         <p class="text-sm text-gray-500 dark:text-gray-400">{{ number_format($product->price, 2, ',', ' ') }} € {{ __('/ unité') }}</p>
@@ -84,7 +84,7 @@ new #[Layout('layouts.app')] class extends Component
 
                     <input type="number" min="1" max="{{ $product->stock }}" value="{{ $entry['quantity'] }}"
                            wire:change="updateQuantity({{ $product->id }}, $event.target.value)"
-                           class="w-20 rounded-xl border-gray-300 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-100 text-sm focus:border-violet-500 focus:ring-violet-500">
+                           class="w-20 rounded-xl border-gray-300 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-100 text-sm focus:border-brand-500 focus:ring-brand-500">
 
                     <span class="font-bold text-gray-900 dark:text-gray-100 w-24 text-right">
                         {{ number_format($product->price * $entry['quantity'], 2, ',', ' ') }} €
@@ -100,7 +100,7 @@ new #[Layout('layouts.app')] class extends Component
         </div>
 
         <div class="flex items-center justify-between mt-6 bg-white dark:bg-gray-800 rounded-2xl shadow-sm p-5">
-            <span class="text-lg font-bold text-gray-900 dark:text-gray-100">{{ __('Total') }} : <span class="text-violet-600 dark:text-violet-400">{{ number_format($total, 2, ',', ' ') }} €</span></span>
+            <span class="text-lg font-bold text-gray-900 dark:text-gray-100">{{ __('Total') }} : <span class="text-brand-600 dark:text-brand-400">{{ number_format($total, 2, ',', ' ') }} €</span></span>
 
             <x-primary-button wire:click="checkout" type="button" class="px-8 py-3">
                 {{ __('Passer commande') }}

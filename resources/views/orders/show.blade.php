@@ -14,7 +14,7 @@
                     </div>
 
                     @if ($order->payment?->status === 'paid')
-                        <a href="{{ route('orders.invoice', $order) }}" target="_blank" class="text-sm font-semibold text-violet-600 dark:text-violet-400 hover:underline shrink-0">
+                        <a href="{{ route('orders.invoice', $order) }}" target="_blank" class="text-sm font-semibold text-brand-600 dark:text-brand-400 hover:underline shrink-0">
                             {{ __('Télécharger la facture') }}
                         </a>
                     @endif
@@ -25,7 +25,7 @@
                         <div class="py-4">
                             <div class="flex items-center justify-between">
                                 <div>
-                                    <a href="{{ route('products.show', $item->product->slug) }}" class="font-semibold text-gray-900 dark:text-gray-100 hover:text-violet-600 dark:hover:text-violet-400">
+                                    <a href="{{ route('products.show', $item->product->slug) }}" class="font-semibold text-gray-900 dark:text-gray-100 hover:text-brand-600 dark:hover:text-brand-400">
                                         {{ $item->product->title }}
                                     </a>
                                     <p class="text-sm text-gray-500 dark:text-gray-400">{{ $item->quantity }} × {{ number_format($item->unit_price, 2, ',', ' ') }} € — {{ __('vendu par') }} {{ $item->seller->shop_name ?? $item->seller->name }}</p>

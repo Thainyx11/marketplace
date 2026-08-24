@@ -33,7 +33,7 @@
 
                 <div class="flex items-center justify-between pt-4 mt-2 border-t border-gray-200 dark:border-gray-700">
                     <span class="font-semibold text-gray-900 dark:text-gray-100">{{ __('Total') }}</span>
-                    <span class="font-extrabold text-lg text-violet-600 dark:text-violet-400" x-text="(shippingMethod === 'express' ? base + fee : base).toFixed(2).replace('.', ',') + ' €'"></span>
+                    <span class="font-extrabold text-lg text-brand-600 dark:text-brand-400" x-text="(shippingMethod === 'express' ? base + fee : base).toFixed(2).replace('.', ',') + ' €'"></span>
                 </div>
             </div>
 
@@ -43,24 +43,24 @@
                 <div>
                     <x-input-label for="shipping_address" :value="__('Adresse de livraison')" />
                     <textarea name="shipping_address" id="shipping_address" rows="3" required maxlength="500"
-                              class="mt-1.5 w-full rounded-xl border-gray-300 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-100 text-sm focus:border-violet-500 focus:ring-violet-500">{{ old('shipping_address', auth()->user()->shipping_address) }}</textarea>
+                              class="mt-1.5 w-full rounded-xl border-gray-300 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-100 text-sm focus:border-brand-500 focus:ring-brand-500">{{ old('shipping_address', auth()->user()->shipping_address) }}</textarea>
                     <x-input-error :messages="$errors->get('shipping_address')" class="mt-2" />
                 </div>
 
                 <div>
                     <x-input-label :value="__('Mode d\'expédition')" />
                     <div class="mt-1.5 grid grid-cols-1 sm:grid-cols-2 gap-3">
-                        <label class="flex items-center gap-2 rounded-xl border border-gray-300 dark:border-gray-600 p-3 cursor-pointer has-[:checked]:border-violet-500 has-[:checked]:ring-1 has-[:checked]:ring-violet-500 transition">
+                        <label class="flex items-center gap-2 rounded-xl border border-gray-300 dark:border-gray-600 p-3 cursor-pointer has-[:checked]:border-brand-500 has-[:checked]:ring-1 has-[:checked]:ring-brand-500 transition">
                             <input type="radio" name="shipping_method" value="standard" x-model="shippingMethod"
-                                   class="text-violet-600 focus:ring-violet-500">
+                                   class="text-brand-600 focus:ring-brand-500">
                             <span class="text-sm">
                                 <span class="font-semibold text-gray-900 dark:text-gray-100 block">{{ __('Standard') }}</span>
                                 <span class="text-gray-500 dark:text-gray-400">{{ __('3 à 5 jours ouvrés · gratuit') }}</span>
                             </span>
                         </label>
-                        <label class="flex items-center gap-2 rounded-xl border border-gray-300 dark:border-gray-600 p-3 cursor-pointer has-[:checked]:border-violet-500 has-[:checked]:ring-1 has-[:checked]:ring-violet-500 transition">
+                        <label class="flex items-center gap-2 rounded-xl border border-gray-300 dark:border-gray-600 p-3 cursor-pointer has-[:checked]:border-brand-500 has-[:checked]:ring-1 has-[:checked]:ring-brand-500 transition">
                             <input type="radio" name="shipping_method" value="express" x-model="shippingMethod"
-                                   class="text-violet-600 focus:ring-violet-500">
+                                   class="text-brand-600 focus:ring-brand-500">
                             <span class="text-sm">
                                 <span class="font-semibold text-gray-900 dark:text-gray-100 block">{{ __('Express') }}</span>
                                 <span class="text-gray-500 dark:text-gray-400">{{ __('24 à 48h · +:fee €', ['fee' => number_format(\App\Http\Controllers\CheckoutController::EXPRESS_FEE, 2, ',', ' ')]) }}</span>

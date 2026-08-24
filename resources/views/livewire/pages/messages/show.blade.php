@@ -101,12 +101,12 @@ new #[Layout('layouts.app')] class extends Component
         $watch('$el.scrollHeight', () => { $el.querySelector('.messages-scroll')?.scrollTo(0, 999999); });
      ">
     <div class="mb-4 flex items-center gap-3">
-        <a href="{{ route('messages.index') }}" wire:navigate class="text-gray-400 hover:text-violet-600 dark:hover:text-violet-400 transition">
+        <a href="{{ route('messages.index') }}" wire:navigate class="text-gray-400 hover:text-brand-600 dark:hover:text-brand-400 transition">
             <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
             </svg>
         </a>
-        <span class="grid place-items-center h-10 w-10 rounded-full bg-gradient-to-br from-violet-500 to-fuchsia-600 text-white font-bold shrink-0">
+        <span class="grid place-items-center h-10 w-10 rounded-full bg-gradient-to-br from-brand-700 to-brand-900 text-white font-bold shrink-0">
             {{ Str::upper(Str::substr($otherUser->shop_name ?? $otherUser->name, 0, 1)) }}
         </span>
         <h1 class="text-lg font-bold text-gray-900 dark:text-gray-100">
@@ -121,7 +121,7 @@ new #[Layout('layouts.app')] class extends Component
                 <div class="max-w-xs">
                     <div @class([
                         'rounded-2xl px-3.5 py-2 text-sm',
-                        'bg-violet-600 text-white rounded-br-sm' => $message['sender_id'] === auth()->id(),
+                        'bg-brand-800 text-white rounded-br-sm' => $message['sender_id'] === auth()->id(),
                         'bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-100 rounded-bl-sm' => $message['sender_id'] !== auth()->id(),
                     ])>
                         {{ $message['content'] }}
@@ -138,9 +138,9 @@ new #[Layout('layouts.app')] class extends Component
 
     <form wire:submit="send" class="flex items-center gap-2 mt-4">
         <input type="text" wire:model="content" placeholder="{{ __('Votre message...') }}"
-               class="flex-1 rounded-full border-gray-300 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-100 text-sm focus:border-violet-500 focus:ring-violet-500">
+               class="flex-1 rounded-full border-gray-300 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-100 text-sm focus:border-brand-500 focus:ring-brand-500">
         <button type="submit" wire:loading.attr="disabled" wire:target="send"
-                class="bg-violet-600 hover:bg-violet-500 disabled:opacity-60 text-white font-semibold px-5 py-2.5 rounded-full text-sm transition">
+                class="bg-brand-800 hover:bg-brand-700 disabled:opacity-60 text-white font-semibold px-5 py-2.5 rounded-full text-sm transition">
             <span wire:loading.remove wire:target="send">{{ __('Envoyer') }}</span>
             <span wire:loading wire:target="send">{{ __('...') }}</span>
         </button>
