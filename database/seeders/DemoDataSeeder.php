@@ -16,13 +16,17 @@ use Illuminate\Support\Str;
 
 class DemoDataSeeder extends Seeder
 {
-    /** Placeholder photo colour per category, so cards stay visually scannable. */
-    private const CATEGORY_COLORS = [
-        'cartes-a-collectionner' => '7c3aed',
-        'jeux-video' => '2563eb',
-        'figurines' => 'c026d3',
-        'manga' => 'd97706',
-        'goodies' => '059669',
+    /**
+     * Real (if generic) stock photos per category via LoremFlickr — keywords
+     * verified reachable from this environment. `?lock=N` pins a stable pick
+     * per product so re-seeding doesn't shuffle every photo.
+     */
+    private const CATEGORY_KEYWORDS = [
+        'cartes-a-collectionner' => ['pokemon', 'collectible+card'],
+        'jeux-video' => ['retrogaming', 'nintendo', 'videogame'],
+        'figurines' => ['figurine', 'toy', 'anime'],
+        'manga' => ['manga', 'comic'],
+        'goodies' => ['goodies', 'souvenir'],
     ];
 
     public function run(): void
@@ -161,11 +165,11 @@ class DemoDataSeeder extends Seeder
             );
 
             if ($product->wasRecentlyCreated) {
-                $color = self::CATEGORY_COLORS[$data['category']];
-                $label = urlencode($this->imageLabel($data['title']));
+                $keywords = self::CATEGORY_KEYWORDS[$data['category']];
+                $keyword = $keywords[$product->id % count($keywords)];
 
-                ProductImage::create(['product_id' => $product->id, 'path' => "https://placehold.co/800x800/{$color}/ffffff?text={$label}", 'position' => 0]);
-                ProductImage::create(['product_id' => $product->id, 'path' => "https://placehold.co/800x800/{$color}/ffffff?text={$label}+-+vue+2", 'position' => 1]);
+                ProductImage::create(['product_id' => $product->id, 'path' => "https://loremflickr.com/800/800/{$keyword}?lock={$product->id}", 'position' => 0]);
+                ProductImage::create(['product_id' => $product->id, 'path' => "https://loremflickr.com/800/800/{$keyword}?lock=".($product->id + 1000), 'position' => 1]);
             }
         }
 
@@ -225,17 +229,5 @@ class DemoDataSeeder extends Seeder
         $vendorEmails = array_map(fn ($key, $def) => $def['email'] ?? "$key@marketplace.test", array_keys($vendorDefs), $vendorDefs);
 
         $this->command?->info('Comptes de test (mot de passe: password) : admin@marketplace.test, acheteur@marketplace.test, vendeur.pending@marketplace.test, et '.implode(', ', $vendorEmails));
-    }
-
-    /** Trims a placeholder image label to a full word, never mid-word. */
-    private function imageLabel(string $title): string
-    {
-        $limit = 32;
-
-        if (mb_strlen($title) <= $limit) {
-            return $title;
-        }
-
-        return rtrim(mb_substr($title, 0, mb_strrpos(mb_substr($title, 0, $limit), ' ') ?: $limit));
     }
 }
