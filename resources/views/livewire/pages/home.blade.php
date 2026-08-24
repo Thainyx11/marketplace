@@ -62,7 +62,7 @@ new #[Layout('layouts.app')] class extends Component
         </div>
 
         @if ($heroProducts->isNotEmpty())
-            <div class="relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
+            <div class="relative px-4 sm:px-6 lg:px-8 pb-16">
                 <x-carousel :dark="true" :interval="5500">
                     @foreach ($heroProducts as $index => $product)
                         <x-carousel-slide>
