@@ -31,20 +31,18 @@ new class extends Component
     }
 }; ?>
 
-<nav x-data="{ open: false }" class="bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700">
+<nav x-data="{ open: false }" class="sticky top-0 z-40 bg-gray-950/95 backdrop-blur supports-[backdrop-filter]:bg-gray-950/80 border-b border-white/10">
     <!-- Primary Navigation Menu -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex justify-between h-16">
-            <div class="flex">
+        <div class="flex justify-between items-center h-16 gap-4">
+            <div class="flex items-center gap-8">
                 <!-- Logo -->
-                <div class="shrink-0 flex items-center">
-                    <a href="{{ route('home') }}" wire:navigate>
-                        <x-application-logo class="block h-9 w-auto fill-current text-gray-800 dark:text-gray-200" />
-                    </a>
-                </div>
+                <a href="{{ route('home') }}" wire:navigate class="shrink-0">
+                    <x-application-logo :light="true" />
+                </a>
 
                 <!-- Navigation Links -->
-                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                <div class="hidden space-x-6 sm:flex">
                     <x-nav-link :href="route('products.index')" :active="request()->routeIs('products.*')" wire:navigate>
                         {{ __('Produits') }}
                     </x-nav-link>
@@ -72,44 +70,59 @@ new class extends Component
                 </div>
             </div>
 
-            <!-- Settings Dropdown -->
-            <div class="hidden sm:flex sm:items-center sm:ms-6">
+            <!-- Search -->
+            <form action="{{ route('products.index') }}" method="GET" class="hidden md:flex flex-1 max-w-sm">
+                <div class="relative w-full">
+                    <svg class="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35M18 10.5a7.5 7.5 0 11-15 0 7.5 7.5 0 0115 0z" />
+                    </svg>
+                    <input type="text" name="q" placeholder="{{ __('Rechercher un article...') }}"
+                           class="w-full bg-white/10 border-transparent rounded-full text-sm text-white placeholder-gray-400 pl-9 pr-4 py-2 focus:bg-white focus:text-gray-900 focus:placeholder-gray-400 focus:ring-2 focus:ring-violet-500 focus:border-transparent transition">
+                </div>
+            </form>
+
+            <!-- Right side -->
+            <div class="hidden sm:flex sm:items-center gap-1 shrink-0">
                 @auth
-                    <a href="{{ route('cart.show') }}" wire:navigate class="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 me-4">
-                        {{ __('Panier') }}@if ($cartCount) <span class="ms-1 inline-flex items-center justify-center bg-indigo-600 text-white text-xs rounded-full w-5 h-5">{{ $cartCount }}</span>@endif
+                    <a href="{{ route('cart.show') }}" wire:navigate class="relative inline-flex items-center justify-center h-9 w-9 rounded-full text-gray-300 hover:text-white hover:bg-white/10 transition">
+                        <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 1.87-4.594 2.25-6.75H5.106M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z" />
+                        </svg>
+                        @if ($cartCount)
+                            <span class="absolute -top-1 -right-1 inline-flex items-center justify-center bg-violet-500 text-white text-[10px] font-bold rounded-full h-4 w-4">{{ $cartCount }}</span>
+                        @endif
                     </a>
 
                     <x-dropdown align="right" width="48">
                         <x-slot name="trigger">
-                            <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none transition ease-in-out duration-150">
-                                <div x-data="{{ json_encode(['name' => auth()->user()->name]) }}" x-text="name" x-on:profile-updated.window="name = $event.detail.name"></div>
-
-                                <div class="ms-1">
-                                    <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                                        <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
-                                    </svg>
-                                </div>
+                            <button class="ms-1 inline-flex items-center justify-center h-9 w-9 rounded-full bg-white/10 hover:bg-white/20 text-white font-semibold text-sm transition focus:outline-none">
+                                {{ Str::upper(Str::substr(auth()->user()->name, 0, 1)) }}
                             </button>
                         </x-slot>
 
                         <x-slot name="content">
+                            <div class="px-4 py-2 border-b border-gray-100 dark:border-gray-700">
+                                <p class="text-sm font-semibold text-gray-900 dark:text-gray-100 truncate" x-data="{{ json_encode(['name' => auth()->user()->name]) }}" x-text="name" x-on:profile-updated.window="name = $event.detail.name"></p>
+                                <p class="text-xs text-gray-500 dark:text-gray-400 truncate">{{ auth()->user()->email }}</p>
+                            </div>
+
                             <x-dropdown-link :href="route('profile')" wire:navigate>
-                                {{ __('Profile') }}
+                                {{ __('Profil') }}
                             </x-dropdown-link>
 
                             <!-- Authentication -->
                             <button wire:click="logout" class="w-full text-start">
                                 <x-dropdown-link>
-                                    {{ __('Log Out') }}
+                                    {{ __('Se déconnecter') }}
                                 </x-dropdown-link>
                             </button>
                         </x-slot>
                     </x-dropdown>
                 @else
-                    <a href="{{ route('login') }}" wire:navigate class="text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100">
+                    <a href="{{ route('login') }}" wire:navigate class="text-sm font-medium text-gray-300 hover:text-white px-3 py-2 transition">
                         {{ __('Connexion') }}
                     </a>
-                    <a href="{{ route('register') }}" wire:navigate class="ms-4 text-sm bg-indigo-600 hover:bg-indigo-500 text-white px-4 py-2 rounded-lg">
+                    <a href="{{ route('register') }}" wire:navigate class="ms-1 text-sm font-semibold bg-violet-600 hover:bg-violet-500 text-white px-4 py-2 rounded-full transition">
                         {{ __('Inscription') }}
                     </a>
                 @endauth
@@ -117,7 +130,7 @@ new class extends Component
 
             <!-- Hamburger -->
             <div class="-me-2 flex items-center sm:hidden">
-                <button @click="open = ! open" class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 dark:text-gray-500 hover:text-gray-500 dark:hover:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-900 focus:outline-none focus:bg-gray-100 dark:focus:bg-gray-900 focus:text-gray-500 dark:focus:text-gray-400 transition duration-150 ease-in-out">
+                <button @click="open = ! open" class="inline-flex items-center justify-center p-2 rounded-md text-gray-300 hover:text-white hover:bg-white/10 focus:outline-none transition">
                     <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
                         <path :class="{'hidden': open, 'inline-flex': ! open }" class="inline-flex" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
                         <path :class="{'hidden': ! open, 'inline-flex': open }" class="hidden" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
@@ -128,8 +141,18 @@ new class extends Component
     </div>
 
     <!-- Responsive Navigation Menu -->
-    <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
-        <div class="pt-2 pb-3 space-y-1">
+    <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden border-t border-white/10">
+        <form action="{{ route('products.index') }}" method="GET" class="px-4 pt-3">
+            <div class="relative">
+                <svg class="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35M18 10.5a7.5 7.5 0 11-15 0 7.5 7.5 0 0115 0z" />
+                </svg>
+                <input type="text" name="q" placeholder="{{ __('Rechercher...') }}"
+                       class="w-full bg-white/10 border-transparent rounded-full text-sm text-white placeholder-gray-400 pl-9 pr-4 py-2 focus:bg-white focus:text-gray-900 focus:ring-2 focus:ring-violet-500 focus:border-transparent transition">
+            </div>
+        </form>
+
+        <div class="pt-3 pb-3 space-y-1">
             <x-responsive-nav-link :href="route('products.index')" :active="request()->routeIs('products.*')" wire:navigate>
                 {{ __('Produits') }}
             </x-responsive-nav-link>
@@ -145,37 +168,47 @@ new class extends Component
                         {{ __('Espace vendeur') }}
                     </x-responsive-nav-link>
                 @endif
+                @if (auth()->user()->isAdmin() && Route::has('admin.dashboard'))
+                    <x-responsive-nav-link :href="route('admin.dashboard')" :active="request()->routeIs('admin.*')" wire:navigate>
+                        {{ __('Administration') }}
+                    </x-responsive-nav-link>
+                @endif
                 <x-responsive-nav-link :href="route('messages.index')" :active="request()->routeIs('messages.*')" wire:navigate>
                     {{ __('Messages') }}
                 </x-responsive-nav-link>
                 <x-responsive-nav-link :href="route('cart.show')" :active="request()->routeIs('cart.show')" wire:navigate>
-                    {{ __('Panier') }}
+                    {{ __('Panier') }}@if ($cartCount) <span class="ms-1 text-violet-400">({{ $cartCount }})</span>@endif
                 </x-responsive-nav-link>
             @endauth
         </div>
 
         <!-- Responsive Settings Options -->
-        <div class="pt-4 pb-1 border-t border-gray-200 dark:border-gray-600">
+        <div class="pt-4 pb-3 border-t border-white/10">
             @auth
-                <div class="px-4">
-                    <div class="font-medium text-base text-gray-800 dark:text-gray-200" x-data="{{ json_encode(['name' => auth()->user()->name]) }}" x-text="name" x-on:profile-updated.window="name = $event.detail.name"></div>
-                    <div class="font-medium text-sm text-gray-500">{{ auth()->user()->email }}</div>
+                <div class="px-4 flex items-center gap-3">
+                    <span class="inline-flex items-center justify-center h-9 w-9 rounded-full bg-white/10 text-white font-semibold text-sm shrink-0">
+                        {{ Str::upper(Str::substr(auth()->user()->name, 0, 1)) }}
+                    </span>
+                    <div class="min-w-0">
+                        <div class="font-medium text-base text-white truncate" x-data="{{ json_encode(['name' => auth()->user()->name]) }}" x-text="name" x-on:profile-updated.window="name = $event.detail.name"></div>
+                        <div class="text-sm text-gray-400 truncate">{{ auth()->user()->email }}</div>
+                    </div>
                 </div>
 
                 <div class="mt-3 space-y-1">
                     <x-responsive-nav-link :href="route('profile')" wire:navigate>
-                        {{ __('Profile') }}
+                        {{ __('Profil') }}
                     </x-responsive-nav-link>
 
                     <!-- Authentication -->
                     <button wire:click="logout" class="w-full text-start">
                         <x-responsive-nav-link>
-                            {{ __('Log Out') }}
+                            {{ __('Se déconnecter') }}
                         </x-responsive-nav-link>
                     </button>
                 </div>
             @else
-                <div class="mt-3 space-y-1">
+                <div class="px-4 space-y-2">
                     <x-responsive-nav-link :href="route('login')" wire:navigate>
                         {{ __('Connexion') }}
                     </x-responsive-nav-link>
