@@ -67,15 +67,23 @@ Le paiement fonctionne en mode dégradé sans clé configurée : le webhook reje
 | Vendeur en attente | `vendeur.pending@marketplace.test` | `password` |
 | Acheteur | `acheteur@marketplace.test` | `password` |
 
-`php artisan migrate:fresh --seed` régénère une base propre avec ces comptes, 5 catégories, 57 produits (2 photos placeholder chacun, générées via placehold.co) répartis sur 6 boutiques, et une commande livrée avec avis pour avoir tout de suite des données à l'écran.
+`php artisan migrate:fresh --seed` régénère une base propre avec ces comptes, 5 catégories, 105 produits (2 photos réelles chacun via LoremFlickr, en portrait pour les cartes à collectionner) répartis sur les 6 boutiques vendeur + la boutique "Sélection Officielle" tenue par l'admin (toujours du stock disponible même sans vendeur externe), et une commande livrée avec avis pour avoir tout de suite des données à l'écran.
 
 ## Tests
 
 ```bash
-php artisan test           # 33 tests (auth, autorisation par rôle, profil...)
+php artisan test           # 44 tests (auth, autorisation par rôle, profil, panier, webhook Stripe, export RGPD...)
 ./vendor/bin/pint --test   # style de code
 npm run build               # build production, doit sortir sans erreur ni warning
 ```
+
+Points notables couverts par les tests :
+- `MarketplaceAuthorizationTest` : gates de rôle (acheteur/vendeur/admin), vendeur en attente vs approuvé
+- `CartManagerTest` : panier invité (session) et connecté (base de données), respect du stock, fusion à la connexion
+- `StripeWebhookTest` : non-régression sur les deux bugs trouvés lors de l'audit de cette itération — le webhook rejette (503/400) tout paiement non signé ou signé avec un mauvais secret, et un webhook valide crée bien la commande/le paiement et vide le panier (c'est ce deuxième cas précis qui avait silencieusement échoué avant correction : le paiement passait côté Stripe mais aucune commande n'était créée)
+- `ProfileDataExportTest` : l'export RGPD ne contient que les données du compte connecté
+
+Une CI GitHub Actions (`.github/workflows/ci.yml`) exécute ces trois commandes à chaque push — inactive tant que ce dépôt n'a pas de remote GitHub.
 
 ## Périmètre fonctionnel réalisé
 
@@ -96,14 +104,151 @@ npm run build               # build production, doit sortir sans erreur ni warni
 
 ## Non couvert dans cette itération
 
-- Déploiement réel (hébergement o2switch/Forge) — nécessite les accès du commanditaire
-- Clés Stripe/Reverb de production — à créer par le commanditaire
-- Suite de tests exhaustive et audit de sécurité formel (phase 7 du planning du cahier des charges) — la base d'autorisation par rôle est testée, mais la couverture n'est pas complète
-- Schéma MCD/UML graphique pour le dossier de TFE — voir l'ERD texte ci-dessous, à transposer dans un outil de modélisation pour le rendu final
+- Déploiement réel (hébergement type Railway/Render/o2switch) — nécessite la création d'un compte hébergeur par le commanditaire ; le code est prêt (voir `.github/workflows/ci.yml` pour la suite de build/tests automatisée, inactive tant que ce dépôt n'est pas poussé sur GitHub)
+- Envoi d'emails réel (confirmation de commande, etc.) — `MAIL_MAILER=log` actuellement, aucun email n'est réellement envoyé ; nécessite un compte chez un service SMTP (Mailtrap, etc.)
+- Clés Stripe/Reverb de production — à créer par le commanditaire (les clés de test fonctionnent en local, voir section Stripe ci-dessus)
+- Suite de tests exhaustive à 100% — la couverture actuelle (voir section Tests) couvre l'autorisation par rôle, le panier, le webhook Stripe (y compris des tests de non-régression sur les deux bugs trouvés lors de l'audit) et l'export RGPD ; certains flows secondaires (messagerie temps réel, litiges admin) restent non testés
 - API REST (Sanctum) : le stack technique du cahier des charges la mentionne, mais aucune app externe (mobile, SPA) ne consomme l'application — tout est rendu côté serveur (Blade/Livewire). Sanctum peut être activé sans changement d'architecture si un besoin apparaît.
-- RGPD : le droit à l'effacement est couvert (suppression de compte depuis Profil, `delete-user-form`), et les mentions légales détaillent les droits de l'utilisateur ; en revanche il n'existe pas encore de fonction d'export de données personnelles (droit à la portabilité) ni de bannière de consentement cookies (non requise ici : seuls des cookies de session strictement nécessaires sont posés).
+- RGPD : le droit à l'effacement (suppression de compte) et le droit à la portabilité (export JSON de ses données depuis Profil) sont couverts ; les mentions légales détaillent les droits de l'utilisateur ; une bannière de consentement cookies est présente (purement informative — seuls des cookies de session strictement nécessaires sont posés, il n'y a rien à opter-out).
 
-## Modèle de données (ERD simplifié)
+## Diagrammes UML
+
+### Diagramme de classes
+
+```mermaid
+classDiagram
+    class User {
+        +string name
+        +string email
+        +string role
+        +string shop_name
+        +string shop_slug
+        +bool is_approved
+        +bool is_active
+        +isAdmin() bool
+        +isVendeur() bool
+        +isAcheteur() bool
+        +averageRating() float
+    }
+    class Category {
+        +string name
+        +string slug
+        +int parent_id
+    }
+    class Product {
+        +string title
+        +string slug
+        +decimal price
+        +int stock
+        +string condition
+        +string rarity
+        +string status
+        +averageRating() float
+        +scopeActive()
+    }
+    class ProductImage {
+        +string path
+        +int position
+        +url() string
+    }
+    class Cart {
+        +total() float
+    }
+    class CartItem {
+        +int quantity
+    }
+    class Order {
+        +decimal total
+        +decimal discount_amount
+        +string status
+        +string shipping_method
+        +recomputeStatus()
+    }
+    class OrderItem {
+        +int quantity
+        +decimal unit_price
+        +string status
+        +existingReview() Review
+    }
+    class Payment {
+        +string stripe_id
+        +decimal amount
+        +decimal commission
+        +string status
+    }
+    class Review {
+        +int rating
+        +string comment
+    }
+    class Message {
+        +string content
+        +bool seen
+    }
+    class MessageReport {
+        +string reason
+        +string status
+    }
+    class PromoCode {
+        +string code
+        +string type
+        +decimal value
+        +int max_uses
+        +int used_count
+        +isValid() bool
+        +discountFor(amount) float
+    }
+
+    User "1" --> "0..1" Cart : possède
+    User "1" --> "*" Product : vend (user_id)
+    User "1" --> "*" Order : achète (buyer_id)
+    User "1" --> "*" Message : envoie/reçoit
+    Category "0..1" --> "*" Category : parent_id
+    Category "1" --> "*" Product : classe
+    Product "1" --> "*" ProductImage : illustré par
+    Product "1" --> "*" OrderItem : vendu via
+    Product "1" --> "*" Review : reçoit
+    Product "1" --> "*" Message : concerne
+    Cart "1" --> "*" CartItem : contient
+    CartItem "*" --> "1" Product
+    Order "1" --> "*" OrderItem : contient
+    Order "1" --> "0..1" Payment : payée par
+    Order "0..1" --> "1" PromoCode : utilise
+    Review "*" --> "1" Order : liée à (order_id)
+    Message "1" --> "*" MessageReport : signalé par
+```
+
+### Diagramme de séquence — paiement Stripe et création de la commande
+
+Documente le flow où résidait le bug le plus critique trouvé cette itération (variable `$manager` absente de la closure `DB::transaction()` — le paiement Stripe réussissait mais la commande n'était jamais créée) : montre pourquoi la vérification de signature (fail-closed) et le webhook sont le seul moment où la commande existe réellement.
+
+```mermaid
+sequenceDiagram
+    actor Acheteur
+    participant App as CheckoutController
+    participant Stripe
+    participant Webhook as StripeWebhookController
+    participant DB as Base de données
+
+    Acheteur->>App: POST /commande (panier, adresse, expédition)
+    App->>App: calcule le total, prépare les métadonnées (buyer_id...)
+    App->>Stripe: crée une Checkout Session
+    Stripe-->>App: URL de la session
+    App-->>Acheteur: redirection vers Stripe Checkout
+    Acheteur->>Stripe: saisit sa carte et paie
+    Stripe->>Webhook: POST /webhook/stripe (checkout.session.completed, signé)
+    Webhook->>Webhook: vérifie Stripe-Signature avec le secret configuré
+    alt secret absent ou signature invalide
+        Webhook-->>Stripe: 503 / 400 (rejeté, échec fermé)
+    else signature valide
+        Webhook->>DB: transaction : crée Order + OrderItem(s) + Payment
+        Webhook->>DB: décrémente le stock produit
+        Webhook->>DB: vide le panier de l'acheteur
+        Webhook-->>Stripe: 200 OK
+    end
+    Stripe-->>Acheteur: redirection vers /commande/succes
+```
+
+### ERD texte (référence rapide)
 
 ```
 users ──┬──< products >──── categories (auto-référencée via parent_id)
