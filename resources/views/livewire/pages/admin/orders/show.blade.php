@@ -33,12 +33,6 @@ new #[Layout('layouts.app')] class extends Component
 
     @include('admin._nav')
 
-    @if (session('status'))
-        <div class="bg-green-50 dark:bg-green-900/40 border border-green-200 dark:border-green-800 text-green-800 dark:text-green-200 rounded-lg p-4 text-sm mb-6">
-            {{ session('status') }}
-        </div>
-    @endif
-
     <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6">
         <p class="font-semibold text-gray-900 dark:text-gray-100">{{ __('Commande #:id', ['id' => $order->id]) }}</p>
         <p class="text-sm text-gray-500 dark:text-gray-400">{{ __('Acheteur') }} : {{ $order->buyer->name }} ({{ $order->buyer->email }})</p>
@@ -54,7 +48,7 @@ new #[Layout('layouts.app')] class extends Component
                         <p class="text-gray-900 dark:text-gray-100">{{ $item->product->title }}</p>
                         <p class="text-sm text-gray-500 dark:text-gray-400">{{ $item->quantity }} × {{ number_format($item->unit_price, 2, ',', ' ') }} € — {{ __('vendeur') }} : {{ $item->seller->name }}</p>
                     </div>
-                    <span class="text-sm text-gray-500 dark:text-gray-400">{{ ['en_attente' => 'En attente', 'acceptee' => 'Acceptée', 'expediee' => 'Expédiée', 'livree' => 'Livrée'][$item->status] }}</span>
+                    <x-order-status-badge :status="$item->status" />
                 </div>
             @endforeach
         </div>

@@ -46,12 +46,6 @@ new #[Layout('layouts.app')] class extends Component
 
     @include('admin._nav')
 
-    @if (session('error'))
-        <div class="bg-red-50 dark:bg-red-900/40 border border-red-200 dark:border-red-800 text-red-800 dark:text-red-200 rounded-lg p-4 text-sm mb-6">
-            {{ session('error') }}
-        </div>
-    @endif
-
     <form wire:submit="create" class="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-5 flex items-end gap-3 mb-6">
         <div class="flex-1">
             <x-input-label for="name" :value="__('Nouvelle catégorie')" />

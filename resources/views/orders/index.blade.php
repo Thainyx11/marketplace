@@ -15,15 +15,7 @@
                         </div>
                         <div class="text-right">
                             <p class="font-semibold text-gray-900 dark:text-gray-100">{{ number_format($order->total, 2, ',', ' ') }} €</p>
-                            <span @class([
-                                'text-xs px-2 py-1 rounded-full font-medium',
-                                'bg-amber-100 text-amber-800' => $order->status === 'en_attente',
-                                'bg-blue-100 text-blue-800' => $order->status === 'acceptee',
-                                'bg-purple-100 text-purple-800' => $order->status === 'expediee',
-                                'bg-green-100 text-green-800' => $order->status === 'livree',
-                            ])>
-                                {{ ['en_attente' => 'En attente', 'acceptee' => 'Acceptée', 'expediee' => 'Expédiée', 'livree' => 'Livrée'][$order->status] }}
-                            </span>
+                            <x-order-status-badge :status="$order->status" />
                         </div>
                     </div>
                 </a>

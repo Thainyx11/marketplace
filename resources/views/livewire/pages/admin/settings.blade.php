@@ -35,12 +35,6 @@ new #[Layout('layouts.app')] class extends Component
 
     @include('admin._nav')
 
-    @if (session('status'))
-        <div class="bg-green-50 dark:bg-green-900/40 border border-green-200 dark:border-green-800 text-green-800 dark:text-green-200 rounded-lg p-4 text-sm mb-6">
-            {{ session('status') }}
-        </div>
-    @endif
-
     <form wire:submit="save" class="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6 space-y-4">
         <div>
             <x-input-label for="commission_rate" :value="__('Taux de commission (%)')" />

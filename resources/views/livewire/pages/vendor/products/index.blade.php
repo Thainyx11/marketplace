@@ -44,12 +44,6 @@ new #[Layout('layouts.app')] class extends Component
         </a>
     </div>
 
-    @if (session('status'))
-        <div class="bg-green-50 dark:bg-green-900/40 border border-green-200 dark:border-green-800 text-green-800 dark:text-green-200 rounded-lg p-4 text-sm mb-6">
-            {{ session('status') }}
-        </div>
-    @endif
-
     @if (! auth()->user()->is_approved)
         <div class="bg-amber-50 dark:bg-amber-900/40 border border-amber-200 dark:border-amber-800 text-amber-800 dark:text-amber-200 rounded-lg p-4 text-sm mb-6">
             {{ __('Votre compte vendeur doit être approuvé par un administrateur avant de pouvoir publier des produits.') }}

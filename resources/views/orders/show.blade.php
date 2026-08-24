@@ -29,15 +29,7 @@
                                     </a>
                                     <p class="text-sm text-gray-500 dark:text-gray-400">{{ $item->quantity }} × {{ number_format($item->unit_price, 2, ',', ' ') }} € — {{ __('vendu par') }} {{ $item->seller->shop_name ?? $item->seller->name }}</p>
                                 </div>
-                                <span @class([
-                                    'text-xs px-2 py-1 rounded-full font-medium shrink-0',
-                                    'bg-amber-100 text-amber-800' => $item->status === 'en_attente',
-                                    'bg-blue-100 text-blue-800' => $item->status === 'acceptee',
-                                    'bg-purple-100 text-purple-800' => $item->status === 'expediee',
-                                    'bg-green-100 text-green-800' => $item->status === 'livree',
-                                ])>
-                                    {{ ['en_attente' => 'En attente', 'acceptee' => 'Acceptée', 'expediee' => 'Expédiée', 'livree' => 'Livrée'][$item->status] }}
-                                </span>
+                                <x-order-status-badge :status="$item->status" class="shrink-0" />
                             </div>
 
                             @if ($item->status === 'livree' && auth()->id() === $order->buyer_id)

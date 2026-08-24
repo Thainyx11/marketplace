@@ -56,12 +56,6 @@ new #[Layout('layouts.app')] class extends Component
 <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
     <h1 class="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-6">{{ __('Mon panier') }}</h1>
 
-    @if (session('error'))
-        <div class="bg-red-50 dark:bg-red-900/40 border border-red-200 dark:border-red-800 text-red-800 dark:text-red-200 rounded-lg p-4 text-sm mb-6">
-            {{ session('error') }}
-        </div>
-    @endif
-
     @if ($items->isEmpty())
         <p class="text-gray-500 dark:text-gray-400 py-12 text-center">
             {{ __('Votre panier est vide.') }}

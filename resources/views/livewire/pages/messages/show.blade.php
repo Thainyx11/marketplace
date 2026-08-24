@@ -108,12 +108,6 @@ new #[Layout('layouts.app')] class extends Component
         </h1>
     </div>
 
-    @if (session('status'))
-        <div class="bg-green-50 dark:bg-green-900/40 border border-green-200 dark:border-green-800 text-green-800 dark:text-green-200 rounded-lg p-3 text-sm mb-4">
-            {{ session('status') }}
-        </div>
-    @endif
-
     <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-4 messages-scroll h-96 overflow-y-auto space-y-3" wire:poll.5s="receiveMessage">
         @foreach ($messages as $message)
             <div class="flex {{ $message['sender_id'] === auth()->id() ? 'justify-end' : 'justify-start' }}">
