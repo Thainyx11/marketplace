@@ -67,24 +67,27 @@ new #[Layout('layouts.app')] class extends Component
                     @foreach ($heroProducts as $index => $product)
                         <x-carousel-slide>
                             <a href="{{ route('products.show', $product->slug) }}" wire:navigate
-                               class="grid grid-cols-1 sm:grid-cols-2 items-center gap-6 sm:gap-10 bg-white/5 border border-white/10 rounded-2xl p-6 sm:p-10 hover:bg-white/10 transition">
-                                <div class="aspect-square sm:aspect-[4/3] bg-white/5 rounded-xl overflow-hidden order-1 sm:order-none">
-                                    @if ($product->images->first())
-                                        <img src="{{ $product->images->first()->url }}" alt="{{ $product->title }}" class="object-cover w-full h-full">
-                                    @endif
-                                </div>
-                                <div>
-                                    <span class="inline-flex items-center gap-1 bg-gradient-to-r from-brand-700 to-brand-900 text-white text-xs font-bold px-3 py-1 rounded-full">
+                               class="group relative block aspect-[4/3] sm:aspect-[21/9] rounded-2xl overflow-hidden">
+                                @if ($product->images->first())
+                                    <img src="{{ $product->images->first()->url }}" alt="{{ $product->title }}"
+                                         class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                                @endif
+                                <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/40 to-black/5"></div>
+
+                                <div class="absolute inset-0 flex flex-col justify-end p-6 sm:p-10">
+                                    <span class="inline-flex items-center gap-1 self-start bg-gradient-to-r from-brand-700 to-brand-900 text-white text-xs font-bold px-3 py-1 rounded-full">
                                         {{ $index < 3 && $product->order_items_count > 0 ? '🔥 '.__('Populaire') : '🆕 '.__('Nouveauté') }}
                                     </span>
-                                    <h2 class="text-2xl sm:text-3xl font-extrabold mt-3">{{ $product->title }}</h2>
-                                    <p class="text-gray-300 text-sm mt-1">{{ $product->seller->shop_name ?? $product->seller->name }}</p>
-                                    <p class="text-3xl font-extrabold mt-4 bg-gradient-to-r from-brand-300 to-brand-500 bg-clip-text text-transparent">
-                                        {{ number_format($product->price, 2, ',', ' ') }} €
-                                    </p>
-                                    <span class="inline-block mt-5 bg-white text-gray-900 font-semibold px-5 py-2.5 rounded-full text-sm">
-                                        {{ __('Voir le produit →') }}
-                                    </span>
+                                    <h2 class="text-2xl sm:text-4xl font-extrabold mt-3 max-w-2xl">{{ $product->title }}</h2>
+                                    <p class="text-gray-300 text-sm sm:text-base mt-1">{{ $product->seller->shop_name ?? $product->seller->name }}</p>
+                                    <div class="flex items-center gap-4 mt-4">
+                                        <p class="text-2xl sm:text-3xl font-extrabold bg-gradient-to-r from-brand-300 to-brand-500 bg-clip-text text-transparent">
+                                            {{ number_format($product->price, 2, ',', ' ') }} €
+                                        </p>
+                                        <span class="bg-white text-gray-900 font-semibold px-5 py-2.5 rounded-full text-sm">
+                                            {{ __('Voir le produit →') }}
+                                        </span>
+                                    </div>
                                 </div>
                             </a>
                         </x-carousel-slide>
