@@ -56,6 +56,33 @@ class PasswordResetTest extends TestCase
         });
     }
 
+    /**
+     * Regression test: found via manual verification that a real mail-transport
+     * failure (Mailtrap rejecting the recipient) was surfacing as an uncaught
+     * 500 instead of the normal generic status — which would also have leaked,
+     * via a different error, whether the address is registered.
+     */
+    public function test_mail_transport_failure_does_not_crash_and_shows_generic_status(): void
+    {
+        config([
+            'mail.default' => 'smtp',
+            'mail.mailers.smtp.host' => '127.0.0.1',
+            'mail.mailers.smtp.port' => 1,
+        ]);
+
+        $user = User::factory()->create();
+
+        $component = Volt::test('pages.auth.forgot-password')
+            ->set('email', $user->email)
+            ->call('sendPasswordResetLink');
+
+        // The email field is only reset on the "link sent" branch — the error
+        // branch leaves it untouched — so this confirms the failure was
+        // swallowed and treated the same as a successful send.
+        $component->assertHasNoErrors();
+        $component->assertSet('email', '');
+    }
+
     public function test_password_can_be_reset_with_valid_token(): void
     {
         Notification::fake();

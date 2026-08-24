@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Password;
 use Livewire\Attributes\Layout;
 use Livewire\Volt\Component;
@@ -20,9 +21,19 @@ new #[Layout('layouts.guest')] class extends Component
         // We will send the password reset link to this user. Once we have attempted
         // to send the link, we will examine the response then see the message we
         // need to show to the user. Finally, we'll send out a proper response.
-        $status = Password::sendResetLink(
-            $this->only('email')
-        );
+        try {
+            $status = Password::sendResetLink(
+                $this->only('email')
+            );
+        } catch (\Throwable $e) {
+            // FIX: a mail-transport failure (e.g. the provider rejecting the
+            // recipient) must never surface as a raw 500 to the user, and must
+            // not reveal — via a different error than usual — whether the
+            // address is registered. Log it and fall through to the same
+            // generic "sent" status shown on success.
+            Log::error('Password reset email could not be sent: '.$e->getMessage());
+            $status = Password::RESET_LINK_SENT;
+        }
 
         if ($status != Password::RESET_LINK_SENT) {
             $this->addError('email', __($status));
