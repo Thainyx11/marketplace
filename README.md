@@ -41,16 +41,17 @@ php artisan reverb:start   # WebSocket pour la messagerie temps réel
 
 ### Paiement Stripe
 
-Le paiement fonctionne en mode dégradé sans clé configurée : le checkout affiche un message clair plutôt que de planter. Pour l'activer :
+Le paiement fonctionne en mode dégradé sans clé configurée : le webhook rejette (503) toute requête tant que `STRIPE_WEBHOOK_SECRET` n'est pas renseigné plutôt que de faire confiance à un paiement non signé. Pour l'activer en local :
 
 1. Créez un compte Stripe gratuit et récupérez vos clés de test sur https://dashboard.stripe.com/test/apikeys
 2. Renseignez `STRIPE_KEY` et `STRIPE_SECRET` dans `.env`
-3. Pour recevoir le webhook en local, installez le [Stripe CLI](https://stripe.com/docs/stripe-cli) puis :
+3. Installez le [Stripe CLI](https://stripe.com/docs/stripe-cli) (`winget install --id Stripe.StripeCLI` sous Windows), puis lancez le forward du webhook — l'URL dépend du serveur utilisé (`php artisan serve` = port 8000, Laragon = port du vhost) :
    ```bash
-   stripe listen --forward-to localhost:8000/webhook/stripe
+   stripe listen --forward-to http://localhost:8000/webhook/stripe --api-key sk_test_...
    ```
-   Copiez le `whsec_...` affiché dans `STRIPE_WEBHOOK_SECRET`.
-4. Testez avec la carte `4242 4242 4242 4242`, une date future, un CVC quelconque.
+   Gardez cette commande active dans un terminal pendant vos tests. Elle affiche un secret `whsec_...` au démarrage (ou récupérable seul via `stripe listen --print-secret --api-key sk_test_...`) : copiez-le dans `STRIPE_WEBHOOK_SECRET`.
+4. Sur la page de paiement Stripe, utilisez la carte de test `4242 4242 4242 4242`, une date d'expiration future (ex. `12/34`), un CVC quelconque (ex. `123`) et un nom quelconque.
+5. Après paiement, le terminal `stripe listen` doit afficher `[200] POST .../webhook/stripe` pour l'événement `checkout.session.completed` : la commande, la ligne de commande, le paiement et la décrémentation du stock se font à ce moment-là (voir `App\Http\Controllers\StripeWebhookController::fulfillOrder()`). Un `[500]` ou l'absence d'événement signale un problème à corriger avant de considérer le paiement fonctionnel — la réussite du paiement côté Stripe ne suffit pas, seul un `200` sur ce webhook garantit que la commande a bien été créée.
 
 ## Comptes de test (créés par le seeder)
 
