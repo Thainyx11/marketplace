@@ -8,15 +8,19 @@ use Livewire\Volt\Component;
 
 new #[Layout('layouts.app')] class extends Component
 {
-    public string $search = '';
-
     public function with(): array
     {
+        $popular = Product::active()->with(['images', 'seller'])
+            ->withCount('orderItems')->orderByDesc('order_items_count')->take(3)->get();
+
+        $latest = Product::active()->with(['images', 'seller'])->latest()->take(4)->get();
+
         return [
             'categories' => Category::withCount(['products' => fn ($q) => $q->active()])->whereNull('parent_id')->get(),
-            'latestProducts' => Product::active()->with(['images', 'seller'])->latest()->take(8)->get(),
+            'heroProducts' => $popular->concat($latest)->unique('id')->take(6)->values(),
+            'latestProducts' => $latest,
             'productsCount' => Product::active()->count(),
-            'vendorsCount' => User::where('role', 'vendeur')->where('is_approved', true)->count(),
+            'vendorsCount' => User::whereIn('role', ['vendeur', 'admin'])->where('is_approved', true)->whereNotNull('shop_slug')->count(),
         ];
     }
 }; ?>
@@ -25,7 +29,7 @@ new #[Layout('layouts.app')] class extends Component
     <div class="relative overflow-hidden bg-gradient-to-br from-violet-950 via-gray-950 to-gray-900 text-white">
         <div class="absolute inset-0 opacity-20" style="background-image: radial-gradient(circle at 20% 20%, #a855f7 0, transparent 35%), radial-gradient(circle at 80% 60%, #f59e0b 0, transparent 30%);"></div>
 
-        <div class="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-20 sm:py-28 text-center">
+        <div class="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 sm:pt-20 pb-10 text-center">
             <span class="inline-flex items-center gap-1.5 bg-white/10 text-violet-200 text-xs font-semibold px-3 py-1 rounded-full mb-6">
                 ✨ {{ __('Cartes, jeux rétro, figurines & plus') }}
             </span>
@@ -50,12 +54,44 @@ new #[Layout('layouts.app')] class extends Component
                 </div>
             </form>
 
-            <div class="mt-10 flex items-center justify-center gap-8 text-sm text-gray-400">
+            <div class="mt-8 flex items-center justify-center gap-8 text-sm text-gray-400">
                 <span><span class="text-white font-bold">{{ $productsCount }}</span> {{ __('articles en vente') }}</span>
                 <span class="h-1 w-1 rounded-full bg-gray-600"></span>
                 <span><span class="text-white font-bold">{{ $vendorsCount }}</span> {{ __('vendeurs') }}</span>
             </div>
         </div>
+
+        @if ($heroProducts->isNotEmpty())
+            <div class="relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
+                <x-carousel :dark="true" :interval="5500">
+                    @foreach ($heroProducts as $index => $product)
+                        <x-carousel-slide>
+                            <a href="{{ route('products.show', $product->slug) }}" wire:navigate
+                               class="grid grid-cols-1 sm:grid-cols-2 items-center gap-6 sm:gap-10 bg-white/5 border border-white/10 rounded-2xl p-6 sm:p-10 hover:bg-white/10 transition">
+                                <div class="aspect-square sm:aspect-[4/3] bg-white/5 rounded-xl overflow-hidden order-1 sm:order-none">
+                                    @if ($product->images->first())
+                                        <img src="{{ $product->images->first()->url }}" alt="{{ $product->title }}" class="object-cover w-full h-full">
+                                    @endif
+                                </div>
+                                <div>
+                                    <span class="inline-flex items-center gap-1 bg-gradient-to-r from-violet-500 to-fuchsia-600 text-white text-xs font-bold px-3 py-1 rounded-full">
+                                        {{ $index < 3 && $product->order_items_count > 0 ? '🔥 '.__('Populaire') : '🆕 '.__('Nouveauté') }}
+                                    </span>
+                                    <h2 class="text-2xl sm:text-3xl font-extrabold mt-3">{{ $product->title }}</h2>
+                                    <p class="text-gray-300 text-sm mt-1">{{ $product->seller->shop_name ?? $product->seller->name }}</p>
+                                    <p class="text-3xl font-extrabold mt-4 bg-gradient-to-r from-violet-400 to-amber-400 bg-clip-text text-transparent">
+                                        {{ number_format($product->price, 2, ',', ' ') }} €
+                                    </p>
+                                    <span class="inline-block mt-5 bg-white text-gray-900 font-semibold px-5 py-2.5 rounded-full text-sm">
+                                        {{ __('Voir le produit →') }}
+                                    </span>
+                                </div>
+                            </a>
+                        </x-carousel-slide>
+                    @endforeach
+                </x-carousel>
+            </div>
+        @endif
     </div>
 
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -98,5 +134,55 @@ new #[Layout('layouts.app')] class extends Component
                 @endforeach
             </div>
         @endif
+    </div>
+
+    <div class="bg-white dark:bg-gray-900 border-t border-gray-100 dark:border-gray-800 py-16">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-lg font-bold text-gray-900 dark:text-gray-100 text-center mb-8">{{ __('Comment ça marche ?') }}</h2>
+
+            <x-carousel :interval="7000">
+                <x-carousel-slide>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-5">
+                        <div class="bg-gray-50 dark:bg-gray-800 rounded-2xl p-6 text-center">
+                            <span class="text-3xl">🔍</span>
+                            <p class="font-bold text-gray-900 dark:text-gray-100 mt-3">1. {{ __('Parcourez') }}</p>
+                            <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">{{ __('Filtrez par catégorie, marque, état ou rareté pour trouver la pièce qui vous manque.') }}</p>
+                        </div>
+                        <div class="bg-gray-50 dark:bg-gray-800 rounded-2xl p-6 text-center">
+                            <span class="text-3xl">💳</span>
+                            <p class="font-bold text-gray-900 dark:text-gray-100 mt-3">2. {{ __('Achetez en sécurité') }}</p>
+                            <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">{{ __('Paiement protégé par Stripe : aucune donnée bancaire ne transite par nos serveurs.') }}</p>
+                        </div>
+                        <div class="bg-gray-50 dark:bg-gray-800 rounded-2xl p-6 text-center">
+                            <span class="text-3xl">⭐</span>
+                            <p class="font-bold text-gray-900 dark:text-gray-100 mt-3">3. {{ __('Recevez et notez') }}</p>
+                            <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">{{ __('Suivez votre livraison puis laissez un avis pour aider la communauté.') }}</p>
+                        </div>
+                    </div>
+                    <p class="text-center text-sm font-semibold text-violet-600 dark:text-violet-400 mt-6">{{ __('Pour les acheteurs') }}</p>
+                </x-carousel-slide>
+
+                <x-carousel-slide>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-5">
+                        <div class="bg-gray-50 dark:bg-gray-800 rounded-2xl p-6 text-center">
+                            <span class="text-3xl">🏪</span>
+                            <p class="font-bold text-gray-900 dark:text-gray-100 mt-3">1. {{ __('Créez votre boutique') }}</p>
+                            <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">{{ __("Inscrivez-vous en tant que vendeur — votre compte est validé rapidement par l'équipe.") }}</p>
+                        </div>
+                        <div class="bg-gray-50 dark:bg-gray-800 rounded-2xl p-6 text-center">
+                            <span class="text-3xl">📸</span>
+                            <p class="font-bold text-gray-900 dark:text-gray-100 mt-3">2. {{ __('Publiez vos articles') }}</p>
+                            <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">{{ __('Photos, état, prix, rareté : décrivez vos objets en quelques minutes.') }}</p>
+                        </div>
+                        <div class="bg-gray-50 dark:bg-gray-800 rounded-2xl p-6 text-center">
+                            <span class="text-3xl">💶</span>
+                            <p class="font-bold text-gray-900 dark:text-gray-100 mt-3">3. {{ __('Encaissez vos ventes') }}</p>
+                            <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">{{ __('Une commission raisonnable est prélevée par vente, le reste est à vous.') }}</p>
+                        </div>
+                    </div>
+                    <p class="text-center text-sm font-semibold text-violet-600 dark:text-violet-400 mt-6">{{ __('Pour les vendeurs') }}</p>
+                </x-carousel-slide>
+            </x-carousel>
+        </div>
     </div>
 </div>
