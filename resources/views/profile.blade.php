@@ -26,6 +26,25 @@
             </div>
 
             <div class="p-4 sm:p-8 bg-white dark:bg-gray-800 shadow-sm rounded-2xl">
+                <div class="max-w-xl space-y-6">
+                    <header>
+                        <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
+                            {{ __('Mes données') }}
+                        </h2>
+                        <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
+                            {{ __('Téléchargez une copie de vos données personnelles (profil, commandes, produits, avis, messages) au format JSON.') }}
+                        </p>
+                    </header>
+
+                    <a href="{{ route('profile.export') }}">
+                        <x-secondary-button type="button">
+                            {{ __('Télécharger mes données') }}
+                        </x-secondary-button>
+                    </a>
+                </div>
+            </div>
+
+            <div class="p-4 sm:p-8 bg-white dark:bg-gray-800 shadow-sm rounded-2xl">
                 <div class="max-w-xl">
                     <livewire:profile.delete-user-form />
                 </div>

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\ProfileDataExportController;
 use App\Http\Controllers\StripeWebhookController;
 use App\Models\Setting;
 use Illuminate\Support\Facades\Route;
@@ -37,6 +38,7 @@ Route::middleware(['auth'])->group(function () {
 
     Route::view('dashboard', 'dashboard')->name('dashboard');
     Route::view('profile', 'profile')->name('profile');
+    Route::get('profil/export-donnees', ProfileDataExportController::class)->name('profile.export');
 });
 
 // Admins can also own and manage a baseline product catalog through this
