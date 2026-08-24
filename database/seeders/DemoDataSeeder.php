@@ -11,6 +11,7 @@ use App\Models\Product;
 use App\Models\Review;
 use App\Models\User;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Str;
 
 class DemoDataSeeder extends Seeder
 {
@@ -65,7 +66,7 @@ class DemoDataSeeder extends Seeder
 
         foreach ($products as $data) {
             Product::firstOrCreate(
-                ['slug' => \Illuminate\Support\Str::slug($data['title'])],
+                ['slug' => Str::slug($data['title'])],
                 [
                     'user_id' => $vendeur->id,
                     'category_id' => $categories[$data['category']]->id,

@@ -17,9 +17,7 @@ class CartManager
 {
     private const SESSION_KEY = 'guest_cart';
 
-    public function __construct(private readonly ?User $user)
-    {
-    }
+    public function __construct(private readonly ?User $user) {}
 
     public function items(): Collection
     {
