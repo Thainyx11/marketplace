@@ -23,7 +23,7 @@ class ProductPolicy
 
     public function create(User $user): bool
     {
-        return $user->isVendeur() && $user->is_approved;
+        return ($user->isVendeur() && $user->is_approved) || $user->isAdmin();
     }
 
     public function update(User $user, Product $product): bool

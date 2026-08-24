@@ -53,9 +53,9 @@ new class extends Component
                         <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" wire:navigate>
                             {{ __('Tableau de bord') }}
                         </x-nav-link>
-                        @if (auth()->user()->isVendeur())
+                        @if (auth()->user()->isVendeur() || auth()->user()->isAdmin())
                             <x-nav-link :href="route('vendor.dashboard')" :active="request()->routeIs('vendor.*')" wire:navigate>
-                                {{ __('Espace vendeur') }}
+                                {{ auth()->user()->isAdmin() ? __('Ma boutique') : __('Espace vendeur') }}
                             </x-nav-link>
                         @endif
                         <x-nav-link :href="route('messages.index')" :active="request()->routeIs('messages.*')" wire:navigate>
@@ -163,9 +163,9 @@ new class extends Component
                 <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" wire:navigate>
                     {{ __('Tableau de bord') }}
                 </x-responsive-nav-link>
-                @if (auth()->user()->isVendeur())
+                @if (auth()->user()->isVendeur() || auth()->user()->isAdmin())
                     <x-responsive-nav-link :href="route('vendor.dashboard')" :active="request()->routeIs('vendor.*')" wire:navigate>
-                        {{ __('Espace vendeur') }}
+                        {{ auth()->user()->isAdmin() ? __('Ma boutique') : __('Espace vendeur') }}
                     </x-responsive-nav-link>
                 @endif
                 @if (auth()->user()->isAdmin() && Route::has('admin.dashboard'))

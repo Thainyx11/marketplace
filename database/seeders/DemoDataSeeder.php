@@ -36,9 +36,16 @@ class DemoDataSeeder extends Seeder
             Setting::set('legal_notice', "Mentions légales\n\nMarketplace Pop Culture est une plateforme de mise en relation entre vendeurs et acheteurs particuliers d'objets de collection liés à la pop culture (cartes, jeux vidéo, figurines, manga, goodies).\n\nÉditeur : Marketplace Pop Culture (projet de Travail de Fin d'Études).\nHébergement : environnement de développement local.\n\nConditions générales d'utilisation\n\n1. Chaque vendeur est responsable de l'exactitude des annonces qu'il publie et de la conformité des objets vendus.\n2. Une commission est prélevée par la plateforme sur chaque transaction, dont le taux est indiqué avant validation de la commande.\n3. Les données personnelles collectées (nom, email, adresse de livraison) sont utilisées exclusivement pour le bon fonctionnement des commandes et ne sont pas cédées à des tiers.\n4. Conformément au RGPD, chaque utilisateur peut demander la suppression de son compte et de ses données depuis la page Profil.\n5. Tout litige entre un acheteur et un vendeur peut être signalé à l'administration, qui pourra intervenir sur la commande concernée.");
         }
 
-        User::firstOrCreate(
+        // The admin can also own a baseline product catalog (ProductPolicy::create),
+        // so the marketplace is never empty regardless of real vendor signups —
+        // it needs a shop identity like any other seller to do that.
+        $admin = User::firstOrCreate(
             ['email' => 'admin@marketplace.test'],
-            ['name' => 'Admin Marketplace', 'password' => bcrypt('password'), 'role' => 'admin'],
+            [
+                'name' => 'Admin Marketplace', 'password' => bcrypt('password'), 'role' => 'admin',
+                'shop_name' => 'Sélection Officielle', 'shop_slug' => 'selection-officielle',
+                'bio' => "La sélection officielle de la marketplace : une base d'objets pop culture toujours disponible, tous univers confondus.",
+            ],
         );
 
         $acheteur = User::firstOrCreate(
@@ -66,7 +73,7 @@ class DemoDataSeeder extends Seeder
             'funko' => ['name' => 'Maxime Girard', 'shop_name' => 'Funko & Friends', 'shop_slug' => 'funko-and-friends', 'bio' => 'Collection de Funko Pop et figurines articulées, neuves sous boîte.'],
         ];
 
-        $vendors = [];
+        $vendors = ['admin' => $admin];
 
         foreach ($vendorDefs as $key => $def) {
             $vendors[$key] = User::firstOrCreate(
@@ -150,6 +157,58 @@ class DemoDataSeeder extends Seeder
             ['vendor' => 'popgoodies', 'title' => 'Casquette Super Mario', 'category' => 'goodies', 'price' => 15, 'condition' => 'neuf', 'brand' => 'Nintendo', 'rarity' => null, 'stock' => 7],
             ['vendor' => 'popgoodies', 'title' => 'Sac à dos Naruto Akatsuki', 'category' => 'goodies', 'price' => 32, 'condition' => 'neuf', 'brand' => null, 'rarity' => null, 'stock' => 4],
             ['vendor' => 'popgoodies', 'title' => 'Tapis de souris One Piece XXL', 'category' => 'goodies', 'price' => 14.9, 'condition' => 'neuf', 'brand' => null, 'rarity' => null, 'stock' => 10],
+
+            // --- Sélection Officielle (admin) : baseline permanente sur toutes les catégories ---
+            ['vendor' => 'admin', 'title' => 'Snorlax Holo - Jungle', 'category' => 'cartes-a-collectionner', 'price' => 24.9, 'condition' => 'bon_etat', 'brand' => 'Pokemon', 'rarity' => 'holo', 'stock' => 6],
+            ['vendor' => 'admin', 'title' => 'Rayquaza VMAX Alt Art', 'category' => 'cartes-a-collectionner', 'price' => 95, 'condition' => 'comme_neuf', 'brand' => 'Pokemon', 'rarity' => 'secrete', 'stock' => 2],
+            ['vendor' => 'admin', 'title' => 'Booster Pokémon 151', 'category' => 'cartes-a-collectionner', 'price' => 6.9, 'condition' => 'neuf', 'brand' => 'Pokemon', 'rarity' => 'commune', 'stock' => 40],
+            ['vendor' => 'admin', 'title' => 'Sol Ring - Magic Commander', 'category' => 'cartes-a-collectionner', 'price' => 4.5, 'condition' => 'neuf', 'brand' => null, 'rarity' => 'commune', 'stock' => 25],
+            ['vendor' => 'admin', 'title' => 'Dracaufeu ex - Écarlate et Violet', 'category' => 'cartes-a-collectionner', 'price' => 12.9, 'condition' => 'neuf', 'brand' => 'Pokemon', 'rarity' => 'holo', 'stock' => 10],
+            ['vendor' => 'admin', 'title' => 'Console PS2 Slim + 2 manettes', 'category' => 'jeux-video', 'price' => 89, 'condition' => 'bon_etat', 'brand' => 'PlayStation', 'rarity' => null, 'stock' => 2],
+            ['vendor' => 'admin', 'title' => 'The Legend of Zelda: Breath of the Wild - Switch', 'category' => 'jeux-video', 'price' => 42, 'condition' => 'comme_neuf', 'brand' => 'Nintendo', 'rarity' => null, 'stock' => 5],
+            ['vendor' => 'admin', 'title' => 'Super Smash Bros Melee - GameCube', 'category' => 'jeux-video', 'price' => 34.9, 'condition' => 'bon_etat', 'brand' => 'Nintendo', 'rarity' => null, 'stock' => 3],
+            ['vendor' => 'admin', 'title' => 'Console Sega Mega Drive II', 'category' => 'jeux-video', 'price' => 65, 'condition' => 'bon_etat', 'brand' => null, 'rarity' => null, 'stock' => 1],
+            ['vendor' => 'admin', 'title' => 'Manette Nintendo Switch Pro', 'category' => 'jeux-video', 'price' => 39.9, 'condition' => 'comme_neuf', 'brand' => 'Nintendo', 'rarity' => null, 'stock' => 6],
+            ['vendor' => 'admin', 'title' => 'Figurine One Piece Film Red - Luffy', 'category' => 'figurines', 'price' => 27.9, 'condition' => 'neuf', 'brand' => null, 'rarity' => null, 'stock' => 5],
+            ['vendor' => 'admin', 'title' => 'Funko Pop Attack on Titan - Eren', 'category' => 'figurines', 'price' => 14.9, 'condition' => 'neuf', 'brand' => 'Funko', 'rarity' => null, 'stock' => 9],
+            ['vendor' => 'admin', 'title' => 'Statuette Dragon Ball Super - Broly', 'category' => 'figurines', 'price' => 54, 'condition' => 'neuf', 'brand' => null, 'rarity' => null, 'stock' => 2],
+            ['vendor' => 'admin', 'title' => 'Figurine Pokémon Center - Mewtwo', 'category' => 'figurines', 'price' => 32, 'condition' => 'comme_neuf', 'brand' => 'Pokemon', 'rarity' => null, 'stock' => 3],
+            ['vendor' => 'admin', 'title' => 'Funko Pop Disney - Mickey Mouse', 'category' => 'figurines', 'price' => 12.9, 'condition' => 'neuf', 'brand' => 'Funko', 'rarity' => null, 'stock' => 14],
+            ['vendor' => 'admin', 'title' => 'Chainsaw Man Tome 1', 'category' => 'manga', 'price' => 7.9, 'condition' => 'neuf', 'brand' => null, 'rarity' => null, 'stock' => 12],
+            ['vendor' => 'admin', 'title' => 'Jujutsu Kaisen Tome 1', 'category' => 'manga', 'price' => 7.9, 'condition' => 'neuf', 'brand' => null, 'rarity' => null, 'stock' => 12],
+            ['vendor' => 'admin', 'title' => 'Spy x Family Tome 1', 'category' => 'manga', 'price' => 7.5, 'condition' => 'neuf', 'brand' => null, 'rarity' => null, 'stock' => 10],
+            ['vendor' => 'admin', 'title' => 'Berserk - Coffret Deluxe Vol.1', 'category' => 'manga', 'price' => 45, 'condition' => 'neuf', 'brand' => null, 'rarity' => null, 'stock' => 4],
+            ['vendor' => 'admin', 'title' => 'Vinland Saga Tome 1', 'category' => 'manga', 'price' => 8.9, 'condition' => 'neuf', 'brand' => null, 'rarity' => null, 'stock' => 8],
+            ['vendor' => 'admin', 'title' => 'Plaid polaire Pokémon', 'category' => 'goodies', 'price' => 22, 'condition' => 'neuf', 'brand' => 'Pokemon', 'rarity' => null, 'stock' => 8],
+            ['vendor' => 'admin', 'title' => 'Lampe Pokéball veilleuse', 'category' => 'goodies', 'price' => 18.9, 'condition' => 'neuf', 'brand' => 'Pokemon', 'rarity' => null, 'stock' => 10],
+            ['vendor' => 'admin', 'title' => 'Boîte de rangement pour cartes à collectionner', 'category' => 'goodies', 'price' => 9.9, 'condition' => 'neuf', 'brand' => null, 'rarity' => null, 'stock' => 20],
+            ['vendor' => 'admin', 'title' => 'Album de rangement 400 cartes', 'category' => 'goodies', 'price' => 16.9, 'condition' => 'neuf', 'brand' => null, 'rarity' => null, 'stock' => 15],
+            ['vendor' => 'admin', 'title' => 'Coffret goodies surprise pop culture', 'category' => 'goodies', 'price' => 29.9, 'condition' => 'neuf', 'brand' => null, 'rarity' => null, 'stock' => 10],
+
+            // --- Catalogue complémentaire (approfondit les boutiques existantes) ---
+            ['vendor' => 'leo', 'title' => 'Venusaur Holo - Base Set', 'category' => 'cartes-a-collectionner', 'price' => 38, 'condition' => 'bon_etat', 'brand' => 'Pokemon', 'rarity' => 'holo', 'stock' => 3],
+            ['vendor' => 'leo', 'title' => 'Gyarados 1ère Édition Shadowless', 'category' => 'cartes-a-collectionner', 'price' => 72, 'condition' => 'bon_etat', 'brand' => 'Pokemon', 'rarity' => 'holo', 'stock' => 1],
+            ['vendor' => 'leo', 'title' => 'Figurine Pokémon Center - Pikachu', 'category' => 'figurines', 'price' => 24.9, 'condition' => 'neuf', 'brand' => 'Pokemon', 'rarity' => null, 'stock' => 7],
+            ['vendor' => 'tck', 'title' => 'Charizard Base Set Shadowless', 'category' => 'cartes-a-collectionner', 'price' => 320, 'condition' => 'bon_etat', 'brand' => 'Pokemon', 'rarity' => 'secrete', 'stock' => 1],
+            ['vendor' => 'tck', 'title' => 'Booster Star Wars Unlimited', 'category' => 'cartes-a-collectionner', 'price' => 4.9, 'condition' => 'neuf', 'brand' => null, 'rarity' => 'commune', 'stock' => 22],
+            ['vendor' => 'tck', 'title' => 'Force of Will - Carte Magic rare', 'category' => 'cartes-a-collectionner', 'price' => 11, 'condition' => 'neuf', 'brand' => null, 'rarity' => 'rare', 'stock' => 9],
+            ['vendor' => 'retropixel', 'title' => 'Console Wii blanche + Wii Sports', 'category' => 'jeux-video', 'price' => 45, 'condition' => 'bon_etat', 'brand' => 'Nintendo', 'rarity' => null, 'stock' => 2],
+            ['vendor' => 'retropixel', 'title' => 'Chrono Trigger - SNES', 'category' => 'jeux-video', 'price' => 95, 'condition' => 'usage', 'brand' => 'Nintendo', 'rarity' => null, 'stock' => 1],
+            ['vendor' => 'retropixel', 'title' => 'Manette PS1 originale', 'category' => 'jeux-video', 'price' => 14.9, 'condition' => 'usage', 'brand' => 'PlayStation', 'rarity' => null, 'stock' => 6],
+            ['vendor' => 'mangacorner', 'title' => 'Vagabond Tome 1', 'category' => 'manga', 'price' => 9.5, 'condition' => 'bon_etat', 'brand' => null, 'rarity' => null, 'stock' => 4],
+            ['vendor' => 'mangacorner', 'title' => 'Tokyo Ghoul Tome 1', 'category' => 'manga', 'price' => 8, 'condition' => 'bon_etat', 'brand' => null, 'rarity' => null, 'stock' => 5],
+            ['vendor' => 'popgoodies', 'title' => 'Figurine porte-clés Kirby', 'category' => 'goodies', 'price' => 5.9, 'condition' => 'neuf', 'brand' => null, 'rarity' => null, 'stock' => 18],
+            ['vendor' => 'popgoodies', 'title' => 'Tapis de bain Animal Crossing', 'category' => 'goodies', 'price' => 16.5, 'condition' => 'neuf', 'brand' => 'Nintendo', 'rarity' => null, 'stock' => 6],
+            ['vendor' => 'popgoodies', 'title' => 'Bougie parfumée gaming', 'category' => 'goodies', 'price' => 12.9, 'condition' => 'neuf', 'brand' => null, 'rarity' => null, 'stock' => 9],
+            ['vendor' => 'funko', 'title' => 'Funko Pop Naruto Shippuden - Sasuke', 'category' => 'figurines', 'price' => 14.9, 'condition' => 'neuf', 'brand' => 'Funko', 'rarity' => null, 'stock' => 10],
+            ['vendor' => 'funko', 'title' => 'Figurine articulée Dragon Ball - Vegeta', 'category' => 'figurines', 'price' => 36, 'condition' => 'neuf', 'brand' => null, 'rarity' => null, 'stock' => 3],
+            ['vendor' => 'admin', 'title' => 'Eevee GX - Soleil et Lune', 'category' => 'cartes-a-collectionner', 'price' => 15.9, 'condition' => 'neuf', 'brand' => 'Pokemon', 'rarity' => 'holo', 'stock' => 8],
+            ['vendor' => 'admin', 'title' => 'Console PSP-3000 + 5 jeux', 'category' => 'jeux-video', 'price' => 74, 'condition' => 'bon_etat', 'brand' => 'PlayStation', 'rarity' => null, 'stock' => 2],
+            ['vendor' => 'admin', 'title' => 'Figurine Ichiban Kuji - Naruto Uzumaki', 'category' => 'figurines', 'price' => 31, 'condition' => 'neuf', 'brand' => null, 'rarity' => null, 'stock' => 4],
+            ['vendor' => 'admin', 'title' => 'Bleach Tome 1', 'category' => 'manga', 'price' => 7.5, 'condition' => 'neuf', 'brand' => null, 'rarity' => null, 'stock' => 9],
+            ['vendor' => 'admin', 'title' => 'Sticker pack pop culture (50 pièces)', 'category' => 'goodies', 'price' => 6.9, 'condition' => 'neuf', 'brand' => null, 'rarity' => null, 'stock' => 25],
+            ['vendor' => 'tck', 'title' => 'Espeon VMAX Alt Art', 'category' => 'cartes-a-collectionner', 'price' => 68, 'condition' => 'comme_neuf', 'brand' => 'Pokemon', 'rarity' => 'secrete', 'stock' => 2],
+            ['vendor' => 'retropixel', 'title' => 'Console Dreamcast + Sonic Adventure', 'category' => 'jeux-video', 'price' => 99, 'condition' => 'bon_etat', 'brand' => null, 'rarity' => null, 'stock' => 1],
         ];
 
         foreach ($products as $data) {

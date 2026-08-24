@@ -10,7 +10,7 @@ new #[Layout('layouts.app')] class extends Component
 
     public function mount(string $shop_slug): void
     {
-        $seller = User::where('role', 'vendeur')->where('shop_slug', $shop_slug)->first();
+        $seller = User::whereIn('role', ['vendeur', 'admin'])->where('shop_slug', $shop_slug)->first();
 
         abort_if(! $seller, 404);
 

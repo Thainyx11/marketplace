@@ -15,7 +15,10 @@ new #[Layout('layouts.app')] class extends Component
 
     public function with(): array
     {
-        $query = User::where('role', 'vendeur')->where('is_approved', true)->where('is_active', true)
+        // Admin-owned baseline catalogs behave like any other shop once they
+        // have a public slug (see ProductPolicy::create + the seeder).
+        $query = User::whereIn('role', ['vendeur', 'admin'])
+            ->where('is_approved', true)->where('is_active', true)->whereNotNull('shop_slug')
             ->withCount(['products' => fn ($q) => $q->active()]);
 
         if ($this->search !== '') {

@@ -39,7 +39,9 @@ Route::middleware(['auth'])->group(function () {
     Route::view('profile', 'profile')->name('profile');
 });
 
-Route::middleware(['auth', 'role:vendeur'])->prefix('vendeur')->name('vendor.')->group(function () {
+// Admins can also own and manage a baseline product catalog through this
+// same UI (see ProductPolicy::create) so the marketplace is never empty.
+Route::middleware(['auth', 'role:vendeur|admin'])->prefix('vendeur')->name('vendor.')->group(function () {
     Volt::route('/', 'pages.vendor.dashboard')->name('dashboard');
     Volt::route('produits', 'pages.vendor.products.index')->name('products.index');
     Volt::route('produits/creer', 'pages.vendor.products.form')->name('products.create');

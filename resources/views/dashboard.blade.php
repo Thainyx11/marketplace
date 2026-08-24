@@ -47,7 +47,7 @@
                     </a>
                 @endif
 
-                @if ($user->isVendeur())
+                @if ($user->isVendeur() || $user->isAdmin())
                     <a href="{{ route('vendor.products.index') }}" wire:navigate class="flex items-start gap-4 bg-white dark:bg-gray-800 rounded-2xl shadow-sm p-5 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200">
                         <span class="text-2xl">🏷️</span>
                         <div>
