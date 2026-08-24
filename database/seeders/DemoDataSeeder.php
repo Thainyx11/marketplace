@@ -231,9 +231,11 @@ class DemoDataSeeder extends Seeder
             if ($product->wasRecentlyCreated) {
                 $keywords = self::CATEGORY_KEYWORDS[$data['category']];
                 $keyword = $keywords[$product->id % count($keywords)];
+                // Portrait ratio for cards to match real trading-card proportions (~63x88mm); square elsewhere.
+                $dimensions = $data['category'] === 'cartes-a-collectionner' ? '560/800' : '800/800';
 
-                ProductImage::create(['product_id' => $product->id, 'path' => "https://loremflickr.com/800/800/{$keyword}?lock={$product->id}", 'position' => 0]);
-                ProductImage::create(['product_id' => $product->id, 'path' => "https://loremflickr.com/800/800/{$keyword}?lock=".($product->id + 1000), 'position' => 1]);
+                ProductImage::create(['product_id' => $product->id, 'path' => "https://loremflickr.com/{$dimensions}/{$keyword}?lock={$product->id}", 'position' => 0]);
+                ProductImage::create(['product_id' => $product->id, 'path' => "https://loremflickr.com/{$dimensions}/{$keyword}?lock=".($product->id + 1000), 'position' => 1]);
             }
         }
 
