@@ -100,27 +100,34 @@ new #[Layout('layouts.app')] class extends Component
         Echo.private('{{ $this->channelName() }}').listen('.message.sent', (e) => { $wire.receiveMessage(); });
         $watch('$el.scrollHeight', () => { $el.querySelector('.messages-scroll')?.scrollTo(0, 999999); });
      ">
-    <div class="mb-4">
-        <a href="{{ route('messages.index') }}" wire:navigate class="text-sm text-gray-500 dark:text-gray-400 hover:underline">← {{ __('Messages') }}</a>
-        <h1 class="text-xl font-semibold text-gray-900 dark:text-gray-100">
+    <div class="mb-4 flex items-center gap-3">
+        <a href="{{ route('messages.index') }}" wire:navigate class="text-gray-400 hover:text-violet-600 dark:hover:text-violet-400 transition">
+            <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+            </svg>
+        </a>
+        <span class="grid place-items-center h-10 w-10 rounded-full bg-gradient-to-br from-violet-500 to-fuchsia-600 text-white font-bold shrink-0">
+            {{ Str::upper(Str::substr($otherUser->shop_name ?? $otherUser->name, 0, 1)) }}
+        </span>
+        <h1 class="text-lg font-bold text-gray-900 dark:text-gray-100">
             {{ $otherUser->shop_name ?? $otherUser->name }}
-            <span class="text-gray-400 font-normal">— {{ $product->title }}</span>
+            <span class="text-gray-400 font-normal text-sm block sm:inline">— {{ $product->title }}</span>
         </h1>
     </div>
 
-    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-4 messages-scroll h-96 overflow-y-auto space-y-3" wire:poll.5s="receiveMessage">
+    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm p-4 messages-scroll h-96 overflow-y-auto space-y-3" wire:poll.5s="receiveMessage">
         @foreach ($messages as $message)
             <div class="flex {{ $message['sender_id'] === auth()->id() ? 'justify-end' : 'justify-start' }}">
                 <div class="max-w-xs">
                     <div @class([
-                        'rounded-lg px-3 py-2 text-sm',
-                        'bg-indigo-600 text-white' => $message['sender_id'] === auth()->id(),
-                        'bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-100' => $message['sender_id'] !== auth()->id(),
+                        'rounded-2xl px-3.5 py-2 text-sm',
+                        'bg-violet-600 text-white rounded-br-sm' => $message['sender_id'] === auth()->id(),
+                        'bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-100 rounded-bl-sm' => $message['sender_id'] !== auth()->id(),
                     ])>
                         {{ $message['content'] }}
                     </div>
                     @if ($message['sender_id'] !== auth()->id())
-                        <button type="button" wire:click="report({{ $message['id'] }})" class="text-xs text-gray-400 hover:underline mt-0.5">
+                        <button type="button" wire:click="report({{ $message['id'] }})" class="text-xs text-gray-400 hover:text-red-500 hover:underline mt-1 ms-1">
                             {{ __('Signaler') }}
                         </button>
                     @endif
@@ -131,9 +138,11 @@ new #[Layout('layouts.app')] class extends Component
 
     <form wire:submit="send" class="flex items-center gap-2 mt-4">
         <input type="text" wire:model="content" placeholder="{{ __('Votre message...') }}"
-               class="flex-1 rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-100 text-sm">
-        <button type="submit" class="bg-indigo-600 hover:bg-indigo-500 text-white font-semibold px-4 py-2 rounded-lg text-sm">
-            {{ __('Envoyer') }}
+               class="flex-1 rounded-full border-gray-300 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-100 text-sm focus:border-violet-500 focus:ring-violet-500">
+        <button type="submit" wire:loading.attr="disabled" wire:target="send"
+                class="bg-violet-600 hover:bg-violet-500 disabled:opacity-60 text-white font-semibold px-5 py-2.5 rounded-full text-sm transition">
+            <span wire:loading.remove wire:target="send">{{ __('Envoyer') }}</span>
+            <span wire:loading wire:target="send">{{ __('...') }}</span>
         </button>
     </form>
     @error('content') <p class="text-sm text-red-500 mt-1">{{ $message }}</p> @enderror
