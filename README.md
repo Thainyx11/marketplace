@@ -53,6 +53,15 @@ Le paiement fonctionne en mode dégradé sans clé configurée : le webhook reje
 4. Sur la page de paiement Stripe, utilisez la carte de test `4242 4242 4242 4242`, une date d'expiration future (ex. `12/34`), un CVC quelconque (ex. `123`) et un nom quelconque.
 5. Après paiement, le terminal `stripe listen` doit afficher `[200] POST .../webhook/stripe` pour l'événement `checkout.session.completed` : la commande, la ligne de commande, le paiement et la décrémentation du stock se font à ce moment-là (voir `App\Http\Controllers\StripeWebhookController::fulfillOrder()`). Un `[500]` ou l'absence d'événement signale un problème à corriger avant de considérer le paiement fonctionnel — la réussite du paiement côté Stripe ne suffit pas, seul un `200` sur ce webhook garantit que la commande a bien été créée.
 
+### Emails (Mailtrap)
+
+Les emails (réinitialisation de mot de passe, futures notifications) partent réellement via l'API transactionnelle de Mailtrap (`railsware/mailtrap-php`, transport `mailtrap-sdk` enregistré dans `config/mail.php` par le bridge Laravel du package) — plus de `MAIL_MAILER=log`.
+
+1. Créez un compte gratuit sur [mailtrap.io](https://mailtrap.io) et générez un token sur la page **API Tokens**.
+2. Renseignez `MAILTRAP_API_KEY` dans `.env`.
+3. `MAIL_FROM_ADDRESS` est réglé sur `hello@demomailtrap.co` (domaine de démo Mailtrap, fonctionne sans vérification) — à remplacer par un domaine vérifié pour un vrai envoi en production.
+4. `php artisan send-mail` envoie un email de test (voir `routes/console.php`) — `{"success": true, "message_ids": [...]}` confirme que ça fonctionne.
+
 ## Comptes de test (créés par le seeder)
 
 | Rôle | Email | Mot de passe |
@@ -105,7 +114,6 @@ Une CI GitHub Actions (`.github/workflows/ci.yml`) exécute ces trois commandes 
 ## Non couvert dans cette itération
 
 - Déploiement réel (hébergement type Railway/Render/o2switch) — nécessite la création d'un compte hébergeur par le commanditaire ; le code est prêt (voir `.github/workflows/ci.yml` pour la suite de build/tests automatisée, inactive tant que ce dépôt n'est pas poussé sur GitHub)
-- Envoi d'emails réel (confirmation de commande, etc.) — `MAIL_MAILER=log` actuellement, aucun email n'est réellement envoyé ; nécessite un compte chez un service SMTP (Mailtrap, etc.)
 - Clés Stripe/Reverb de production — à créer par le commanditaire (les clés de test fonctionnent en local, voir section Stripe ci-dessus)
 - Suite de tests exhaustive à 100% — la couverture actuelle (voir section Tests) couvre l'autorisation par rôle, le panier, le webhook Stripe (y compris des tests de non-régression sur les deux bugs trouvés lors de l'audit) et l'export RGPD ; certains flows secondaires (messagerie temps réel, litiges admin) restent non testés
 - API REST (Sanctum) : le stack technique du cahier des charges la mentionne, mais aucune app externe (mobile, SPA) ne consomme l'application — tout est rendu côté serveur (Blade/Livewire). Sanctum peut être activé sans changement d'architecture si un besoin apparaît.

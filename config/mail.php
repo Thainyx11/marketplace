@@ -75,6 +75,14 @@ return [
             'channel' => env('MAIL_LOG_CHANNEL'),
         ],
 
+        // Registered by railsware/mailtrap-php's Laravel bridge (Mail::extend
+        // in MailtrapSdkProvider::boot()) — sends through Mailtrap's real
+        // transactional API, not just the sandbox. Host/apiKey come from
+        // config/services.php's 'mailtrap-sdk' key (env: MAILTRAP_HOST, MAILTRAP_API_KEY).
+        'mailtrap-sdk' => [
+            'transport' => 'mailtrap-sdk',
+        ],
+
         'array' => [
             'transport' => 'array',
         ],
