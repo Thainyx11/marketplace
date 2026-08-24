@@ -21,11 +21,11 @@ new #[Layout('layouts.app')] class extends Component
 }; ?>
 
 <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-    <h1 class="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-6">{{ __('Administration') }}</h1>
+    <h1 class="text-2xl font-extrabold text-gray-900 dark:text-gray-100 mb-6">{{ __('Administration') }}</h1>
 
     @include('admin._nav')
 
-    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm divide-y divide-gray-100 dark:divide-gray-700">
+    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm divide-y divide-gray-100 dark:divide-gray-700">
         @forelse ($reports as $report)
             <div class="p-4" wire:key="report-{{ $report->id }}">
                 <div class="flex items-center justify-between">
@@ -37,11 +37,11 @@ new #[Layout('layouts.app')] class extends Component
                         <p class="text-xs text-gray-400 mt-1">{{ __('De') }} {{ $report->message->sender->name }} {{ __('à') }} {{ $report->message->receiver->name }}</p>
                     </div>
                     <div class="text-right shrink-0">
-                        <span @class(['text-xs px-2 py-1 rounded-full', 'bg-amber-100 text-amber-800' => $report->status === 'pending', 'bg-green-100 text-green-800' => $report->status === 'resolved'])>
+                        <x-badge :color="$report->status === 'pending' ? 'amber' : 'emerald'">
                             {{ $report->status === 'pending' ? __('En attente') : __('Résolu') }}
-                        </span>
+                        </x-badge>
                         @if ($report->status === 'pending')
-                            <button type="button" wire:click="resolve({{ $report->id }})" class="block mt-2 text-sm text-indigo-600 dark:text-indigo-400 hover:underline">
+                            <button type="button" wire:click="resolve({{ $report->id }})" class="block mt-2 text-sm font-semibold text-violet-600 dark:text-violet-400 hover:underline">
                                 {{ __('Marquer résolu') }}
                             </button>
                         @endif

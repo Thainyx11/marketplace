@@ -45,32 +45,27 @@ new #[Layout('layouts.app')] class extends Component
 }; ?>
 
 <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-    <h1 class="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-6">{{ __('Administration') }}</h1>
+    <h1 class="text-2xl font-extrabold text-gray-900 dark:text-gray-100 mb-6">{{ __('Administration') }}</h1>
 
     @include('admin._nav')
 
     <input type="text" wire:model.live.debounce.400ms="search" placeholder="{{ __('Titre ou vendeur...') }}"
-           class="w-full max-w-sm rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-100 text-sm mb-4">
+           class="w-full max-w-sm rounded-xl border-gray-300 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-100 text-sm mb-4 focus:border-violet-500 focus:ring-violet-500">
 
-    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm divide-y divide-gray-100 dark:divide-gray-700">
+    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm divide-y divide-gray-100 dark:divide-gray-700">
         @foreach ($products as $product)
             <div class="flex items-center gap-4 p-4" wire:key="admin-product-{{ $product->id }}">
                 <div class="flex-1 min-w-0">
-                    <p class="font-medium text-gray-900 dark:text-gray-100 truncate">{{ $product->title }}</p>
+                    <p class="font-semibold text-gray-900 dark:text-gray-100 truncate">{{ $product->title }}</p>
                     <p class="text-sm text-gray-500 dark:text-gray-400">{{ $product->seller->name }} · {{ number_format($product->price, 2, ',', ' ') }} €</p>
                 </div>
 
-                <span @class([
-                    'text-xs px-2 py-1 rounded-full',
-                    'bg-green-100 text-green-800' => $product->status === 'active',
-                    'bg-gray-100 text-gray-500' => $product->status === 'hidden',
-                    'bg-red-100 text-red-800' => $product->status === 'removed',
-                ])>
+                <x-badge :color="match($product->status) { 'active' => 'emerald', 'hidden' => 'gray', 'removed' => 'red' }">
                     {{ ['active' => 'En vente', 'hidden' => 'Masqué', 'removed' => 'Retiré'][$product->status] }}
-                </span>
+                </x-badge>
 
                 @if ($product->status === 'removed')
-                    <button type="button" wire:click="restore({{ $product->id }})" class="text-sm text-indigo-600 dark:text-indigo-400 hover:underline">
+                    <button type="button" wire:click="restore({{ $product->id }})" class="text-sm font-semibold text-violet-600 dark:text-violet-400 hover:underline">
                         {{ __('Restaurer') }}
                     </button>
                 @else

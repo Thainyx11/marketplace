@@ -140,27 +140,27 @@ new #[Layout('layouts.app')] class extends Component
 }; ?>
 
 <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-    <h1 class="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-6">
+    <h1 class="text-2xl font-extrabold text-gray-900 dark:text-gray-100 mb-6">
         {{ $product ? __('Modifier le produit') : __('Nouveau produit') }}
     </h1>
 
-    <form wire:submit="save" class="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6 space-y-4">
+    <form wire:submit="save" class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm p-6 space-y-4">
         <div>
             <x-input-label for="title" :value="__('Titre')" />
-            <x-text-input wire:model="title" id="title" class="mt-1 w-full" />
+            <x-text-input wire:model="title" id="title" class="mt-1.5 w-full" />
             @error('title') <p class="text-sm text-red-500 mt-1">{{ $message }}</p> @enderror
         </div>
 
         <div>
             <x-input-label for="description" :value="__('Description')" />
-            <textarea wire:model="description" id="description" rows="4" class="mt-1 w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-100 text-sm"></textarea>
+            <textarea wire:model="description" id="description" rows="4" class="mt-1.5 w-full rounded-xl border-gray-300 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-100 text-sm focus:border-violet-500 focus:ring-violet-500"></textarea>
             @error('description') <p class="text-sm text-red-500 mt-1">{{ $message }}</p> @enderror
         </div>
 
         <div class="grid grid-cols-2 gap-4">
             <div>
                 <x-input-label for="category_id" :value="__('Catégorie')" />
-                <select wire:model="category_id" id="category_id" class="mt-1 w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-100 text-sm">
+                <select wire:model="category_id" id="category_id" class="mt-1.5 w-full rounded-xl border-gray-300 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-100 text-sm focus:border-violet-500 focus:ring-violet-500">
                     <option value="">{{ __('Choisir...') }}</option>
                     @foreach ($categories as $cat)
                         <option value="{{ $cat->id }}">{{ $cat->name }}</option>
@@ -171,7 +171,7 @@ new #[Layout('layouts.app')] class extends Component
 
             <div>
                 <x-input-label for="condition" :value="__('État')" />
-                <select wire:model="condition" id="condition" class="mt-1 w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-100 text-sm">
+                <select wire:model="condition" id="condition" class="mt-1.5 w-full rounded-xl border-gray-300 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-100 text-sm focus:border-violet-500 focus:ring-violet-500">
                     <option value="neuf">{{ __('Neuf') }}</option>
                     <option value="comme_neuf">{{ __('Comme neuf') }}</option>
                     <option value="bon_etat">{{ __('Bon état') }}</option>
@@ -183,12 +183,12 @@ new #[Layout('layouts.app')] class extends Component
         <div class="grid grid-cols-2 gap-4">
             <div>
                 <x-input-label for="price" :value="__('Prix (€)')" />
-                <x-text-input wire:model="price" id="price" type="number" step="0.01" min="0" class="mt-1 w-full" />
+                <x-text-input wire:model="price" id="price" type="number" step="0.01" min="0" class="mt-1.5 w-full" />
                 @error('price') <p class="text-sm text-red-500 mt-1">{{ $message }}</p> @enderror
             </div>
             <div>
                 <x-input-label for="stock" :value="__('Stock')" />
-                <x-text-input wire:model="stock" id="stock" type="number" min="0" class="mt-1 w-full" />
+                <x-text-input wire:model="stock" id="stock" type="number" min="0" class="mt-1.5 w-full" />
                 @error('stock') <p class="text-sm text-red-500 mt-1">{{ $message }}</p> @enderror
             </div>
         </div>
@@ -196,17 +196,17 @@ new #[Layout('layouts.app')] class extends Component
         <div class="grid grid-cols-2 gap-4">
             <div>
                 <x-input-label for="brand" :value="__('Marque / série (optionnel)')" />
-                <x-text-input wire:model="brand" id="brand" class="mt-1 w-full" />
+                <x-text-input wire:model="brand" id="brand" class="mt-1.5 w-full" />
             </div>
             <div>
                 <x-input-label for="rarity" :value="__('Rareté (optionnel, cartes)')" />
-                <x-text-input wire:model="rarity" id="rarity" class="mt-1 w-full" />
+                <x-text-input wire:model="rarity" id="rarity" class="mt-1.5 w-full" />
             </div>
         </div>
 
         <div>
             <x-input-label for="status" :value="__('Visibilité')" />
-            <select wire:model="status" id="status" class="mt-1 w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-100 text-sm">
+            <select wire:model="status" id="status" class="mt-1.5 w-full rounded-xl border-gray-300 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-100 text-sm focus:border-violet-500 focus:ring-violet-500">
                 <option value="active">{{ __('En vente') }}</option>
                 <option value="hidden">{{ __('Masqué') }}</option>
             </select>
@@ -218,10 +218,10 @@ new #[Layout('layouts.app')] class extends Component
             @if ($existingImages->isNotEmpty())
                 <div class="grid grid-cols-4 gap-2 mt-2">
                     @foreach ($existingImages as $image)
-                        <div class="relative aspect-square bg-gray-100 dark:bg-gray-700 rounded overflow-hidden group" wire:key="img-{{ $image->id }}">
+                        <div class="relative aspect-square bg-gray-100 dark:bg-gray-700 rounded-xl overflow-hidden group" wire:key="img-{{ $image->id }}">
                             <img src="{{ Storage::url($image->path) }}" class="object-cover w-full h-full">
                             <button type="button" wire:click="removeImage({{ $image->id }})"
-                                    class="absolute top-1 right-1 bg-red-600 text-white text-xs rounded-full w-5 h-5">×</button>
+                                    class="absolute top-1 right-1 bg-red-600 hover:bg-red-500 text-white text-xs rounded-full w-5 h-5 transition">×</button>
                         </div>
                     @endforeach
                 </div>
@@ -232,7 +232,7 @@ new #[Layout('layouts.app')] class extends Component
         </div>
 
         <div class="flex justify-end gap-3 pt-2">
-            <a href="{{ route('vendor.products.index') }}" wire:navigate class="text-sm text-gray-600 dark:text-gray-400 self-center">{{ __('Annuler') }}</a>
+            <a href="{{ route('vendor.products.index') }}" wire:navigate class="text-sm font-semibold text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 self-center transition">{{ __('Annuler') }}</a>
             <x-primary-button>{{ __('Enregistrer') }}</x-primary-button>
         </div>
     </form>

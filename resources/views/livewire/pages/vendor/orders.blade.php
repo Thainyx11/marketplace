@@ -40,13 +40,13 @@ new #[Layout('layouts.app')] class extends Component
 }; ?>
 
 <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-    <h1 class="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-6">{{ __('Commandes reçues') }}</h1>
+    <h1 class="text-2xl font-extrabold text-gray-900 dark:text-gray-100 mb-6">{{ __('Commandes reçues') }}</h1>
 
-    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm divide-y divide-gray-100 dark:divide-gray-700">
+    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm divide-y divide-gray-100 dark:divide-gray-700">
         @forelse ($items as $item)
             <div class="flex items-center gap-4 p-4" wire:key="order-item-{{ $item->id }}">
                 <div class="flex-1 min-w-0">
-                    <p class="font-medium text-gray-900 dark:text-gray-100 truncate">{{ $item->product->title }}</p>
+                    <p class="font-semibold text-gray-900 dark:text-gray-100 truncate">{{ $item->product->title }}</p>
                     <p class="text-sm text-gray-500 dark:text-gray-400">
                         {{ __('Commande #:id', ['id' => $item->order_id]) }} · {{ $item->order->buyer->name }} ·
                         {{ $item->quantity }} × {{ number_format($item->unit_price, 2, ',', ' ') }} €
@@ -57,13 +57,16 @@ new #[Layout('layouts.app')] class extends Component
 
                 @if (isset(self::NEXT_STATUS[$item->status]))
                     <button type="button" wire:click="advance({{ $item->id }})"
-                            class="text-sm bg-gray-800 hover:bg-gray-700 text-white px-3 py-1.5 rounded-lg shrink-0">
+                            class="text-sm font-semibold bg-gray-900 hover:bg-gray-700 dark:bg-gray-100 dark:hover:bg-white dark:text-gray-900 text-white px-3.5 py-1.5 rounded-full shrink-0 transition">
                         {{ ['en_attente' => 'Accepter', 'acceptee' => 'Marquer expédiée', 'expediee' => 'Marquer livrée'][$item->status] }}
                     </button>
                 @endif
             </div>
         @empty
-            <p class="text-gray-500 dark:text-gray-400 p-8 text-center">{{ __("Aucune commande reçue pour l'instant.") }}</p>
+            <div class="p-12 text-center">
+                <div class="text-5xl mb-3">📬</div>
+                <p class="text-gray-500 dark:text-gray-400">{{ __("Aucune commande reçue pour l'instant.") }}</p>
+            </div>
         @endforelse
     </div>
 

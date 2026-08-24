@@ -33,49 +33,58 @@ new #[Layout('layouts.app')] class extends Component
 }; ?>
 
 <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-    <h1 class="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-6">{{ __('Tableau de bord vendeur') }}</h1>
+    <h1 class="text-2xl font-extrabold text-gray-900 dark:text-gray-100 mb-6">{{ __('Tableau de bord vendeur') }}</h1>
 
-    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
-        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-5">
-            <p class="text-sm text-gray-500 dark:text-gray-400">{{ __('Chiffre d\'affaires') }}</p>
-            <p class="text-2xl font-bold text-gray-900 dark:text-gray-100">{{ number_format($totalRevenue, 2, ',', ' ') }} €</p>
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm p-5 flex items-center gap-4">
+            <span class="grid place-items-center h-11 w-11 rounded-xl bg-violet-100 dark:bg-violet-900/50 text-violet-600 dark:text-violet-400 text-xl shrink-0">💶</span>
+            <div>
+                <p class="text-sm text-gray-500 dark:text-gray-400">{{ __('Chiffre d\'affaires') }}</p>
+                <p class="text-2xl font-extrabold text-gray-900 dark:text-gray-100">{{ number_format($totalRevenue, 2, ',', ' ') }} €</p>
+            </div>
         </div>
-        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-5">
-            <p class="text-sm text-gray-500 dark:text-gray-400">{{ __('Ventes') }}</p>
-            <p class="text-2xl font-bold text-gray-900 dark:text-gray-100">{{ $totalSales }}</p>
+        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm p-5 flex items-center gap-4">
+            <span class="grid place-items-center h-11 w-11 rounded-xl bg-amber-100 dark:bg-amber-900/50 text-amber-600 dark:text-amber-400 text-xl shrink-0">📈</span>
+            <div>
+                <p class="text-sm text-gray-500 dark:text-gray-400">{{ __('Ventes') }}</p>
+                <p class="text-2xl font-extrabold text-gray-900 dark:text-gray-100">{{ $totalSales }}</p>
+            </div>
         </div>
-        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-5">
-            <p class="text-sm text-gray-500 dark:text-gray-400">{{ __('Produits en vente') }}</p>
-            <p class="text-2xl font-bold text-gray-900 dark:text-gray-100">{{ $productsCount }}</p>
+        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm p-5 flex items-center gap-4">
+            <span class="grid place-items-center h-11 w-11 rounded-xl bg-emerald-100 dark:bg-emerald-900/50 text-emerald-600 dark:text-emerald-400 text-xl shrink-0">🏷️</span>
+            <div>
+                <p class="text-sm text-gray-500 dark:text-gray-400">{{ __('Produits en vente') }}</p>
+                <p class="text-2xl font-extrabold text-gray-900 dark:text-gray-100">{{ $productsCount }}</p>
+            </div>
         </div>
     </div>
 
-    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
-        <a href="{{ route('vendor.products.index') }}" wire:navigate class="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-5 hover:shadow-md transition">
-            <p class="font-medium text-gray-900 dark:text-gray-100">{{ __('Mes produits') }}</p>
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+        <a href="{{ route('vendor.products.index') }}" wire:navigate class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm p-5 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 font-semibold text-gray-900 dark:text-gray-100">
+            {{ __('Mes produits') }} →
         </a>
-        <a href="{{ route('vendor.orders') }}" wire:navigate class="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-5 hover:shadow-md transition">
-            <p class="font-medium text-gray-900 dark:text-gray-100">{{ __('Commandes reçues') }}</p>
+        <a href="{{ route('vendor.orders') }}" wire:navigate class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm p-5 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 font-semibold text-gray-900 dark:text-gray-100">
+            {{ __('Commandes reçues') }} →
         </a>
-        <a href="{{ route('messages.index') }}" wire:navigate class="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-5 hover:shadow-md transition">
-            <p class="font-medium text-gray-900 dark:text-gray-100">{{ __('Messages') }}</p>
+        <a href="{{ route('messages.index') }}" wire:navigate class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm p-5 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 font-semibold text-gray-900 dark:text-gray-100">
+            {{ __('Messages') }} →
         </a>
     </div>
 
-    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-5"
+    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm p-5"
          x-data="{
             init() {
                 new Chart(this.$refs.canvas, {
                     type: 'bar',
                     data: {
                         labels: @js($chartLabels),
-                        datasets: [{ label: @js(__('Chiffre d\'affaires (€)')), data: @js($chartData), backgroundColor: '#6366f1' }],
+                        datasets: [{ label: @js(__('Chiffre d\'affaires (€)')), data: @js($chartData), backgroundColor: '#7c3aed', borderRadius: 6 }],
                     },
                     options: { responsive: true, plugins: { legend: { display: false } } },
                 });
             }
          }">
-        <p class="font-semibold text-gray-900 dark:text-gray-100 mb-3">{{ __('Chiffre d\'affaires mensuel') }}</p>
+        <p class="font-bold text-gray-900 dark:text-gray-100 mb-3">{{ __('Chiffre d\'affaires mensuel') }}</p>
         <canvas x-ref="canvas" height="90"></canvas>
     </div>
 </div>
