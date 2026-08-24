@@ -22,11 +22,18 @@ class StripeWebhookController extends Controller
     {
         $secret = config('services.stripe.webhook_secret');
 
+        // Fail closed: without a secret we cannot verify the payload came from
+        // Stripe, so an unsigned "checkout.session.completed" must never be
+        // trusted to mint a paid order. This applies in dev exactly as in prod.
+        if (! $secret) {
+            Log::warning('Stripe webhook rejected: STRIPE_WEBHOOK_SECRET is not configured.');
+
+            return response('Webhook not configured', 503);
+        }
+
         try {
-            $event = $secret
-                ? Webhook::constructEvent($request->getContent(), $request->header('Stripe-Signature', ''), $secret)
-                : json_decode($request->getContent(), false, 512, JSON_THROW_ON_ERROR);
-        } catch (SignatureVerificationException|\JsonException $e) {
+            $event = Webhook::constructEvent($request->getContent(), $request->header('Stripe-Signature', ''), $secret);
+        } catch (SignatureVerificationException $e) {
             Log::warning('Stripe webhook rejected: '.$e->getMessage());
 
             return response('Invalid signature', 400);

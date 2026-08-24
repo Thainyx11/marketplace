@@ -13,6 +13,12 @@ new #[Layout('layouts.app')] class extends Component
     #[Url(as: 'q')]
     public string $search = '';
 
+    /** Defense-in-depth: the route group already requires role:admin. */
+    public function mount(): void
+    {
+        abort_unless(auth()->user()->isAdmin(), 403);
+    }
+
     public function remove(Product $product): void
     {
         $product->update(['status' => 'removed']);

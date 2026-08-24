@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Order;
+use Illuminate\Support\Facades\Gate;
 use Livewire\Attributes\Layout;
 use Livewire\Volt\Component;
 
@@ -12,12 +13,16 @@ new #[Layout('layouts.app')] class extends Component
 
     public function mount(Order $order): void
     {
+        abort_unless(auth()->user()->isAdmin(), 403);
+
         $this->order = $order->load(['items.product', 'items.seller', 'buyer', 'payment']);
         $this->status = $order->status;
     }
 
     public function overrideStatus(): void
     {
+        Gate::authorize('update', $this->order);
+
         $this->order->update(['status' => $this->status]);
         session()->flash('status', __('Statut de la commande mis à jour (intervention manuelle).'));
     }

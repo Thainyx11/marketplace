@@ -11,6 +11,12 @@ new #[Layout('layouts.app')] class extends Component
 
     public ?int $parent_id = null;
 
+    /** Defense-in-depth: the route group already requires role:admin. */
+    public function mount(): void
+    {
+        abort_unless(auth()->user()->isAdmin(), 403);
+    }
+
     public function create(): void
     {
         $this->validate(['name' => ['required', 'string', 'max:255']]);

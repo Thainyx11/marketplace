@@ -9,6 +9,12 @@ new #[Layout('layouts.app')] class extends Component
 {
     use WithPagination;
 
+    /** Defense-in-depth: the route group already requires role:admin. */
+    public function mount(): void
+    {
+        abort_unless(auth()->user()->isAdmin(), 403);
+    }
+
     public function resolve(MessageReport $report): void
     {
         $report->update(['status' => 'resolved']);

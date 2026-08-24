@@ -34,6 +34,12 @@ new #[Layout('layouts.app')] class extends Component
 
     public string $editRole = '';
 
+    /** Defense-in-depth: the route group already requires role:admin. */
+    public function mount(): void
+    {
+        abort_unless(auth()->user()->isAdmin(), 403);
+    }
+
     public function createUser(): void
     {
         $data = $this->validate([
