@@ -30,5 +30,7 @@
                 {{ __('Mentions légales & CGU') }}
             </a>
         </div>
+
+        <x-cookie-banner />
     </body>
 </html>
