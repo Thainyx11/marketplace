@@ -1,11 +1,11 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">{{ __('Commande #:id', ['id' => $order->id]) }}</h2>
+        <h2 class="font-extrabold text-2xl text-gray-900 dark:text-gray-100 leading-tight">{{ __('Commande #:id', ['id' => $order->id]) }}</h2>
     </x-slot>
 
-    <div class="py-12">
+    <div class="py-10">
         <div class="max-w-3xl mx-auto sm:px-6 lg:px-8 space-y-6">
-            <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6">
+            <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm p-6">
                 <div class="flex items-center justify-between mb-4">
                     <div>
                         <p class="text-sm text-gray-500 dark:text-gray-400">{{ $order->created_at->format('d/m/Y H:i') }}</p>
@@ -13,7 +13,7 @@
                     </div>
 
                     @if ($order->payment?->status === 'paid')
-                        <a href="{{ route('orders.invoice', $order) }}" target="_blank" class="text-sm text-indigo-600 dark:text-indigo-400 underline">
+                        <a href="{{ route('orders.invoice', $order) }}" target="_blank" class="text-sm font-semibold text-violet-600 dark:text-violet-400 hover:underline shrink-0">
                             {{ __('Télécharger la facture') }}
                         </a>
                     @endif
@@ -24,7 +24,7 @@
                         <div class="py-4">
                             <div class="flex items-center justify-between">
                                 <div>
-                                    <a href="{{ route('products.show', $item->product->slug) }}" class="font-medium text-gray-900 dark:text-gray-100 hover:underline">
+                                    <a href="{{ route('products.show', $item->product->slug) }}" class="font-semibold text-gray-900 dark:text-gray-100 hover:text-violet-600 dark:hover:text-violet-400">
                                         {{ $item->product->title }}
                                     </a>
                                     <p class="text-sm text-gray-500 dark:text-gray-400">{{ $item->quantity }} × {{ number_format($item->unit_price, 2, ',', ' ') }} € — {{ __('vendu par') }} {{ $item->seller->shop_name ?? $item->seller->name }}</p>
@@ -45,7 +45,7 @@
                     @else
                         <span></span>
                     @endif
-                    <span class="font-bold text-lg text-gray-900 dark:text-gray-100">{{ __('Total') }} : {{ number_format($order->total, 2, ',', ' ') }} €</span>
+                    <span class="font-extrabold text-lg text-gray-900 dark:text-gray-100">{{ __('Total') }} : {{ number_format($order->total, 2, ',', ' ') }} €</span>
                 </div>
             </div>
         </div>
