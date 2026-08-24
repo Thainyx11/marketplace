@@ -9,15 +9,24 @@ new class extends Component
 {
     public int $cartCount = 0;
 
+    public int $wishlistCount = 0;
+
     public function mount(): void
     {
         $this->cartCount = (new CartManager(auth()->user()))->count();
+        $this->wishlistCount = auth()->check() ? auth()->user()->wishlistedProducts()->count() : 0;
     }
 
     #[On('cart-updated')]
     public function refreshCartCount(): void
     {
         $this->cartCount = (new CartManager(auth()->user()))->count();
+    }
+
+    #[On('wishlist-updated')]
+    public function refreshWishlistCount(): void
+    {
+        $this->wishlistCount = auth()->check() ? auth()->user()->wishlistedProducts()->count() : 0;
     }
 
     /**
@@ -48,6 +57,9 @@ new class extends Component
                     </x-nav-link>
                     <x-nav-link :href="route('sellers.index')" :active="request()->routeIs('sellers.*')" wire:navigate>
                         {{ __('Vendeurs') }}
+                    </x-nav-link>
+                    <x-nav-link :href="route('wanted.index')" :active="request()->routeIs('wanted.*')" wire:navigate>
+                        {{ __('Recherches') }}
                     </x-nav-link>
                     @auth
                         <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" wire:navigate>
@@ -84,6 +96,15 @@ new class extends Component
             <!-- Right side -->
             <div class="hidden sm:flex sm:items-center gap-1 shrink-0">
                 @auth
+                    <a href="{{ route('wishlist.index') }}" wire:navigate class="relative inline-flex items-center justify-center h-9 w-9 rounded-full text-gray-300 hover:text-white hover:bg-white/10 transition">
+                        <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" />
+                        </svg>
+                        @if ($wishlistCount)
+                            <span class="absolute -top-1 -right-1 inline-flex items-center justify-center bg-brand-600 text-white text-[10px] font-bold rounded-full h-4 w-4">{{ $wishlistCount }}</span>
+                        @endif
+                    </a>
+
                     <a href="{{ route('cart.show') }}" wire:navigate class="relative inline-flex items-center justify-center h-9 w-9 rounded-full text-gray-300 hover:text-white hover:bg-white/10 transition">
                         <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 1.87-4.594 2.25-6.75H5.106M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z" />
@@ -159,6 +180,9 @@ new class extends Component
             <x-responsive-nav-link :href="route('sellers.index')" :active="request()->routeIs('sellers.*')" wire:navigate>
                 {{ __('Vendeurs') }}
             </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('wanted.index')" :active="request()->routeIs('wanted.*')" wire:navigate>
+                {{ __('Recherches') }}
+            </x-responsive-nav-link>
             @auth
                 <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" wire:navigate>
                     {{ __('Tableau de bord') }}
@@ -175,6 +199,9 @@ new class extends Component
                 @endif
                 <x-responsive-nav-link :href="route('messages.index')" :active="request()->routeIs('messages.*')" wire:navigate>
                     {{ __('Messages') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('wishlist.index')" :active="request()->routeIs('wishlist.index')" wire:navigate>
+                    {{ __('Favoris') }}@if ($wishlistCount) <span class="ms-1 text-brand-400">({{ $wishlistCount }})</span>@endif
                 </x-responsive-nav-link>
                 <x-responsive-nav-link :href="route('cart.show')" :active="request()->routeIs('cart.show')" wire:navigate>
                     {{ __('Panier') }}@if ($cartCount) <span class="ms-1 text-brand-400">({{ $cartCount }})</span>@endif

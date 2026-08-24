@@ -80,6 +80,7 @@ new #[Layout('layouts.app')] class extends Component
                 </p>
 
                 <livewire:components.add-to-cart :product="$product" />
+                <livewire:components.wishlist-toggle :product="$product" :compact="false" />
             </div>
 
             <div class="mt-8 border-t border-gray-200 dark:border-gray-700 pt-6">

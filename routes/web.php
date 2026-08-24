@@ -16,6 +16,12 @@ Volt::route('produits/{product:slug}', 'pages.products.show')->name('products.sh
 Volt::route('vendeurs', 'pages.sellers.index')->name('sellers.index');
 Volt::route('vendeurs/{shop_slug}', 'pages.sellers.show')->name('sellers.show');
 
+// 'nouvelle' must be declared before the {wantedItem} wildcard below, or the
+// wildcard route would swallow it as if it were an item id.
+Volt::route('recherches/nouvelle', 'pages.wanted.create')->middleware('auth')->name('wanted.create');
+Volt::route('recherches', 'pages.wanted.index')->name('wanted.index');
+Volt::route('recherches/{wantedItem}', 'pages.wanted.show')->name('wanted.show');
+
 Volt::route('panier', 'pages.cart.show')->name('cart.show');
 
 Route::get('mentions-legales', function () {
@@ -35,6 +41,8 @@ Route::middleware(['auth'])->group(function () {
 
     Volt::route('messages', 'pages.messages.index')->name('messages.index');
     Volt::route('messages/{product}/{user}', 'pages.messages.show')->name('messages.show');
+
+    Volt::route('favoris', 'pages.wishlist.index')->name('wishlist.index');
 
     Route::view('dashboard', 'dashboard')->name('dashboard');
     Route::view('profile', 'profile')->name('profile');

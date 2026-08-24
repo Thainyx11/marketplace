@@ -1,7 +1,7 @@
 @props(['product'])
 
-<a href="{{ route('products.show', $product->slug) }}" wire:navigate
-   class="group block bg-white dark:bg-gray-800 rounded-2xl overflow-hidden shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200">
+<div class="group relative bg-white dark:bg-gray-800 rounded-2xl overflow-hidden shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200">
+    <a href="{{ route('products.show', $product->slug) }}" wire:navigate class="block">
     <div class="relative {{ $product->category->slug === 'cartes-a-collectionner' ? 'aspect-[5/7]' : 'aspect-square' }} bg-gray-100 dark:bg-gray-700 overflow-hidden">
         @if ($product->images->first())
             <img src="{{ $product->images->first()->url }}" alt="{{ $product->title }}"
@@ -29,4 +29,7 @@
         <p class="text-xs text-gray-500 dark:text-gray-400 truncate mt-0.5">{{ $product->seller->shop_name ?? $product->seller->name }}</p>
         <p class="font-bold text-brand-600 dark:text-brand-400 mt-2">{{ number_format($product->price, 2, ',', ' ') }} €</p>
     </div>
-</a>
+    </a>
+
+    <livewire:components.wishlist-toggle :product="$product" :key="'wishlist-'.$product->id" />
+</div>

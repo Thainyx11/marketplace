@@ -81,7 +81,7 @@ Les emails (réinitialisation de mot de passe, futures notifications) partent r�
 ## Tests
 
 ```bash
-php artisan test           # 44 tests (auth, autorisation par rôle, profil, panier, webhook Stripe, export RGPD...)
+php artisan test           # 53 tests (auth, autorisation par rôle, profil, panier, webhook Stripe, export RGPD, favoris, recherches...)
 ./vendor/bin/pint --test   # style de code
 npm run build               # build production, doit sortir sans erreur ni warning
 ```
@@ -98,6 +98,8 @@ Une CI GitHub Actions (`.github/workflows/ci.yml`) exécute ces trois commandes 
 
 - **Comptes** : inscription acheteur (accès immédiat) / vendeur (validation admin requise), connexion, mot de passe oublié, profil (avatar, bio, adresse, infos boutique)
 - **Catalogue** : accueil, liste avec filtres (catégorie, marque, état, rareté, prix) + tri + recherche, fiche produit, annuaire et profils vendeurs
+- **Favoris** : ajouter/retirer un produit en un clic (catalogue et fiche produit), page dédiée `/favoris`, compteur en temps réel dans la nav
+- **Recherches** (`/recherches`) : un acheteur publie ce qu'il cherche (titre, description, catégorie, budget max) ; les vendeurs approuvés peuvent répondre, éventuellement en liant une de leurs annonces ; l'auteur peut marquer la recherche comme pourvue ou la clôturer
 - **Panier & commande** : panier session (invité) ou base de données (connecté, fusionné à la connexion), choix du mode d'expédition (standard / express), checkout Stripe, codes promo, facture PDF, suivi de commande
 - **Messagerie** : discussion par produit entre acheteur et vendeur, temps réel (Reverb), indicateur lu/non lu, signalement
 - **Avis** : notation 1-5 après livraison, affichée sur la fiche produit et le profil vendeur

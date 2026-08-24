@@ -45,6 +45,13 @@
                             <p class="text-sm text-gray-500 dark:text-gray-400">{{ __('Finaliser mes achats en cours') }}</p>
                         </div>
                     </a>
+                    <a href="{{ route('wishlist.index') }}" wire:navigate class="flex items-start gap-4 bg-white dark:bg-gray-800 rounded-2xl shadow-sm p-5 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200">
+                        <span class="text-2xl">🤍</span>
+                        <div>
+                            <p class="font-semibold text-gray-900 dark:text-gray-100">{{ __('Mes favoris') }}</p>
+                            <p class="text-sm text-gray-500 dark:text-gray-400">{{ __('Retrouver les articles sauvegardés') }}</p>
+                        </div>
+                    </a>
                 @endif
 
                 @if ($user->isVendeur() || $user->isAdmin())
