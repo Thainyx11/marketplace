@@ -7,6 +7,9 @@
 
         <title>{{ config('app.name', 'Laravel') }}</title>
 
+        <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+        <link rel="icon" href="/favicon.ico" sizes="any">
+
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=inter:400,500,600,700,800&display=swap" rel="stylesheet" />
@@ -37,7 +40,7 @@
             <footer class="mt-auto border-t border-gray-100 dark:border-gray-800">
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex flex-col sm:flex-row items-center justify-between gap-2 text-sm text-gray-500 dark:text-gray-400">
                     <span>&copy; {{ now()->year }} {{ config('app.name') }}</span>
-                    <a href="{{ route('legal-notice') }}" wire:navigate class="hover:text-violet-600 dark:hover:text-violet-400 transition">
+                    <a href="{{ route('legal-notice') }}" wire:navigate class="hover:text-brand-600 dark:hover:text-brand-400 transition">
                         {{ __('Mentions légales & CGU') }}
                     </a>
                 </div>

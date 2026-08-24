@@ -2,7 +2,7 @@
 
 <a href="{{ route('products.show', $product->slug) }}" wire:navigate
    class="group block bg-white dark:bg-gray-800 rounded-2xl overflow-hidden shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200">
-    <div class="relative aspect-square bg-gray-100 dark:bg-gray-700 overflow-hidden">
+    <div class="relative {{ $product->category->slug === 'cartes-a-collectionner' ? 'aspect-[5/7]' : 'aspect-square' }} bg-gray-100 dark:bg-gray-700 overflow-hidden">
         @if ($product->images->first())
             <img src="{{ $product->images->first()->url }}" alt="{{ $product->title }}"
                  class="object-cover w-full h-full group-hover:scale-105 transition-transform duration-300">
@@ -27,6 +27,6 @@
     <div class="p-3.5">
         <p class="font-semibold text-gray-900 dark:text-gray-100 truncate">{{ $product->title }}</p>
         <p class="text-xs text-gray-500 dark:text-gray-400 truncate mt-0.5">{{ $product->seller->shop_name ?? $product->seller->name }}</p>
-        <p class="font-bold text-violet-600 dark:text-violet-400 mt-2">{{ number_format($product->price, 2, ',', ' ') }} €</p>
+        <p class="font-bold text-brand-600 dark:text-brand-400 mt-2">{{ number_format($product->price, 2, ',', ' ') }} €</p>
     </div>
 </a>

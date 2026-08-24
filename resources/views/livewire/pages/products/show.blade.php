@@ -19,14 +19,16 @@ new #[Layout('layouts.app')] class extends Component
 
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
     <nav class="text-sm text-gray-500 dark:text-gray-400 mb-6">
-        <a href="{{ route('products.index') }}" wire:navigate class="hover:text-violet-600 dark:hover:text-violet-400">{{ __('Catalogue') }}</a>
+        <a href="{{ route('products.index') }}" wire:navigate class="hover:text-brand-600 dark:hover:text-brand-400">{{ __('Catalogue') }}</a>
         <span class="mx-1">/</span>
-        <a href="{{ route('products.index', ['categorie' => $product->category->slug]) }}" wire:navigate class="hover:text-violet-600 dark:hover:text-violet-400">{{ $product->category->name }}</a>
+        <a href="{{ route('products.index', ['categorie' => $product->category->slug]) }}" wire:navigate class="hover:text-brand-600 dark:hover:text-brand-400">{{ $product->category->name }}</a>
     </nav>
+
+    @php $isCard = $product->category->slug === 'cartes-a-collectionner'; @endphp
 
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
         <div x-data="{ active: 0, images: {{ $product->images->map(fn ($i) => $i->url)->toJson() }} }">
-            <div class="relative aspect-square bg-gray-100 dark:bg-gray-800 rounded-2xl overflow-hidden flex items-center justify-center">
+            <div class="relative {{ $isCard ? 'aspect-[5/7]' : 'aspect-square' }} bg-gray-100 dark:bg-gray-800 rounded-2xl overflow-hidden flex items-center justify-center">
                 <template x-if="images.length">
                     <img :src="images[active]" alt="{{ $product->title }}" class="object-cover w-full h-full">
                 </template>
@@ -45,8 +47,8 @@ new #[Layout('layouts.app')] class extends Component
                 <div class="grid grid-cols-5 gap-2 mt-2">
                     @foreach ($product->images as $index => $image)
                         <button type="button" @click="active = {{ $index }}"
-                                :class="active === {{ $index }} ? 'ring-2 ring-violet-500' : 'ring-1 ring-transparent opacity-80 hover:opacity-100'"
-                                class="aspect-square bg-gray-100 dark:bg-gray-800 rounded-lg overflow-hidden transition">
+                                :class="active === {{ $index }} ? 'ring-2 ring-brand-500' : 'ring-1 ring-transparent opacity-80 hover:opacity-100'"
+                                class="{{ $isCard ? 'aspect-[5/7]' : 'aspect-square' }} bg-gray-100 dark:bg-gray-800 rounded-lg overflow-hidden transition">
                             <img src="{{ $image->url }}" class="object-cover w-full h-full">
                         </button>
                     @endforeach
@@ -67,11 +69,11 @@ new #[Layout('layouts.app')] class extends Component
                 @if ($product->brand)
                     <x-badge color="gray">{{ $product->brand }}</x-badge>
                 @endif
-                <x-badge color="violet">{{ ['neuf' => 'Neuf', 'comme_neuf' => 'Comme neuf', 'bon_etat' => 'Bon état', 'usage' => 'Usagé'][$product->condition] }}</x-badge>
+                <x-badge color="brand">{{ ['neuf' => 'Neuf', 'comme_neuf' => 'Comme neuf', 'bon_etat' => 'Bon état', 'usage' => 'Usagé'][$product->condition] }}</x-badge>
             </div>
 
             <div class="mt-6 bg-white dark:bg-gray-800 rounded-2xl shadow-sm p-5">
-                <p class="text-3xl font-extrabold text-violet-600 dark:text-violet-400">{{ number_format($product->price, 2, ',', ' ') }} €</p>
+                <p class="text-3xl font-extrabold text-brand-600 dark:text-brand-400">{{ number_format($product->price, 2, ',', ' ') }} €</p>
 
                 <p class="text-sm mt-1 font-medium {{ $product->stock > 0 ? 'text-emerald-600 dark:text-emerald-400' : 'text-red-500' }}">
                     {{ $product->stock > 0 ? __(':count en stock', ['count' => $product->stock]) : __('Épuisé') }}
@@ -89,7 +91,7 @@ new #[Layout('layouts.app')] class extends Component
                 <h2 class="font-bold text-gray-900 dark:text-gray-100 mb-3">{{ __('Vendeur') }}</h2>
                 <a href="{{ route('sellers.show', $product->seller->shop_slug ?? $product->seller->id) }}" wire:navigate
                    class="flex items-center gap-3 bg-white dark:bg-gray-800 rounded-2xl p-4 shadow-sm hover:shadow-md transition">
-                    <span class="grid place-items-center h-11 w-11 rounded-full bg-gradient-to-br from-violet-500 to-fuchsia-600 text-white font-bold shrink-0">
+                    <span class="grid place-items-center h-11 w-11 rounded-full bg-gradient-to-br from-brand-700 to-brand-900 text-white font-bold shrink-0">
                         {{ Str::upper(Str::substr($product->seller->shop_name ?? $product->seller->name, 0, 1)) }}
                     </span>
                     <div class="flex-1 min-w-0">
@@ -98,7 +100,7 @@ new #[Layout('layouts.app')] class extends Component
                             <p class="text-sm text-amber-500">★ {{ number_format($product->seller->averageRating(), 1) }}</p>
                         @endif
                     </div>
-                    <span class="text-sm font-semibold text-violet-600 dark:text-violet-400 shrink-0">{{ __('Voir la boutique →') }}</span>
+                    <span class="text-sm font-semibold text-brand-600 dark:text-brand-400 shrink-0">{{ __('Voir la boutique →') }}</span>
                 </a>
 
                 @auth

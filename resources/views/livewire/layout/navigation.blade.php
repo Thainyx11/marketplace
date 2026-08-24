@@ -77,7 +77,7 @@ new class extends Component
                         <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35M18 10.5a7.5 7.5 0 11-15 0 7.5 7.5 0 0115 0z" />
                     </svg>
                     <input type="text" name="q" placeholder="{{ __('Rechercher un article...') }}"
-                           class="w-full bg-white/10 border-transparent rounded-full text-sm text-white placeholder-gray-400 pl-9 pr-4 py-2 focus:bg-white focus:text-gray-900 focus:placeholder-gray-400 focus:ring-2 focus:ring-violet-500 focus:border-transparent transition">
+                           class="w-full bg-white/10 border-transparent rounded-full text-sm text-white placeholder-gray-400 pl-9 pr-4 py-2 focus:bg-white focus:text-gray-900 focus:placeholder-gray-400 focus:ring-2 focus:ring-brand-500 focus:border-transparent transition">
                 </div>
             </form>
 
@@ -89,7 +89,7 @@ new class extends Component
                             <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 1.87-4.594 2.25-6.75H5.106M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z" />
                         </svg>
                         @if ($cartCount)
-                            <span class="absolute -top-1 -right-1 inline-flex items-center justify-center bg-violet-500 text-white text-[10px] font-bold rounded-full h-4 w-4">{{ $cartCount }}</span>
+                            <span class="absolute -top-1 -right-1 inline-flex items-center justify-center bg-brand-600 text-white text-[10px] font-bold rounded-full h-4 w-4">{{ $cartCount }}</span>
                         @endif
                     </a>
 
@@ -122,7 +122,7 @@ new class extends Component
                     <a href="{{ route('login') }}" wire:navigate class="text-sm font-medium text-gray-300 hover:text-white px-3 py-2 transition">
                         {{ __('Connexion') }}
                     </a>
-                    <a href="{{ route('register') }}" wire:navigate class="ms-1 text-sm font-semibold bg-violet-600 hover:bg-violet-500 text-white px-4 py-2 rounded-full transition">
+                    <a href="{{ route('register') }}" wire:navigate class="ms-1 text-sm font-semibold bg-brand-800 hover:bg-brand-700 text-white px-4 py-2 rounded-full transition">
                         {{ __('Inscription') }}
                     </a>
                 @endauth
@@ -148,7 +148,7 @@ new class extends Component
                     <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35M18 10.5a7.5 7.5 0 11-15 0 7.5 7.5 0 0115 0z" />
                 </svg>
                 <input type="text" name="q" placeholder="{{ __('Rechercher...') }}"
-                       class="w-full bg-white/10 border-transparent rounded-full text-sm text-white placeholder-gray-400 pl-9 pr-4 py-2 focus:bg-white focus:text-gray-900 focus:ring-2 focus:ring-violet-500 focus:border-transparent transition">
+                       class="w-full bg-white/10 border-transparent rounded-full text-sm text-white placeholder-gray-400 pl-9 pr-4 py-2 focus:bg-white focus:text-gray-900 focus:ring-2 focus:ring-brand-500 focus:border-transparent transition">
             </div>
         </form>
 
@@ -177,7 +177,7 @@ new class extends Component
                     {{ __('Messages') }}
                 </x-responsive-nav-link>
                 <x-responsive-nav-link :href="route('cart.show')" :active="request()->routeIs('cart.show')" wire:navigate>
-                    {{ __('Panier') }}@if ($cartCount) <span class="ms-1 text-violet-400">({{ $cartCount }})</span>@endif
+                    {{ __('Panier') }}@if ($cartCount) <span class="ms-1 text-brand-400">({{ $cartCount }})</span>@endif
                 </x-responsive-nav-link>
             @endauth
         </div>

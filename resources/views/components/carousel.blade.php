@@ -46,7 +46,7 @@
     <div class="flex justify-center gap-1.5 mt-3">
         <template x-for="i in count" :key="i">
             <button type="button" @click="goTo(i - 1)"
-                    :class="active === i - 1 ? '{{ $dark ? 'bg-white' : 'bg-violet-600' }} w-6' : '{{ $dark ? 'bg-white/30' : 'bg-gray-300' }} w-2'"
+                    :class="active === i - 1 ? '{{ $dark ? 'bg-white' : 'bg-brand-800' }} w-6' : '{{ $dark ? 'bg-white/30' : 'bg-gray-300' }} w-2'"
                     class="h-2 rounded-full transition-all"></button>
         </template>
     </div>

@@ -14,6 +14,21 @@ export default {
             fontFamily: {
                 sans: ['Inter', ...defaultTheme.fontFamily.sans],
             },
+            colors: {
+                brand: {
+                    50: '#F3F6FC',
+                    100: '#E5ECFA',
+                    200: '#C5D4F7',
+                    300: '#91AFF3',
+                    400: '#5082F1',
+                    500: '#0D54F2',
+                    600: '#0945CE',
+                    700: '#0537A8',
+                    800: '#032C87',
+                    900: '#012169',
+                    950: '#021746',
+                },
+            },
         },
     },
 

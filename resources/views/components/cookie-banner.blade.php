@@ -11,7 +11,7 @@
         </p>
         <button type="button"
                 @click="localStorage.setItem('cookie-banner-dismissed', '1'); show = false"
-                class="shrink-0 bg-violet-600 hover:bg-violet-500 text-white font-semibold text-sm px-5 py-2.5 rounded-full transition">
+                class="shrink-0 bg-brand-800 hover:bg-brand-700 text-white font-semibold text-sm px-5 py-2.5 rounded-full transition">
             {{ __("J'ai compris") }}
         </button>
     </div>
