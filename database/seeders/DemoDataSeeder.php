@@ -8,6 +8,7 @@ use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Payment;
 use App\Models\Product;
+use App\Models\ProductImage;
 use App\Models\Review;
 use App\Models\User;
 use Illuminate\Database\Seeder;
@@ -15,28 +16,20 @@ use Illuminate\Support\Str;
 
 class DemoDataSeeder extends Seeder
 {
+    /** Placeholder photo colour per category, so cards stay visually scannable. */
+    private const CATEGORY_COLORS = [
+        'cartes-a-collectionner' => '7c3aed',
+        'jeux-video' => '2563eb',
+        'figurines' => 'c026d3',
+        'manga' => 'd97706',
+        'goodies' => '059669',
+    ];
+
     public function run(): void
     {
-        $admin = User::firstOrCreate(
+        User::firstOrCreate(
             ['email' => 'admin@marketplace.test'],
             ['name' => 'Admin Marketplace', 'password' => bcrypt('password'), 'role' => 'admin'],
-        );
-
-        $vendeur = User::firstOrCreate(
-            ['email' => 'vendeur@marketplace.test'],
-            [
-                'name' => 'Cartes & Figurines Léo', 'password' => bcrypt('password'), 'role' => 'vendeur',
-                'is_approved' => true, 'shop_name' => 'Cartes & Figurines Léo', 'shop_slug' => 'cartes-figurines-leo',
-                'bio' => 'Passionné de cartes Pokémon et de figurines depuis 15 ans.',
-            ],
-        );
-
-        $vendeurPending = User::firstOrCreate(
-            ['email' => 'vendeur.pending@marketplace.test'],
-            [
-                'name' => 'Retro Games Shop', 'password' => bcrypt('password'), 'role' => 'vendeur',
-                'is_approved' => false, 'shop_name' => 'Retro Games Shop', 'shop_slug' => 'retro-games-shop',
-            ],
         );
 
         $acheteur = User::firstOrCreate(
@@ -47,28 +40,114 @@ class DemoDataSeeder extends Seeder
             ],
         );
 
+        User::firstOrCreate(
+            ['email' => 'vendeur.pending@marketplace.test'],
+            [
+                'name' => 'Retro Games Shop', 'password' => bcrypt('password'), 'role' => 'vendeur',
+                'is_approved' => false, 'shop_name' => 'Retro Games Shop', 'shop_slug' => 'retro-games-shop',
+            ],
+        );
+
+        $vendorDefs = [
+            'leo' => ['email' => 'vendeur@marketplace.test', 'name' => 'Léo Martin', 'shop_name' => 'Cartes & Figurines Léo', 'shop_slug' => 'cartes-figurines-leo', 'bio' => 'Passionné de cartes Pokémon et de figurines depuis 15 ans.'],
+            'tck' => ['name' => 'Antoine Roche', 'shop_name' => 'Trading Card Kingdom', 'shop_slug' => 'trading-card-kingdom', 'bio' => 'Spécialiste Magic, Pokémon et Yu-Gi-Oh — cartes gradées et éditions rares.'],
+            'retropixel' => ['name' => 'Julien Faure', 'shop_name' => 'RetroPixel Games', 'shop_slug' => 'retropixel-games', 'bio' => 'Consoles et jeux rétro testés et fonctionnels, du NES à la Dreamcast.'],
+            'mangacorner' => ['name' => 'Sofia Marchetti', 'shop_name' => 'Manga Corner', 'shop_slug' => 'manga-corner', 'bio' => "Mangas d'occasion en bon état, éditions originales et coffrets complets."],
+            'popgoodies' => ['name' => 'Nora Bensaid', 'shop_name' => 'PopGoodies Boutique', 'shop_slug' => 'popgoodies-boutique', 'bio' => 'Goodies, peluches et objets dérivés pour tous les fandoms.'],
+            'funko' => ['name' => 'Maxime Girard', 'shop_name' => 'Funko & Friends', 'shop_slug' => 'funko-and-friends', 'bio' => 'Collection de Funko Pop et figurines articulées, neuves sous boîte.'],
+        ];
+
+        $vendors = [];
+
+        foreach ($vendorDefs as $key => $def) {
+            $vendors[$key] = User::firstOrCreate(
+                ['email' => $def['email'] ?? "$key@marketplace.test"],
+                [
+                    'name' => $def['name'], 'password' => bcrypt('password'), 'role' => 'vendeur',
+                    'is_approved' => true, 'shop_name' => $def['shop_name'], 'shop_slug' => $def['shop_slug'],
+                    'bio' => $def['bio'],
+                ],
+            );
+        }
+
         $categories = Category::all()->keyBy('slug');
 
         $products = [
-            ['title' => 'Pikachu Illustrator (reproduction)', 'category' => 'cartes-a-collectionner', 'price' => 120, 'condition' => 'comme_neuf', 'brand' => 'Pokemon', 'rarity' => 'secrete', 'stock' => 3],
-            ['title' => 'Charizard VMAX', 'category' => 'cartes-a-collectionner', 'price' => 45.5, 'condition' => 'neuf', 'brand' => 'Pokemon', 'rarity' => 'holo', 'stock' => 5],
-            ['title' => 'Booster Magic The Gathering - Dominaria', 'category' => 'cartes-a-collectionner', 'price' => 8.9, 'condition' => 'neuf', 'brand' => null, 'rarity' => 'commune', 'stock' => 20],
-            ['title' => 'Super Mario 64 - Nintendo 64', 'category' => 'jeux-video', 'price' => 39.9, 'condition' => 'bon_etat', 'brand' => 'Nintendo', 'rarity' => null, 'stock' => 2],
-            ['title' => 'Final Fantasy VII - PS1 (complet)', 'category' => 'jeux-video', 'price' => 59, 'condition' => 'bon_etat', 'brand' => 'PlayStation', 'rarity' => null, 'stock' => 1],
-            ['title' => 'Manette GameCube violette', 'category' => 'jeux-video', 'price' => 25, 'condition' => 'usage', 'brand' => 'Nintendo', 'rarity' => null, 'stock' => 4],
-            ['title' => 'Figurine Funko Pop Naruto', 'category' => 'figurines', 'price' => 15.9, 'condition' => 'neuf', 'brand' => 'Funko', 'rarity' => null, 'stock' => 10],
-            ['title' => 'Figurine Ichiban Kuji Luffy', 'category' => 'figurines', 'price' => 34, 'condition' => 'neuf', 'brand' => null, 'rarity' => null, 'stock' => 6],
-            ['title' => 'One Piece Tome 1 - édition originale', 'category' => 'manga', 'price' => 12, 'condition' => 'bon_etat', 'brand' => null, 'rarity' => null, 'stock' => 3],
-            ['title' => 'Coffret Dragon Ball Z complet', 'category' => 'manga', 'price' => 89, 'condition' => 'comme_neuf', 'brand' => null, 'rarity' => null, 'stock' => 1],
-            ['title' => 'Porte-clés Pokéball lumineux', 'category' => 'goodies', 'price' => 6.5, 'condition' => 'neuf', 'brand' => 'Pokemon', 'rarity' => null, 'stock' => 15],
-            ['title' => 'Mug Zelda Triforce', 'category' => 'goodies', 'price' => 11.9, 'condition' => 'neuf', 'brand' => 'Nintendo', 'rarity' => null, 'stock' => 8],
+            // --- Cartes à collectionner : Léo ---
+            ['vendor' => 'leo', 'title' => 'Pikachu Illustrator (reproduction)', 'category' => 'cartes-a-collectionner', 'price' => 120, 'condition' => 'comme_neuf', 'brand' => 'Pokemon', 'rarity' => 'secrete', 'stock' => 3],
+            ['vendor' => 'leo', 'title' => 'Charizard VMAX', 'category' => 'cartes-a-collectionner', 'price' => 45.5, 'condition' => 'neuf', 'brand' => 'Pokemon', 'rarity' => 'holo', 'stock' => 5],
+            ['vendor' => 'leo', 'title' => 'Booster Magic The Gathering - Dominaria', 'category' => 'cartes-a-collectionner', 'price' => 8.9, 'condition' => 'neuf', 'brand' => null, 'rarity' => 'commune', 'stock' => 20],
+            ['vendor' => 'leo', 'title' => 'Blastoise EX', 'category' => 'cartes-a-collectionner', 'price' => 28, 'condition' => 'bon_etat', 'brand' => 'Pokemon', 'rarity' => 'holo', 'stock' => 4],
+            ['vendor' => 'leo', 'title' => 'Dracaufeu Reverse Édition Française', 'category' => 'cartes-a-collectionner', 'price' => 62, 'condition' => 'comme_neuf', 'brand' => 'Pokemon', 'rarity' => 'holo', 'stock' => 2],
+            ['vendor' => 'leo', 'title' => 'Mewtwo GX', 'category' => 'cartes-a-collectionner', 'price' => 19.5, 'condition' => 'neuf', 'brand' => 'Pokemon', 'rarity' => 'rare', 'stock' => 6],
+
+            // --- Cartes à collectionner : Trading Card Kingdom ---
+            ['vendor' => 'tck', 'title' => 'Black Lotus Alpha (reproduction certifiée)', 'category' => 'cartes-a-collectionner', 'price' => 89, 'condition' => 'neuf', 'brand' => null, 'rarity' => 'secrete', 'stock' => 2],
+            ['vendor' => 'tck', 'title' => 'Booster Yu-Gi-Oh! Legend of Blue Eyes', 'category' => 'cartes-a-collectionner', 'price' => 14.9, 'condition' => 'neuf', 'brand' => null, 'rarity' => 'rare', 'stock' => 12],
+            ['vendor' => 'tck', 'title' => 'Jace the Mind Sculptor - Magic', 'category' => 'cartes-a-collectionner', 'price' => 55, 'condition' => 'bon_etat', 'brand' => null, 'rarity' => 'holo', 'stock' => 3],
+            ['vendor' => 'tck', 'title' => 'Display 36 boosters Écarlate et Violet', 'category' => 'cartes-a-collectionner', 'price' => 145, 'condition' => 'neuf', 'brand' => 'Pokemon', 'rarity' => null, 'stock' => 5],
+            ['vendor' => 'tck', 'title' => 'Dracaufeu VSTAR Rainbow Rare', 'category' => 'cartes-a-collectionner', 'price' => 78, 'condition' => 'comme_neuf', 'brand' => 'Pokemon', 'rarity' => 'secrete', 'stock' => 2],
+            ['vendor' => 'tck', 'title' => 'Mew EX Full Art', 'category' => 'cartes-a-collectionner', 'price' => 22, 'condition' => 'neuf', 'brand' => 'Pokemon', 'rarity' => 'holo', 'stock' => 7],
+            ['vendor' => 'tck', 'title' => 'Salamence VMAX', 'category' => 'cartes-a-collectionner', 'price' => 17.5, 'condition' => 'bon_etat', 'brand' => 'Pokemon', 'rarity' => 'rare', 'stock' => 8],
+            ['vendor' => 'tck', 'title' => 'Booster One Piece Card Game - Romance Dawn', 'category' => 'cartes-a-collectionner', 'price' => 5.5, 'condition' => 'neuf', 'brand' => null, 'rarity' => 'commune', 'stock' => 30],
+            ['vendor' => 'tck', 'title' => 'Deck complet Yu-Gi-Oh Kaiba', 'category' => 'cartes-a-collectionner', 'price' => 34, 'condition' => 'comme_neuf', 'brand' => null, 'rarity' => 'rare', 'stock' => 4],
+            ['vendor' => 'tck', 'title' => 'Umbreon VMAX Alt Art', 'category' => 'cartes-a-collectionner', 'price' => 210, 'condition' => 'comme_neuf', 'brand' => 'Pokemon', 'rarity' => 'secrete', 'stock' => 1],
+            ['vendor' => 'tck', 'title' => 'Lugia Neo Genesis 1er Édition', 'category' => 'cartes-a-collectionner', 'price' => 165, 'condition' => 'bon_etat', 'brand' => 'Pokemon', 'rarity' => 'holo', 'stock' => 1],
+
+            // --- Jeux vidéo : RetroPixel Games ---
+            ['vendor' => 'retropixel', 'title' => 'Super Mario 64 - Nintendo 64', 'category' => 'jeux-video', 'price' => 39.9, 'condition' => 'bon_etat', 'brand' => 'Nintendo', 'rarity' => null, 'stock' => 2],
+            ['vendor' => 'retropixel', 'title' => 'Final Fantasy VII - PS1 (complet)', 'category' => 'jeux-video', 'price' => 59, 'condition' => 'bon_etat', 'brand' => 'PlayStation', 'rarity' => null, 'stock' => 1],
+            ['vendor' => 'retropixel', 'title' => 'Manette GameCube violette', 'category' => 'jeux-video', 'price' => 25, 'condition' => 'usage', 'brand' => 'Nintendo', 'rarity' => null, 'stock' => 4],
+            ['vendor' => 'retropixel', 'title' => 'Zelda Ocarina of Time - Nintendo 64', 'category' => 'jeux-video', 'price' => 44.9, 'condition' => 'bon_etat', 'brand' => 'Nintendo', 'rarity' => null, 'stock' => 2],
+            ['vendor' => 'retropixel', 'title' => 'Sonic Adventure 2 - Dreamcast', 'category' => 'jeux-video', 'price' => 32, 'condition' => 'bon_etat', 'brand' => null, 'rarity' => null, 'stock' => 1],
+            ['vendor' => 'retropixel', 'title' => 'Metal Gear Solid - PS1', 'category' => 'jeux-video', 'price' => 27.5, 'condition' => 'usage', 'brand' => 'PlayStation', 'rarity' => null, 'stock' => 3],
+            ['vendor' => 'retropixel', 'title' => 'Pokémon Version Or HeartGold - DS', 'category' => 'jeux-video', 'price' => 68, 'condition' => 'bon_etat', 'brand' => 'Nintendo', 'rarity' => null, 'stock' => 1],
+            ['vendor' => 'retropixel', 'title' => 'Console Game Boy Color transparente', 'category' => 'jeux-video', 'price' => 55, 'condition' => 'bon_etat', 'brand' => 'Nintendo', 'rarity' => null, 'stock' => 2],
+            ['vendor' => 'retropixel', 'title' => 'Manette Xbox 360 sans fil', 'category' => 'jeux-video', 'price' => 18, 'condition' => 'usage', 'brand' => null, 'rarity' => null, 'stock' => 5],
+            ['vendor' => 'retropixel', 'title' => 'Crash Bandicoot 3 - PS1', 'category' => 'jeux-video', 'price' => 24.9, 'condition' => 'bon_etat', 'brand' => 'PlayStation', 'rarity' => null, 'stock' => 2],
+            ['vendor' => 'retropixel', 'title' => 'Console Nintendo 64 grise + câbles', 'category' => 'jeux-video', 'price' => 79, 'condition' => 'bon_etat', 'brand' => 'Nintendo', 'rarity' => null, 'stock' => 1],
+
+            // --- Figurines : Léo + Funko & Friends ---
+            ['vendor' => 'leo', 'title' => 'Figurine Funko Pop Naruto', 'category' => 'figurines', 'price' => 15.9, 'condition' => 'neuf', 'brand' => 'Funko', 'rarity' => null, 'stock' => 10],
+            ['vendor' => 'leo', 'title' => 'Figurine Ichiban Kuji Luffy', 'category' => 'figurines', 'price' => 34, 'condition' => 'neuf', 'brand' => null, 'rarity' => null, 'stock' => 6],
+            ['vendor' => 'funko', 'title' => 'Funko Pop Batman', 'category' => 'figurines', 'price' => 13.9, 'condition' => 'neuf', 'brand' => 'Funko', 'rarity' => null, 'stock' => 12],
+            ['vendor' => 'funko', 'title' => 'Funko Pop Harry Potter - Dumbledore', 'category' => 'figurines', 'price' => 14.5, 'condition' => 'neuf', 'brand' => 'Funko', 'rarity' => null, 'stock' => 8],
+            ['vendor' => 'funko', 'title' => 'Figurine Dragon Ball - Goku Ultra Instinct', 'category' => 'figurines', 'price' => 42, 'condition' => 'neuf', 'brand' => null, 'rarity' => null, 'stock' => 4],
+            ['vendor' => 'funko', 'title' => 'Statuette My Hero Academia - Deku', 'category' => 'figurines', 'price' => 38, 'condition' => 'neuf', 'brand' => null, 'rarity' => null, 'stock' => 3],
+            ['vendor' => 'funko', 'title' => 'Funko Pop Star Wars - Baby Yoda', 'category' => 'figurines', 'price' => 16.9, 'condition' => 'neuf', 'brand' => 'Funko', 'rarity' => null, 'stock' => 15],
+            ['vendor' => 'funko', 'title' => 'Nendoroid Sailor Moon', 'category' => 'figurines', 'price' => 49, 'condition' => 'comme_neuf', 'brand' => null, 'rarity' => null, 'stock' => 2],
+            ['vendor' => 'funko', 'title' => 'Funko Pop Marvel - Spider-Man', 'category' => 'figurines', 'price' => 13.9, 'condition' => 'neuf', 'brand' => 'Funko', 'rarity' => null, 'stock' => 11],
+            ['vendor' => 'funko', 'title' => 'Figurine Demon Slayer - Tanjiro', 'category' => 'figurines', 'price' => 29.9, 'condition' => 'neuf', 'brand' => null, 'rarity' => null, 'stock' => 5],
+
+            // --- Manga : Manga Corner ---
+            ['vendor' => 'mangacorner', 'title' => 'One Piece Tome 1 - édition originale', 'category' => 'manga', 'price' => 12, 'condition' => 'bon_etat', 'brand' => null, 'rarity' => null, 'stock' => 3],
+            ['vendor' => 'mangacorner', 'title' => 'Coffret Dragon Ball Z complet', 'category' => 'manga', 'price' => 89, 'condition' => 'comme_neuf', 'brand' => null, 'rarity' => null, 'stock' => 1],
+            ['vendor' => 'mangacorner', 'title' => 'Naruto Tome 1 - édition originale', 'category' => 'manga', 'price' => 9.5, 'condition' => 'bon_etat', 'brand' => null, 'rarity' => null, 'stock' => 5],
+            ['vendor' => 'mangacorner', 'title' => "L'Attaque des Titans - Coffret complet", 'category' => 'manga', 'price' => 145, 'condition' => 'comme_neuf', 'brand' => null, 'rarity' => null, 'stock' => 1],
+            ['vendor' => 'mangacorner', 'title' => 'Death Note Tomes 1 à 5', 'category' => 'manga', 'price' => 38, 'condition' => 'bon_etat', 'brand' => null, 'rarity' => null, 'stock' => 2],
+            ['vendor' => 'mangacorner', 'title' => 'Demon Slayer Tome 1', 'category' => 'manga', 'price' => 7.9, 'condition' => 'neuf', 'brand' => null, 'rarity' => null, 'stock' => 8],
+            ['vendor' => 'mangacorner', 'title' => 'One Punch Man Tome 1', 'category' => 'manga', 'price' => 8.5, 'condition' => 'neuf', 'brand' => null, 'rarity' => null, 'stock' => 6],
+            ['vendor' => 'mangacorner', 'title' => 'Fullmetal Alchemist - Coffret intégral', 'category' => 'manga', 'price' => 120, 'condition' => 'comme_neuf', 'brand' => null, 'rarity' => null, 'stock' => 1],
+            ['vendor' => 'mangacorner', 'title' => 'My Hero Academia Tomes 1 à 3', 'category' => 'manga', 'price' => 22, 'condition' => 'bon_etat', 'brand' => null, 'rarity' => null, 'stock' => 3],
+
+            // --- Goodies : PopGoodies ---
+            ['vendor' => 'popgoodies', 'title' => 'Porte-clés Pokéball lumineux', 'category' => 'goodies', 'price' => 6.5, 'condition' => 'neuf', 'brand' => 'Pokemon', 'rarity' => null, 'stock' => 15],
+            ['vendor' => 'popgoodies', 'title' => 'Mug Zelda Triforce', 'category' => 'goodies', 'price' => 11.9, 'condition' => 'neuf', 'brand' => 'Nintendo', 'rarity' => null, 'stock' => 8],
+            ['vendor' => 'popgoodies', 'title' => 'Peluche Pikachu 30cm', 'category' => 'goodies', 'price' => 19.9, 'condition' => 'neuf', 'brand' => 'Pokemon', 'rarity' => null, 'stock' => 10],
+            ['vendor' => 'popgoodies', 'title' => "Poster L'Attaque des Titans", 'category' => 'goodies', 'price' => 8.9, 'condition' => 'neuf', 'brand' => null, 'rarity' => null, 'stock' => 20],
+            ['vendor' => 'popgoodies', 'title' => "Set de pin's Pokémon", 'category' => 'goodies', 'price' => 9.5, 'condition' => 'neuf', 'brand' => 'Pokemon', 'rarity' => null, 'stock' => 12],
+            ['vendor' => 'popgoodies', 'title' => 'Coussin Totoro', 'category' => 'goodies', 'price' => 17.9, 'condition' => 'neuf', 'brand' => null, 'rarity' => null, 'stock' => 6],
+            ['vendor' => 'popgoodies', 'title' => 'Gourde Harry Potter Poudlard', 'category' => 'goodies', 'price' => 13.5, 'condition' => 'neuf', 'brand' => null, 'rarity' => null, 'stock' => 9],
+            ['vendor' => 'popgoodies', 'title' => 'Casquette Super Mario', 'category' => 'goodies', 'price' => 15, 'condition' => 'neuf', 'brand' => 'Nintendo', 'rarity' => null, 'stock' => 7],
+            ['vendor' => 'popgoodies', 'title' => 'Sac à dos Naruto Akatsuki', 'category' => 'goodies', 'price' => 32, 'condition' => 'neuf', 'brand' => null, 'rarity' => null, 'stock' => 4],
+            ['vendor' => 'popgoodies', 'title' => 'Tapis de souris One Piece XXL', 'category' => 'goodies', 'price' => 14.9, 'condition' => 'neuf', 'brand' => null, 'rarity' => null, 'stock' => 10],
         ];
 
         foreach ($products as $data) {
-            Product::firstOrCreate(
+            $product = Product::firstOrCreate(
                 ['slug' => Str::slug($data['title'])],
                 [
-                    'user_id' => $vendeur->id,
+                    'user_id' => $vendors[$data['vendor']]->id,
                     'category_id' => $categories[$data['category']]->id,
                     'title' => $data['title'],
                     'description' => "Article d'occasion / collection vendu en l'état. {$data['title']}, en parfait état de fonctionnement.",
@@ -80,10 +159,19 @@ class DemoDataSeeder extends Seeder
                     'status' => 'active',
                 ],
             );
+
+            if ($product->wasRecentlyCreated) {
+                $color = self::CATEGORY_COLORS[$data['category']];
+                $label = urlencode($this->imageLabel($data['title']));
+
+                ProductImage::create(['product_id' => $product->id, 'path' => "https://placehold.co/800x800/{$color}/ffffff?text={$label}", 'position' => 0]);
+                ProductImage::create(['product_id' => $product->id, 'path' => "https://placehold.co/800x800/{$color}/ffffff?text={$label}+-+vue+2", 'position' => 1]);
+            }
         }
 
         // A completed order with a review, so the delivered/review flow has data to show immediately.
         $charizard = Product::where('slug', 'charizard-vmax')->first();
+        $vendeur = $vendors['leo'];
 
         if ($charizard && ! Order::where('buyer_id', $acheteur->id)->exists()) {
             $order = Order::create([
@@ -134,6 +222,20 @@ class DemoDataSeeder extends Seeder
             ]);
         }
 
-        $this->command?->info('Comptes de test : admin@marketplace.test / vendeur@marketplace.test / vendeur.pending@marketplace.test / acheteur@marketplace.test — mot de passe : password');
+        $vendorEmails = array_map(fn ($key, $def) => $def['email'] ?? "$key@marketplace.test", array_keys($vendorDefs), $vendorDefs);
+
+        $this->command?->info('Comptes de test (mot de passe: password) : admin@marketplace.test, acheteur@marketplace.test, vendeur.pending@marketplace.test, et '.implode(', ', $vendorEmails));
+    }
+
+    /** Trims a placeholder image label to a full word, never mid-word. */
+    private function imageLabel(string $title): string
+    {
+        $limit = 32;
+
+        if (mb_strlen($title) <= $limit) {
+            return $title;
+        }
+
+        return rtrim(mb_substr($title, 0, mb_strrpos(mb_substr($title, 0, $limit), ' ') ?: $limit));
     }
 }

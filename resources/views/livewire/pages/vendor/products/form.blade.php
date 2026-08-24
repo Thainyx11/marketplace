@@ -219,7 +219,7 @@ new #[Layout('layouts.app')] class extends Component
                 <div class="grid grid-cols-4 gap-2 mt-2">
                     @foreach ($existingImages as $image)
                         <div class="relative aspect-square bg-gray-100 dark:bg-gray-700 rounded-xl overflow-hidden group" wire:key="img-{{ $image->id }}">
-                            <img src="{{ Storage::url($image->path) }}" class="object-cover w-full h-full">
+                            <img src="{{ $image->url }}" class="object-cover w-full h-full">
                             <button type="button" wire:click="removeImage({{ $image->id }})"
                                     class="absolute top-1 right-1 bg-red-600 hover:bg-red-500 text-white text-xs rounded-full w-5 h-5 transition">×</button>
                         </div>

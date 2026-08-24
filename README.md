@@ -57,11 +57,16 @@ Le paiement fonctionne en mode dégradé sans clé configurée : le checkout aff
 | Rôle | Email | Mot de passe |
 |---|---|---|
 | Administrateur | `admin@marketplace.test` | `password` |
-| Vendeur approuvé | `vendeur@marketplace.test` | `password` |
+| Vendeur approuvé — Cartes & Figurines Léo | `vendeur@marketplace.test` | `password` |
+| Vendeur approuvé — Trading Card Kingdom | `tck@marketplace.test` | `password` |
+| Vendeur approuvé — RetroPixel Games | `retropixel@marketplace.test` | `password` |
+| Vendeur approuvé — Manga Corner | `mangacorner@marketplace.test` | `password` |
+| Vendeur approuvé — PopGoodies Boutique | `popgoodies@marketplace.test` | `password` |
+| Vendeur approuvé — Funko & Friends | `funko@marketplace.test` | `password` |
 | Vendeur en attente | `vendeur.pending@marketplace.test` | `password` |
 | Acheteur | `acheteur@marketplace.test` | `password` |
 
-`php artisan migrate:fresh --seed` régénère une base propre avec ces comptes, 5 catégories, 12 produits, et une commande livrée avec avis pour avoir tout de suite des données à l'écran.
+`php artisan migrate:fresh --seed` régénère une base propre avec ces comptes, 5 catégories, 57 produits (2 photos placeholder chacun, générées via placehold.co) répartis sur 6 boutiques, et une commande livrée avec avis pour avoir tout de suite des données à l'écran.
 
 ## Tests
 

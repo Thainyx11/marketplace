@@ -25,7 +25,7 @@ new #[Layout('layouts.app')] class extends Component
     </nav>
 
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
-        <div x-data="{ active: 0, images: {{ $product->images->map(fn ($i) => Storage::url($i->path))->toJson() }} }">
+        <div x-data="{ active: 0, images: {{ $product->images->map(fn ($i) => $i->url)->toJson() }} }">
             <div class="relative aspect-square bg-gray-100 dark:bg-gray-800 rounded-2xl overflow-hidden flex items-center justify-center">
                 <template x-if="images.length">
                     <img :src="images[active]" alt="{{ $product->title }}" class="object-cover w-full h-full">
@@ -47,7 +47,7 @@ new #[Layout('layouts.app')] class extends Component
                         <button type="button" @click="active = {{ $index }}"
                                 :class="active === {{ $index }} ? 'ring-2 ring-violet-500' : 'ring-1 ring-transparent opacity-80 hover:opacity-100'"
                                 class="aspect-square bg-gray-100 dark:bg-gray-800 rounded-lg overflow-hidden transition">
-                            <img src="{{ Storage::url($image->path) }}" class="object-cover w-full h-full">
+                            <img src="{{ $image->url }}" class="object-cover w-full h-full">
                         </button>
                     @endforeach
                 </div>

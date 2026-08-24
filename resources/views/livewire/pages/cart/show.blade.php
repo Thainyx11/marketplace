@@ -71,7 +71,7 @@ new #[Layout('layouts.app')] class extends Component
                 <div class="flex items-center gap-4 p-4" wire:key="cart-item-{{ $product->id }}">
                     <div class="w-16 h-16 bg-gray-100 dark:bg-gray-700 rounded-xl overflow-hidden shrink-0 flex items-center justify-center">
                         @if ($product->images->first())
-                            <img src="{{ Storage::url($product->images->first()->path) }}" class="object-cover w-full h-full">
+                            <img src="{{ $product->images->first()->url }}" class="object-cover w-full h-full">
                         @endif
                     </div>
 

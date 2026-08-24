@@ -4,7 +4,7 @@
    class="group block bg-white dark:bg-gray-800 rounded-2xl overflow-hidden shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200">
     <div class="relative aspect-square bg-gray-100 dark:bg-gray-700 overflow-hidden">
         @if ($product->images->first())
-            <img src="{{ Storage::url($product->images->first()->path) }}" alt="{{ $product->title }}"
+            <img src="{{ $product->images->first()->url }}" alt="{{ $product->title }}"
                  class="object-cover w-full h-full group-hover:scale-105 transition-transform duration-300">
         @else
             <div class="flex items-center justify-center w-full h-full text-gray-300 dark:text-gray-600">
