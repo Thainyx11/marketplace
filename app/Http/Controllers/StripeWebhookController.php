@@ -78,7 +78,7 @@ class StripeWebhookController extends Controller
         $total = max(0, $subtotal - $discount + $shippingFee);
         $commissionRate = (float) Setting::get('commission_rate', 5) / 100;
 
-        DB::transaction(function () use ($items, $buyer, $metadata, $discount, $total, $session, $commissionRate, $shippingMethod) {
+        DB::transaction(function () use ($items, $buyer, $metadata, $discount, $total, $session, $commissionRate, $shippingMethod, $manager) {
             $order = Order::create([
                 'buyer_id' => $buyer->id,
                 'promo_code_id' => $metadata->promo_code_id ?: null,
