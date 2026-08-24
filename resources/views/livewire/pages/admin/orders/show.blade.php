@@ -66,7 +66,7 @@ new #[Layout('layouts.app')] class extends Component
     <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm p-6 mt-6">
         <p class="font-bold text-gray-900 dark:text-gray-100 mb-3">{{ __('Intervention (litige)') }}</p>
         <div class="flex items-center gap-3">
-            <select wire:model="status" class="rounded-xl border-gray-300 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-100 text-sm focus:border-violet-500 focus:ring-violet-500">
+            <select wire:model="status" class="rounded-xl border-gray-300 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-100 text-sm focus:border-brand-500 focus:ring-brand-500">
                 <option value="en_attente">{{ __('En attente') }}</option>
                 <option value="acceptee">{{ __('Acceptée') }}</option>
                 <option value="expediee">{{ __('Expédiée') }}</option>

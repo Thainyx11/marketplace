@@ -153,14 +153,14 @@ new #[Layout('layouts.app')] class extends Component
 
         <div>
             <x-input-label for="description" :value="__('Description')" />
-            <textarea wire:model="description" id="description" rows="4" class="mt-1.5 w-full rounded-xl border-gray-300 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-100 text-sm focus:border-violet-500 focus:ring-violet-500"></textarea>
+            <textarea wire:model="description" id="description" rows="4" class="mt-1.5 w-full rounded-xl border-gray-300 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-100 text-sm focus:border-brand-500 focus:ring-brand-500"></textarea>
             @error('description') <p class="text-sm text-red-500 mt-1">{{ $message }}</p> @enderror
         </div>
 
         <div class="grid grid-cols-2 gap-4">
             <div>
                 <x-input-label for="category_id" :value="__('Catégorie')" />
-                <select wire:model="category_id" id="category_id" class="mt-1.5 w-full rounded-xl border-gray-300 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-100 text-sm focus:border-violet-500 focus:ring-violet-500">
+                <select wire:model="category_id" id="category_id" class="mt-1.5 w-full rounded-xl border-gray-300 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-100 text-sm focus:border-brand-500 focus:ring-brand-500">
                     <option value="">{{ __('Choisir...') }}</option>
                     @foreach ($categories as $cat)
                         <option value="{{ $cat->id }}">{{ $cat->name }}</option>
@@ -171,7 +171,7 @@ new #[Layout('layouts.app')] class extends Component
 
             <div>
                 <x-input-label for="condition" :value="__('État')" />
-                <select wire:model="condition" id="condition" class="mt-1.5 w-full rounded-xl border-gray-300 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-100 text-sm focus:border-violet-500 focus:ring-violet-500">
+                <select wire:model="condition" id="condition" class="mt-1.5 w-full rounded-xl border-gray-300 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-100 text-sm focus:border-brand-500 focus:ring-brand-500">
                     <option value="neuf">{{ __('Neuf') }}</option>
                     <option value="comme_neuf">{{ __('Comme neuf') }}</option>
                     <option value="bon_etat">{{ __('Bon état') }}</option>
@@ -206,7 +206,7 @@ new #[Layout('layouts.app')] class extends Component
 
         <div>
             <x-input-label for="status" :value="__('Visibilité')" />
-            <select wire:model="status" id="status" class="mt-1.5 w-full rounded-xl border-gray-300 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-100 text-sm focus:border-violet-500 focus:ring-violet-500">
+            <select wire:model="status" id="status" class="mt-1.5 w-full rounded-xl border-gray-300 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-100 text-sm focus:border-brand-500 focus:ring-brand-500">
                 <option value="active">{{ __('En vente') }}</option>
                 <option value="hidden">{{ __('Masqué') }}</option>
             </select>

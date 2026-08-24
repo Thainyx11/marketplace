@@ -69,7 +69,7 @@ new #[Layout('layouts.app')] class extends Component
         </div>
         <div>
             <x-input-label for="type" :value="__('Type')" />
-            <select wire:model="type" id="type" class="mt-1.5 w-full rounded-xl border-gray-300 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-100 text-sm focus:border-violet-500 focus:ring-violet-500">
+            <select wire:model="type" id="type" class="mt-1.5 w-full rounded-xl border-gray-300 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-100 text-sm focus:border-brand-500 focus:ring-brand-500">
                 <option value="percent">%</option>
                 <option value="fixed">€</option>
             </select>
@@ -100,7 +100,7 @@ new #[Layout('layouts.app')] class extends Component
                 <x-badge :color="$promo->active ? 'emerald' : 'gray'">
                     {{ $promo->active ? __('Actif') : __('Inactif') }}
                 </x-badge>
-                <button type="button" wire:click="toggleActive({{ $promo->id }})" class="text-sm font-semibold text-violet-600 dark:text-violet-400 hover:underline">
+                <button type="button" wire:click="toggleActive({{ $promo->id }})" class="text-sm font-semibold text-brand-600 dark:text-brand-400 hover:underline">
                     {{ $promo->active ? __('Désactiver') : __('Activer') }}
                 </button>
                 <button type="button" wire:click="delete({{ $promo->id }})" wire:confirm="{{ __('Supprimer ce code promo ?') }}" class="text-sm text-red-500 hover:underline">

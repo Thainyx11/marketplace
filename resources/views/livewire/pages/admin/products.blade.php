@@ -56,7 +56,7 @@ new #[Layout('layouts.app')] class extends Component
     @include('admin._nav')
 
     <input type="text" wire:model.live.debounce.400ms="search" placeholder="{{ __('Titre ou vendeur...') }}"
-           class="w-full max-w-sm rounded-xl border-gray-300 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-100 text-sm mb-4 focus:border-violet-500 focus:ring-violet-500">
+           class="w-full max-w-sm rounded-xl border-gray-300 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-100 text-sm mb-4 focus:border-brand-500 focus:ring-brand-500">
 
     <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm divide-y divide-gray-100 dark:divide-gray-700">
         @foreach ($products as $product)
@@ -71,7 +71,7 @@ new #[Layout('layouts.app')] class extends Component
                 </x-badge>
 
                 @if ($product->status === 'removed')
-                    <button type="button" wire:click="restore({{ $product->id }})" class="text-sm font-semibold text-violet-600 dark:text-violet-400 hover:underline">
+                    <button type="button" wire:click="restore({{ $product->id }})" class="text-sm font-semibold text-brand-600 dark:text-brand-400 hover:underline">
                         {{ __('Restaurer') }}
                     </button>
                 @else

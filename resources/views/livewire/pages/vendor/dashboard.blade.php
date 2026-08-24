@@ -37,14 +37,14 @@ new #[Layout('layouts.app')] class extends Component
 
     <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
         <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm p-5 flex items-center gap-4">
-            <span class="grid place-items-center h-11 w-11 rounded-xl bg-violet-100 dark:bg-violet-900/50 text-violet-600 dark:text-violet-400 text-xl shrink-0">💶</span>
+            <span class="grid place-items-center h-11 w-11 rounded-xl bg-brand-100 dark:bg-brand-900/50 text-brand-600 dark:text-brand-400 text-xl shrink-0">💶</span>
             <div>
                 <p class="text-sm text-gray-500 dark:text-gray-400">{{ __('Chiffre d\'affaires') }}</p>
                 <p class="text-2xl font-extrabold text-gray-900 dark:text-gray-100">{{ number_format($totalRevenue, 2, ',', ' ') }} €</p>
             </div>
         </div>
         <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm p-5 flex items-center gap-4">
-            <span class="grid place-items-center h-11 w-11 rounded-xl bg-amber-100 dark:bg-amber-900/50 text-amber-600 dark:text-amber-400 text-xl shrink-0">📈</span>
+            <span class="grid place-items-center h-11 w-11 rounded-xl bg-brand-200 dark:bg-brand-800/50 text-brand-700 dark:text-brand-300 text-xl shrink-0">📈</span>
             <div>
                 <p class="text-sm text-gray-500 dark:text-gray-400">{{ __('Ventes') }}</p>
                 <p class="text-2xl font-extrabold text-gray-900 dark:text-gray-100">{{ $totalSales }}</p>
@@ -78,7 +78,7 @@ new #[Layout('layouts.app')] class extends Component
                     type: 'bar',
                     data: {
                         labels: @js($chartLabels),
-                        datasets: [{ label: @js(__('Chiffre d\'affaires (€)')), data: @js($chartData), backgroundColor: '#7c3aed', borderRadius: 6 }],
+                        datasets: [{ label: @js(__('Chiffre d\'affaires (€)')), data: @js($chartData), backgroundColor: '#012169', borderRadius: 6 }],
                     },
                     options: { responsive: true, plugins: { legend: { display: false } } },
                 });

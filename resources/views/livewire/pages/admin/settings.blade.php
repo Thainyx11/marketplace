@@ -49,7 +49,7 @@ new #[Layout('layouts.app')] class extends Component
         <div>
             <x-input-label for="legal_notice" :value="__('Mentions légales / CGU')" />
             <textarea wire:model="legal_notice" id="legal_notice" rows="10"
-                      class="mt-1.5 w-full rounded-xl border-gray-300 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-100 text-sm focus:border-violet-500 focus:ring-violet-500"></textarea>
+                      class="mt-1.5 w-full rounded-xl border-gray-300 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-100 text-sm focus:border-brand-500 focus:ring-brand-500"></textarea>
             @error('legal_notice') <p class="text-sm text-red-500 mt-1">{{ $message }}</p> @enderror
             <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">
                 {{ __('Visible publiquement sur') }}

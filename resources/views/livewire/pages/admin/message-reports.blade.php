@@ -47,7 +47,7 @@ new #[Layout('layouts.app')] class extends Component
                             {{ $report->status === 'pending' ? __('En attente') : __('Résolu') }}
                         </x-badge>
                         @if ($report->status === 'pending')
-                            <button type="button" wire:click="resolve({{ $report->id }})" class="block mt-2 text-sm font-semibold text-violet-600 dark:text-violet-400 hover:underline">
+                            <button type="button" wire:click="resolve({{ $report->id }})" class="block mt-2 text-sm font-semibold text-brand-600 dark:text-brand-400 hover:underline">
                                 {{ __('Marquer résolu') }}
                             </button>
                         @endif

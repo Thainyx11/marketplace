@@ -50,7 +50,7 @@ new #[Layout('layouts.app')] class extends Component
 
     <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
         <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm p-5 flex items-center gap-4">
-            <span class="grid place-items-center h-11 w-11 rounded-xl bg-violet-100 dark:bg-violet-900/50 text-xl shrink-0">📦</span>
+            <span class="grid place-items-center h-11 w-11 rounded-xl bg-brand-100 dark:bg-brand-900/50 text-xl shrink-0">📦</span>
             <div>
                 <p class="text-sm text-gray-500 dark:text-gray-400">{{ __('Commandes') }}</p>
                 <p class="text-2xl font-extrabold text-gray-900 dark:text-gray-100">{{ $totalOrders }}</p>
@@ -64,7 +64,7 @@ new #[Layout('layouts.app')] class extends Component
             </div>
         </div>
         <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm p-5 flex items-center gap-4">
-            <span class="grid place-items-center h-11 w-11 rounded-xl bg-amber-100 dark:bg-amber-900/50 text-xl shrink-0">📈</span>
+            <span class="grid place-items-center h-11 w-11 rounded-xl bg-brand-200 dark:bg-brand-800/50 text-xl shrink-0">📈</span>
             <div>
                 <p class="text-sm text-gray-500 dark:text-gray-400">{{ __('Volume total') }}</p>
                 <p class="text-2xl font-extrabold text-gray-900 dark:text-gray-100">{{ number_format($totalRevenue, 2, ',', ' ') }} €</p>
@@ -78,7 +78,7 @@ new #[Layout('layouts.app')] class extends Component
             </div>
         </div>
         <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm p-5 flex items-center gap-4">
-            <span class="grid place-items-center h-11 w-11 rounded-xl bg-fuchsia-100 dark:bg-fuchsia-900/50 text-xl shrink-0">🏪</span>
+            <span class="grid place-items-center h-11 w-11 rounded-xl bg-brand-50 dark:bg-brand-950/50 text-xl shrink-0">🏪</span>
             <div>
                 <p class="text-sm text-gray-500 dark:text-gray-400">{{ __('Vendeurs actifs') }}</p>
                 <p class="text-2xl font-extrabold text-gray-900 dark:text-gray-100">{{ $totalVendors }}</p>

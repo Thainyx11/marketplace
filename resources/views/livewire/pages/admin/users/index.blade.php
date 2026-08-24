@@ -141,7 +141,7 @@ new #[Layout('layouts.app')] class extends Component
         </div>
         <div>
             <x-input-label for="newRole" :value="__('Rôle')" />
-            <select wire:model="newRole" id="newRole" class="mt-1.5 w-full rounded-xl border-gray-300 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-100 text-sm focus:border-violet-500 focus:ring-violet-500">
+            <select wire:model="newRole" id="newRole" class="mt-1.5 w-full rounded-xl border-gray-300 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-100 text-sm focus:border-brand-500 focus:ring-brand-500">
                 <option value="acheteur">{{ __('Acheteur') }}</option>
                 <option value="vendeur">{{ __('Vendeur') }}</option>
                 <option value="admin">{{ __('Administrateur') }}</option>
@@ -152,8 +152,8 @@ new #[Layout('layouts.app')] class extends Component
 
     <div class="flex gap-3 mb-4">
         <input type="text" wire:model.live.debounce.400ms="search" placeholder="{{ __('Nom ou email...') }}"
-               class="rounded-xl border-gray-300 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-100 text-sm focus:border-violet-500 focus:ring-violet-500">
-        <select wire:model.live="role" class="rounded-xl border-gray-300 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-100 text-sm focus:border-violet-500 focus:ring-violet-500">
+               class="rounded-xl border-gray-300 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-100 text-sm focus:border-brand-500 focus:ring-brand-500">
+        <select wire:model.live="role" class="rounded-xl border-gray-300 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-100 text-sm focus:border-brand-500 focus:ring-brand-500">
             <option value="">{{ __('Tous les rôles') }}</option>
             <option value="acheteur">{{ __('Acheteur') }}</option>
             <option value="vendeur">{{ __('Vendeur') }}</option>
@@ -178,7 +178,7 @@ new #[Layout('layouts.app')] class extends Component
                         </div>
                         <div>
                             <x-input-label :value="__('Rôle')" />
-                            <select wire:model="editRole" class="mt-1 w-full rounded-xl border-gray-300 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-100 text-sm focus:border-violet-500 focus:ring-violet-500">
+                            <select wire:model="editRole" class="mt-1 w-full rounded-xl border-gray-300 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-100 text-sm focus:border-brand-500 focus:ring-brand-500">
                                 <option value="acheteur">{{ __('Acheteur') }}</option>
                                 <option value="vendeur">{{ __('Vendeur') }}</option>
                                 <option value="admin">{{ __('Administrateur') }}</option>
@@ -200,12 +200,12 @@ new #[Layout('layouts.app')] class extends Component
                             {{ $user->is_active ? __('Actif') : __('Désactivé') }}
                         </x-badge>
 
-                        <button type="button" wire:click="editUser({{ $user->id }})" class="text-sm font-semibold text-violet-600 dark:text-violet-400 hover:underline">
+                        <button type="button" wire:click="editUser({{ $user->id }})" class="text-sm font-semibold text-brand-600 dark:text-brand-400 hover:underline">
                             {{ __('Modifier') }}
                         </button>
 
                         @if ($user->id !== auth()->id())
-                            <button type="button" wire:click="toggleActive({{ $user->id }})" class="text-sm font-semibold text-violet-600 dark:text-violet-400 hover:underline">
+                            <button type="button" wire:click="toggleActive({{ $user->id }})" class="text-sm font-semibold text-brand-600 dark:text-brand-400 hover:underline">
                                 {{ $user->is_active ? __('Désactiver') : __('Réactiver') }}
                             </button>
                         @endif

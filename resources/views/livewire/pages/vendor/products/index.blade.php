@@ -39,7 +39,7 @@ new #[Layout('layouts.app')] class extends Component
     <div class="flex items-center justify-between mb-6">
         <h1 class="text-2xl font-extrabold text-gray-900 dark:text-gray-100">{{ __('Mes produits') }}</h1>
         <a href="{{ route('vendor.products.create') }}" wire:navigate
-           class="bg-violet-600 hover:bg-violet-500 text-white font-semibold px-4 py-2.5 rounded-full text-sm transition">
+           class="bg-brand-800 hover:bg-brand-700 text-white font-semibold px-4 py-2.5 rounded-full text-sm transition">
             {{ __('+ Nouveau produit') }}
         </a>
     </div>
@@ -70,7 +70,7 @@ new #[Layout('layouts.app')] class extends Component
                     {{ ['active' => 'En vente', 'hidden' => 'Masqué', 'removed' => 'Retiré'][$product->status] }}
                 </x-badge>
 
-                <a href="{{ route('vendor.products.edit', $product) }}" wire:navigate class="text-sm font-semibold text-violet-600 dark:text-violet-400 hover:underline shrink-0">
+                <a href="{{ route('vendor.products.edit', $product) }}" wire:navigate class="text-sm font-semibold text-brand-600 dark:text-brand-400 hover:underline shrink-0">
                     {{ __('Modifier') }}
                 </a>
 

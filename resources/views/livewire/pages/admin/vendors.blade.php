@@ -76,7 +76,7 @@ new #[Layout('layouts.app')] class extends Component
                 <x-badge :color="$vendor->is_active ? 'emerald' : 'gray'">
                     {{ $vendor->is_active ? __('Actif') : __('Suspendu') }}
                 </x-badge>
-                <button type="button" wire:click="suspend({{ $vendor->id }})" class="text-sm font-semibold text-violet-600 dark:text-violet-400 hover:underline">
+                <button type="button" wire:click="suspend({{ $vendor->id }})" class="text-sm font-semibold text-brand-600 dark:text-brand-400 hover:underline">
                     {{ $vendor->is_active ? __('Suspendre') : __('Réactiver') }}
                 </button>
             </div>

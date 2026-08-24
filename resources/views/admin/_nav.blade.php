@@ -18,8 +18,8 @@
         <a href="{{ route($route) }}" wire:navigate
            @class([
                'px-3.5 py-1.5 rounded-full font-medium transition',
-               'bg-violet-600 text-white shadow-sm' => request()->routeIs($route === 'admin.users.index' ? 'admin.users.*' : ($route === 'admin.orders.index' ? 'admin.orders.*' : $route)),
-               'bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-violet-50 dark:hover:bg-gray-700 hover:text-violet-700 dark:hover:text-white' => ! request()->routeIs($route === 'admin.users.index' ? 'admin.users.*' : ($route === 'admin.orders.index' ? 'admin.orders.*' : $route)),
+               'bg-brand-800 text-white shadow-sm' => request()->routeIs($route === 'admin.users.index' ? 'admin.users.*' : ($route === 'admin.orders.index' ? 'admin.orders.*' : $route)),
+               'bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-brand-50 dark:hover:bg-gray-700 hover:text-brand-700 dark:hover:text-white' => ! request()->routeIs($route === 'admin.users.index' ? 'admin.users.*' : ($route === 'admin.orders.index' ? 'admin.orders.*' : $route)),
            ])>
             {{ $label }}
         </a>

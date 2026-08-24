@@ -60,7 +60,7 @@ new #[Layout('layouts.app')] class extends Component
         </div>
         <div class="flex-1">
             <x-input-label for="parent_id" :value="__('Catégorie parente (optionnel)')" />
-            <select wire:model="parent_id" id="parent_id" class="mt-1.5 w-full rounded-xl border-gray-300 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-100 text-sm focus:border-violet-500 focus:ring-violet-500">
+            <select wire:model="parent_id" id="parent_id" class="mt-1.5 w-full rounded-xl border-gray-300 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-100 text-sm focus:border-brand-500 focus:ring-brand-500">
                 <option value="">{{ __('Aucune') }}</option>
                 @foreach ($categories as $cat)
                     <option value="{{ $cat->id }}">{{ $cat->name }}</option>
