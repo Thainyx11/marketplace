@@ -13,6 +13,8 @@ use Stripe\Stripe;
 
 class CheckoutController extends Controller
 {
+    public const EXPRESS_FEE = 4.90;
+
     public function show()
     {
         $manager = new CartManager(auth()->user());
@@ -71,6 +73,19 @@ class CheckoutController extends Controller
             'quantity' => $entry['quantity'],
         ])->values()->all();
 
+        $shippingMethod = $request->string('shipping_method')->value();
+
+        if ($shippingMethod === 'express') {
+            $lineItems[] = [
+                'price_data' => [
+                    'currency' => 'eur',
+                    'product_data' => ['name' => __('Livraison express')],
+                    'unit_amount' => (int) round(self::EXPRESS_FEE * 100),
+                ],
+                'quantity' => 1,
+            ];
+        }
+
         $sessionParams = [
             'mode' => 'payment',
             'line_items' => $lineItems,
@@ -80,6 +95,7 @@ class CheckoutController extends Controller
             'metadata' => [
                 'buyer_id' => $request->user()->id,
                 'shipping_address' => $request->string('shipping_address'),
+                'shipping_method' => $shippingMethod,
                 'promo_code_id' => $promoCode?->id ?? '',
                 'discount_amount' => (string) $discount,
             ],

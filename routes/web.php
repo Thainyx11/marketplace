@@ -3,6 +3,7 @@
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\StripeWebhookController;
+use App\Models\Setting;
 use Illuminate\Support\Facades\Route;
 use Livewire\Volt\Volt;
 
@@ -15,6 +16,10 @@ Volt::route('vendeurs', 'pages.sellers.index')->name('sellers.index');
 Volt::route('vendeurs/{shop_slug}', 'pages.sellers.show')->name('sellers.show');
 
 Volt::route('panier', 'pages.cart.show')->name('cart.show');
+
+Route::get('mentions-legales', function () {
+    return view('legal-notice', ['content' => Setting::get('legal_notice', '')]);
+})->name('legal-notice');
 
 Route::post('webhook/stripe', [StripeWebhookController::class, 'handle'])->name('webhook.stripe');
 

@@ -25,6 +25,10 @@
             <div class="w-full sm:max-w-md mt-6 px-6 py-8 bg-white dark:bg-gray-800 shadow-xl shadow-black/20 overflow-hidden sm:rounded-2xl">
                 {{ $slot }}
             </div>
+
+            <a href="{{ route('legal-notice') }}" wire:navigate class="mt-6 text-xs text-gray-400 hover:text-gray-200 transition">
+                {{ __('Mentions légales & CGU') }}
+            </a>
         </div>
     </body>
 </html>

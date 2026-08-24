@@ -10,6 +10,7 @@
                     <div>
                         <p class="text-sm text-gray-500 dark:text-gray-400">{{ $order->created_at->format('d/m/Y H:i') }}</p>
                         <p class="text-sm text-gray-500 dark:text-gray-400 mt-1 whitespace-pre-line">{{ __('Livraison') }} : {{ $order->shipping_address }}</p>
+                        <x-badge color="gray" class="mt-1.5">{{ $order->shipping_method === 'express' ? __('Livraison express') : __('Livraison standard') }}</x-badge>
                     </div>
 
                     @if ($order->payment?->status === 'paid')

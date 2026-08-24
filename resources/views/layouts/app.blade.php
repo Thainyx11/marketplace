@@ -15,7 +15,7 @@
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
     <body class="font-sans antialiased">
-        <div class="min-h-screen bg-gray-50 dark:bg-gray-950">
+        <div class="min-h-screen flex flex-col bg-gray-50 dark:bg-gray-950">
             <livewire:layout.navigation />
 
             <x-flash-messages />
@@ -33,6 +33,15 @@
             <main>
                 {{ $slot }}
             </main>
+
+            <footer class="mt-auto border-t border-gray-100 dark:border-gray-800">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex flex-col sm:flex-row items-center justify-between gap-2 text-sm text-gray-500 dark:text-gray-400">
+                    <span>&copy; {{ now()->year }} {{ config('app.name') }}</span>
+                    <a href="{{ route('legal-notice') }}" wire:navigate class="hover:text-violet-600 dark:hover:text-violet-400 transition">
+                        {{ __('Mentions légales & CGU') }}
+                    </a>
+                </div>
+            </footer>
         </div>
     </body>
 </html>

@@ -36,7 +36,7 @@ new #[Layout('layouts.app')] class extends Component
     <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm p-6">
         <p class="font-bold text-gray-900 dark:text-gray-100">{{ __('Commande #:id', ['id' => $order->id]) }}</p>
         <p class="text-sm text-gray-500 dark:text-gray-400">{{ __('Acheteur') }} : {{ $order->buyer->name }} ({{ $order->buyer->email }})</p>
-        <p class="text-sm text-gray-500 dark:text-gray-400 whitespace-pre-line">{{ __('Livraison') }} : {{ $order->shipping_address }}</p>
+        <p class="text-sm text-gray-500 dark:text-gray-400 whitespace-pre-line">{{ __('Livraison') }} ({{ $order->shipping_method === 'express' ? __('express') : __('standard') }}) : {{ $order->shipping_address }}</p>
         @if ($order->payment)
             <p class="text-sm text-gray-500 dark:text-gray-400">{{ __('Paiement Stripe') }} : {{ $order->payment->stripe_id }} ({{ $order->payment->status }})</p>
         @endif

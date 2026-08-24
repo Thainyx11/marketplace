@@ -19,6 +19,7 @@ class CheckoutRequest extends FormRequest
         return [
             // Kept short on purpose: it round-trips through Stripe Checkout metadata (500 char cap).
             'shipping_address' => ['required', 'string', 'max:500'],
+            'shipping_method' => ['required', 'in:standard,express'],
             'promo_code' => ['nullable', 'string', 'max:50'],
         ];
     }

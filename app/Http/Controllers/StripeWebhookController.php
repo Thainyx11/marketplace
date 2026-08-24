@@ -65,11 +65,13 @@ class StripeWebhookController extends Controller
         }
 
         $discount = (float) ($metadata->discount_amount ?? 0);
+        $shippingMethod = ($metadata->shipping_method ?? 'standard') === 'express' ? 'express' : 'standard';
+        $shippingFee = $shippingMethod === 'express' ? CheckoutController::EXPRESS_FEE : 0;
         $subtotal = $manager->total();
-        $total = max(0, $subtotal - $discount);
+        $total = max(0, $subtotal - $discount + $shippingFee);
         $commissionRate = (float) Setting::get('commission_rate', 5) / 100;
 
-        DB::transaction(function () use ($items, $buyer, $metadata, $discount, $total, $session, $commissionRate) {
+        DB::transaction(function () use ($items, $buyer, $metadata, $discount, $total, $session, $commissionRate, $shippingMethod) {
             $order = Order::create([
                 'buyer_id' => $buyer->id,
                 'promo_code_id' => $metadata->promo_code_id ?: null,
@@ -77,6 +79,7 @@ class StripeWebhookController extends Controller
                 'total' => $total,
                 'status' => 'en_attente',
                 'shipping_address' => $metadata->shipping_address ?? $buyer->shipping_address ?? '',
+                'shipping_method' => $shippingMethod,
             ]);
 
             foreach ($items as $entry) {

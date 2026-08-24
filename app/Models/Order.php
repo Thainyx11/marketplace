@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
-#[Fillable(['buyer_id', 'promo_code_id', 'discount_amount', 'total', 'status', 'shipping_address'])]
+#[Fillable(['buyer_id', 'promo_code_id', 'discount_amount', 'total', 'status', 'shipping_address', 'shipping_method'])]
 class Order extends Model
 {
     /** Statuses in pipeline order, per the cahier des charges section 4.3. */

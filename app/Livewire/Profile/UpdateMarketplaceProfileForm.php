@@ -3,6 +3,7 @@
 namespace App\Livewire\Profile;
 
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 
@@ -53,6 +54,13 @@ class UpdateMarketplaceProfileForm extends Component
             }
 
             $data['avatar'] = $this->avatar->store('avatars', 'public');
+        }
+
+        // Boutiques créées directement par un administrateur (ou dont le nom
+        // vient d'être renseigné pour la première fois) n'ont pas encore de
+        // slug public — on en génère un dès que possible.
+        if (($data['shop_name'] ?? null) && ! $user->shop_slug) {
+            $data['shop_slug'] = Str::slug($data['shop_name']).'-'.Str::lower(Str::random(6));
         }
 
         $user->update($data);

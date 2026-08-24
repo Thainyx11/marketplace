@@ -10,6 +10,7 @@ use App\Models\Payment;
 use App\Models\Product;
 use App\Models\ProductImage;
 use App\Models\Review;
+use App\Models\Setting;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Str;
@@ -31,6 +32,10 @@ class DemoDataSeeder extends Seeder
 
     public function run(): void
     {
+        if (! Setting::where('key', 'legal_notice')->exists()) {
+            Setting::set('legal_notice', "Mentions légales\n\nMarketplace Pop Culture est une plateforme de mise en relation entre vendeurs et acheteurs particuliers d'objets de collection liés à la pop culture (cartes, jeux vidéo, figurines, manga, goodies).\n\nÉditeur : Marketplace Pop Culture (projet de Travail de Fin d'Études).\nHébergement : environnement de développement local.\n\nConditions générales d'utilisation\n\n1. Chaque vendeur est responsable de l'exactitude des annonces qu'il publie et de la conformité des objets vendus.\n2. Une commission est prélevée par la plateforme sur chaque transaction, dont le taux est indiqué avant validation de la commande.\n3. Les données personnelles collectées (nom, email, adresse de livraison) sont utilisées exclusivement pour le bon fonctionnement des commandes et ne sont pas cédées à des tiers.\n4. Conformément au RGPD, chaque utilisateur peut demander la suppression de son compte et de ses données depuis la page Profil.\n5. Tout litige entre un acheteur et un vendeur peut être signalé à l'administration, qui pourra intervenir sur la commande concernée.");
+        }
+
         User::firstOrCreate(
             ['email' => 'admin@marketplace.test'],
             ['name' => 'Admin Marketplace', 'password' => bcrypt('password'), 'role' => 'admin'],

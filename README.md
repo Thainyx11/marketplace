@@ -80,11 +80,11 @@ npm run build               # build production, doit sortir sans erreur ni warni
 
 - **Comptes** : inscription acheteur (accès immédiat) / vendeur (validation admin requise), connexion, mot de passe oublié, profil (avatar, bio, adresse, infos boutique)
 - **Catalogue** : accueil, liste avec filtres (catégorie, marque, état, rareté, prix) + tri + recherche, fiche produit, annuaire et profils vendeurs
-- **Panier & commande** : panier session (invité) ou base de données (connecté, fusionné à la connexion), checkout Stripe, codes promo, facture PDF, suivi de commande
+- **Panier & commande** : panier session (invité) ou base de données (connecté, fusionné à la connexion), choix du mode d'expédition (standard / express), checkout Stripe, codes promo, facture PDF, suivi de commande
 - **Messagerie** : discussion par produit entre acheteur et vendeur, temps réel (Reverb), indicateur lu/non lu, signalement
 - **Avis** : notation 1-5 après livraison, affichée sur la fiche produit et le profil vendeur
-- **Espace vendeur** : CRUD produits avec upload d'images, commandes reçues avec pipeline de statut, statistiques mensuelles (graphique)
-- **Back office admin** : statistiques globales, gestion utilisateurs/vendeurs (validation, suspension), catégories, modération produits/avis, litiges de commande, messages signalés, codes promo, paramètres (taux de commission, mentions légales)
+- **Espace vendeur** : CRUD produits avec upload d'images, commandes reçues avec pipeline de statut et montant net après commission, statistiques mensuelles (graphique)
+- **Back office admin** : statistiques globales, gestion utilisateurs (création, modification, désactivation) et vendeurs (validation, suspension), catégories, modération produits/avis, litiges de commande, messages signalés, codes promo, paramètres (taux de commission, mentions légales publiées sur `/mentions-legales`)
 
 ### Décisions techniques notables
 
@@ -99,6 +99,8 @@ npm run build               # build production, doit sortir sans erreur ni warni
 - Clés Stripe/Reverb de production — à créer par le commanditaire
 - Suite de tests exhaustive et audit de sécurité formel (phase 7 du planning du cahier des charges) — la base d'autorisation par rôle est testée, mais la couverture n'est pas complète
 - Schéma MCD/UML graphique pour le dossier de TFE — voir l'ERD texte ci-dessous, à transposer dans un outil de modélisation pour le rendu final
+- API REST (Sanctum) : le stack technique du cahier des charges la mentionne, mais aucune app externe (mobile, SPA) ne consomme l'application — tout est rendu côté serveur (Blade/Livewire). Sanctum peut être activé sans changement d'architecture si un besoin apparaît.
+- RGPD : le droit à l'effacement est couvert (suppression de compte depuis Profil, `delete-user-form`), et les mentions légales détaillent les droits de l'utilisateur ; en revanche il n'existe pas encore de fonction d'export de données personnelles (droit à la portabilité) ni de bannière de consentement cookies (non requise ici : seuls des cookies de session strictement nécessaires sont posés).
 
 ## Modèle de données (ERD simplifié)
 
