@@ -51,7 +51,7 @@ new class extends Component
                 </a>
 
                 <!-- Navigation Links -->
-                <div class="hidden space-x-6 sm:flex">
+                <div class="hidden space-x-6 lg:flex">
                     <x-nav-link :href="route('products.index')" :active="request()->routeIs('products.*')" wire:navigate>
                         {{ __('Produits') }}
                     </x-nav-link>
@@ -94,7 +94,7 @@ new class extends Component
             </form>
 
             <!-- Right side -->
-            <div class="hidden sm:flex sm:items-center gap-1 shrink-0">
+            <div class="hidden lg:flex lg:items-center gap-1 shrink-0">
                 @auth
                     <a href="{{ route('wishlist.index') }}" wire:navigate class="relative inline-flex items-center justify-center h-9 w-9 rounded-full text-gray-300 hover:text-white hover:bg-white/10 transition">
                         <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -150,7 +150,7 @@ new class extends Component
             </div>
 
             <!-- Hamburger -->
-            <div class="-me-2 flex items-center sm:hidden">
+            <div class="-me-2 flex items-center lg:hidden">
                 <button @click="open = ! open" class="inline-flex items-center justify-center p-2 rounded-md text-gray-300 hover:text-white hover:bg-white/10 focus:outline-none transition">
                     <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
                         <path :class="{'hidden': open, 'inline-flex': ! open }" class="inline-flex" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
@@ -162,7 +162,7 @@ new class extends Component
     </div>
 
     <!-- Responsive Navigation Menu -->
-    <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden border-t border-white/10">
+    <div :class="{'block': open, 'hidden': ! open}" class="hidden lg:hidden border-t border-white/10">
         <form action="{{ route('products.index') }}" method="GET" class="px-4 pt-3">
             <div class="relative">
                 <svg class="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
