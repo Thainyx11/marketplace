@@ -37,10 +37,15 @@ class DemoDataSeeder extends Seeder
      *   - Cards: TCGdex (Pokémon) and Scryfall (Magic)
      *   - Jeux vidéo: libretro-thumbnails (curated box-art, GitHub-hosted)
      *   - Manga: MangaDex (volume-1 / tome-1 covers)
+     *   - Figurines : kennymkchan/funko-pop-data (base Funko Pop! ouverte,
+     *     hébergée sur GitHub/hobbydb) — la figurine n'est pas toujours de
+     *     la même gamme que l'annonce (Ichiban Kuji, Pokémon Center,
+     *     statuette...), mais reste le bon personnage ; accepté comme tel.
      * Sealed/bundle products (boosters, coffrets, multi-tome packs, consoles,
      * controllers) and the few titles these sources don't carry (Pikachu
-     * Illustrator, Zelda BOTW - no Switch box-art repo) are intentionally
-     * left out and keep the generic LoremFlickr photo below.
+     * Illustrator, Zelda BOTW - no Switch box-art repo, Demon Slayer absent
+     * du dataset Funko) sont intentionnellement laissés sur la photo
+     * générique LoremFlickr ci-dessous.
      */
     private const IMAGE_OVERRIDES = [
         // Cartes à collectionner
@@ -90,6 +95,25 @@ class DemoDataSeeder extends Seeder
         'Vagabond Tome 1' => 'https://uploads.mangadex.org/covers/d1a9fdeb-f713-407f-960c-8326b586e6fd/00cf99f7-5145-44ea-a068-0a8a5cd4dc76.jpg',
         'Tokyo Ghoul Tome 1' => 'https://uploads.mangadex.org/covers/6a1d1cb1-ecd5-40d9-89ff-9d88e40b136b/040e8ae9-4ddd-49d2-8986-56782b391714.jpg',
         'Bleach Tome 1' => 'https://uploads.mangadex.org/covers/239d6260-d71f-43b0-afff-074e3619e3de/3cbb1b1c-6630-4971-b2b1-e24e6cbf4f40.jpg',
+
+        // Figurines
+        'Figurine Funko Pop Naruto' => 'https://images.hobbydb.com/processed_uploads/catalog_item_photo/catalog_item_photo/image/779737/Naruto_%2528Running%2529_Vinyl_Art_Toys_3c67d8fc-45d7-4e85-8fc2-868061fa504f_large.jpg',
+        'Funko Pop Batman' => 'https://images.hobbydb.com/processed_uploads/catalog_item_photo/catalog_item_photo/image/797128/Batman_Vinyl_Art_Toys_d166ac45-c499-4d06-ade3-f18b377c40c2_large.jpg',
+        'Funko Pop Harry Potter - Dumbledore' => 'https://images.hobbydb.com/processed_uploads/catalog_item_photo/catalog_item_photo/image/592412/Albus_Dumbledore_Vinyl_Art_Toys_14d0c091-b355-49da-a615-d25775a46f3f_large.jpeg',
+        'Figurine Dragon Ball - Goku Ultra Instinct' => 'https://images.hobbydb.com/processed_uploads/catalog_item_photo/catalog_item_photo/image/583916/Goku_%2528Ultra_Instinct%2529_Vinyl_Art_Toys_48928fee-2b36-4b19-ae9a-efa2db934a23_large.jpg',
+        'Statuette My Hero Academia - Deku' => 'https://images.hobbydb.com/processed_uploads/catalog_item_photo/catalog_item_photo/image/848668/Izuku_Midoriya_Vinyl_Art_Toys_43be80a6-19f4-4d40-83f1-22490cf184ef.jpg',
+        'Funko Pop Star Wars - Baby Yoda' => 'https://images.hobbydb.com/processed_uploads/catalog_item_photo/catalog_item_photo/image/780619/The_Child_Vinyl_Art_Toys_30fdde78-61dc-4ecc-ba06-4536d9897dad_large.JPG',
+        'Nendoroid Sailor Moon' => 'https://images.hobbydb.com/processed_uploads/catalog_item_photo/catalog_item_photo/image/462454/Sailor_Moon_%2528w%252F_Luna%2529_Vinyl_Art_Toys_41103a37-2ee2-461f-916b-77551cb0166f_large.jpg',
+        'Funko Pop Marvel - Spider-Man' => 'https://images.hobbydb.com/processed_uploads/catalog_item_photo/catalog_item_photo/image/457466/Spider-Man_Vinyl_Art_Toys_638b022b-4857-4431-b29d-09357ebe5622.jpg',
+        'Figurine One Piece Film Red - Luffy' => 'https://images.hobbydb.com/processed_uploads/catalog_item_photo/catalog_item_photo/image/462344/Monkey_D._Luffy_Vinyl_Art_Toys_9bfa2ff7-a503-48d6-8c44-d471bd6ad830_large.jpg',
+        'Funko Pop Attack on Titan - Eren' => 'https://images.hobbydb.com/processed_uploads/catalog_item_photo/catalog_item_photo/image/458001/Eren_Jaeger_Vinyl_Art_Toys_96112b89-99d2-43a6-8a05-7a09d4e03c9c_large.jpg',
+        'Statuette Dragon Ball Super - Broly' => 'https://images.hobbydb.com/processed_uploads/catalog_item_photo/catalog_item_photo/image/748169/Legendary_Super_Saiyan_Broly_Vinyl_Art_Toys_9319aa03-bd7b-44df-83fc-863aae01722a_large.jpg',
+        'Figurine Pokémon Center - Mewtwo' => 'https://images.hobbydb.com/processed_uploads/catalog_item_photo/catalog_item_photo/image/771623/Mewtwo_Vinyl_Art_Toys_1cbeb380-dd36-41ce-899d-f09fd5b5c419_large.jpg',
+        'Funko Pop Disney - Mickey Mouse' => 'https://images.hobbydb.com/processed_uploads/catalog_item_photo/catalog_item_photo/image/458244/Mickey_Mouse_Vinyl_Art_Toys_d0fc5d58-ed48-4305-8cf0-d3d67f3fd9d7_large.jpg',
+        'Figurine Pokémon Center - Pikachu' => 'https://images.hobbydb.com/processed_uploads/catalog_item_photo/catalog_item_photo/image/584813/Pikachu_Vinyl_Art_Toys_4c998d8a-59e1-41e6-ade5-dbf6036928ea_large.jpg',
+        'Funko Pop Naruto Shippuden - Sasuke' => 'https://images.hobbydb.com/processed_uploads/catalog_item_photo/catalog_item_photo/image/800813/Sasuke_Uchiha_Vinyl_Art_Toys_8fbc155a-5fc2-4fd6-ae55-f57fea8b0cf1.png',
+        'Figurine articulée Dragon Ball - Vegeta' => 'https://images.hobbydb.com/processed_uploads/catalog_item_photo/catalog_item_photo/image/457992/Vegeta_Vinyl_Art_Toys_c6cdb4d7-4c09-44ad-89c9-0a85e1e460df_large.jpg',
+        'Figurine Ichiban Kuji - Naruto Uzumaki' => 'https://images.hobbydb.com/processed_uploads/catalog_item_photo/catalog_item_photo/image/768623/Naruto_%2528Hokage%2529_Vinyl_Art_Toys_a72e51c9-21aa-4edd-b920-45a92e86419c_large.jpg',
     ];
 
     public function run(): void
