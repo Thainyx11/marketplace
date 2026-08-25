@@ -185,7 +185,7 @@ class DemoDataSeeder extends Seeder
             'tck' => ['name' => 'Antoine Roche', 'shop_name' => 'Trading Card Kingdom', 'shop_slug' => 'trading-card-kingdom', 'bio' => 'Spécialiste Magic, Pokémon et Yu-Gi-Oh — cartes gradées et éditions rares.'],
             'retropixel' => ['name' => 'Julien Faure', 'shop_name' => 'RetroPixel Games', 'shop_slug' => 'retropixel-games', 'bio' => 'Consoles et jeux rétro testés et fonctionnels, du NES à la Dreamcast.'],
             'mangacorner' => ['name' => 'Sofia Marchetti', 'shop_name' => 'Manga Corner', 'shop_slug' => 'manga-corner', 'bio' => "Mangas d'occasion en bon état, éditions originales et coffrets complets."],
-            'popgoodies' => ['name' => 'Nora Bensaid', 'shop_name' => 'PopGoodies Boutique', 'shop_slug' => 'popgoodies-boutique', 'bio' => 'Goodies, peluches et objets dérivés pour tous les fandoms.'],
+            'popgoodies' => ['name' => 'Nora Bensaid', 'shop_name' => 'PopGoodies Boutique', 'shop_slug' => 'popgoodies-boutique', 'bio' => 'Goodies, jeux vidéo et mangas en tout genre — photos à venir sous peu !'],
             'funko' => ['name' => 'Maxime Girard', 'shop_name' => 'Funko & Friends', 'shop_slug' => 'funko-and-friends', 'bio' => 'Collection de Funko Pop et figurines articulées, neuves sous boîte.'],
         ];
 
@@ -306,7 +306,7 @@ class DemoDataSeeder extends Seeder
             ['vendor' => 'admin', 'title' => 'Figurine Sonic the Hedgehog', 'category' => 'figurines', 'price' => 17.9, 'condition' => 'neuf', 'brand' => null, 'rarity' => null, 'stock' => 6],
             ['vendor' => 'admin', 'title' => 'Funko Pop Horror - Pennywise', 'category' => 'figurines', 'price' => 16.5, 'condition' => 'neuf', 'brand' => 'Funko', 'rarity' => null, 'stock' => 5],
 
-            // --- Goodies : PopGoodies (sans photo — visuels ajoutés à la main séparément) ---
+            // --- Goodies : PopGoodies, seul vendeur des produits "no_image" (voir plus bas) ---
             ['vendor' => 'popgoodies', 'title' => 'Porte-clés Pokéball lumineux', 'category' => 'goodies', 'price' => 6.5, 'condition' => 'neuf', 'brand' => 'Pokemon', 'rarity' => null, 'stock' => 15, 'no_image' => true],
             ['vendor' => 'popgoodies', 'title' => 'Mug Zelda Triforce', 'category' => 'goodies', 'price' => 11.9, 'condition' => 'neuf', 'brand' => 'Nintendo', 'rarity' => null, 'stock' => 8, 'no_image' => true],
             ['vendor' => 'popgoodies', 'title' => 'Peluche Pikachu 30cm', 'category' => 'goodies', 'price' => 19.9, 'condition' => 'neuf', 'brand' => 'Pokemon', 'rarity' => null, 'stock' => 10, 'no_image' => true],
@@ -320,26 +320,26 @@ class DemoDataSeeder extends Seeder
             ['vendor' => 'popgoodies', 'title' => 'Plaid polaire Pokémon', 'category' => 'goodies', 'price' => 22, 'condition' => 'neuf', 'brand' => 'Pokemon', 'rarity' => null, 'stock' => 8, 'no_image' => true],
             ['vendor' => 'popgoodies', 'title' => 'Lampe Pokéball veilleuse', 'category' => 'goodies', 'price' => 18.9, 'condition' => 'neuf', 'brand' => 'Pokemon', 'rarity' => null, 'stock' => 10, 'no_image' => true],
 
-            // --- Jeux vidéo supplémentaires (sans photo, consoles/manettes + Switch) ---
-            ['vendor' => 'retropixel', 'title' => 'Manette GameCube violette', 'category' => 'jeux-video', 'price' => 25, 'condition' => 'usage', 'brand' => 'Nintendo', 'rarity' => null, 'stock' => 4, 'no_image' => true],
-            ['vendor' => 'retropixel', 'title' => 'Console Game Boy Color transparente', 'category' => 'jeux-video', 'price' => 55, 'condition' => 'bon_etat', 'brand' => 'Nintendo', 'rarity' => null, 'stock' => 2, 'no_image' => true],
-            ['vendor' => 'retropixel', 'title' => 'Manette Xbox 360 sans fil', 'category' => 'jeux-video', 'price' => 18, 'condition' => 'usage', 'brand' => null, 'rarity' => null, 'stock' => 5, 'no_image' => true],
-            ['vendor' => 'retropixel', 'title' => 'Console Nintendo 64 grise + câbles', 'category' => 'jeux-video', 'price' => 79, 'condition' => 'bon_etat', 'brand' => 'Nintendo', 'rarity' => null, 'stock' => 1, 'no_image' => true],
-            ['vendor' => 'admin', 'title' => 'Console PS2 Slim + 2 manettes', 'category' => 'jeux-video', 'price' => 89, 'condition' => 'bon_etat', 'brand' => 'PlayStation', 'rarity' => null, 'stock' => 2, 'no_image' => true],
-            ['vendor' => 'admin', 'title' => 'The Legend of Zelda: Breath of the Wild - Switch', 'category' => 'jeux-video', 'price' => 42, 'condition' => 'comme_neuf', 'brand' => 'Nintendo', 'rarity' => null, 'stock' => 5, 'no_image' => true],
-            ['vendor' => 'admin', 'title' => 'Console Sega Mega Drive II', 'category' => 'jeux-video', 'price' => 65, 'condition' => 'bon_etat', 'brand' => null, 'rarity' => null, 'stock' => 1, 'no_image' => true],
-            ['vendor' => 'admin', 'title' => 'Manette Nintendo Switch Pro', 'category' => 'jeux-video', 'price' => 39.9, 'condition' => 'comme_neuf', 'brand' => 'Nintendo', 'rarity' => null, 'stock' => 6, 'no_image' => true],
-            ['vendor' => 'retropixel', 'title' => 'Console Wii blanche + Wii Sports', 'category' => 'jeux-video', 'price' => 45, 'condition' => 'bon_etat', 'brand' => 'Nintendo', 'rarity' => null, 'stock' => 2, 'no_image' => true],
-            ['vendor' => 'retropixel', 'title' => 'Manette PS1 originale', 'category' => 'jeux-video', 'price' => 14.9, 'condition' => 'usage', 'brand' => 'PlayStation', 'rarity' => null, 'stock' => 6, 'no_image' => true],
-            ['vendor' => 'admin', 'title' => 'Console PSP-3000 + 5 jeux', 'category' => 'jeux-video', 'price' => 74, 'condition' => 'bon_etat', 'brand' => 'PlayStation', 'rarity' => null, 'stock' => 2, 'no_image' => true],
-            ['vendor' => 'retropixel', 'title' => 'Console Dreamcast + Sonic Adventure', 'category' => 'jeux-video', 'price' => 99, 'condition' => 'bon_etat', 'brand' => null, 'rarity' => null, 'stock' => 1, 'no_image' => true],
+            // --- Jeux vidéo supplémentaires (sans photo, consoles/manettes + Switch — vendeur PopGoodies) ---
+            ['vendor' => 'popgoodies', 'title' => 'Manette GameCube violette', 'category' => 'jeux-video', 'price' => 25, 'condition' => 'usage', 'brand' => 'Nintendo', 'rarity' => null, 'stock' => 4, 'no_image' => true],
+            ['vendor' => 'popgoodies', 'title' => 'Console Game Boy Color transparente', 'category' => 'jeux-video', 'price' => 55, 'condition' => 'bon_etat', 'brand' => 'Nintendo', 'rarity' => null, 'stock' => 2, 'no_image' => true],
+            ['vendor' => 'popgoodies', 'title' => 'Manette Xbox 360 sans fil', 'category' => 'jeux-video', 'price' => 18, 'condition' => 'usage', 'brand' => null, 'rarity' => null, 'stock' => 5, 'no_image' => true],
+            ['vendor' => 'popgoodies', 'title' => 'Console Nintendo 64 grise + câbles', 'category' => 'jeux-video', 'price' => 79, 'condition' => 'bon_etat', 'brand' => 'Nintendo', 'rarity' => null, 'stock' => 1, 'no_image' => true],
+            ['vendor' => 'popgoodies', 'title' => 'Console PS2 Slim + 2 manettes', 'category' => 'jeux-video', 'price' => 89, 'condition' => 'bon_etat', 'brand' => 'PlayStation', 'rarity' => null, 'stock' => 2, 'no_image' => true],
+            ['vendor' => 'popgoodies', 'title' => 'The Legend of Zelda: Breath of the Wild - Switch', 'category' => 'jeux-video', 'price' => 42, 'condition' => 'comme_neuf', 'brand' => 'Nintendo', 'rarity' => null, 'stock' => 5, 'no_image' => true],
+            ['vendor' => 'popgoodies', 'title' => 'Console Sega Mega Drive II', 'category' => 'jeux-video', 'price' => 65, 'condition' => 'bon_etat', 'brand' => null, 'rarity' => null, 'stock' => 1, 'no_image' => true],
+            ['vendor' => 'popgoodies', 'title' => 'Manette Nintendo Switch Pro', 'category' => 'jeux-video', 'price' => 39.9, 'condition' => 'comme_neuf', 'brand' => 'Nintendo', 'rarity' => null, 'stock' => 6, 'no_image' => true],
+            ['vendor' => 'popgoodies', 'title' => 'Console Wii blanche + Wii Sports', 'category' => 'jeux-video', 'price' => 45, 'condition' => 'bon_etat', 'brand' => 'Nintendo', 'rarity' => null, 'stock' => 2, 'no_image' => true],
+            ['vendor' => 'popgoodies', 'title' => 'Manette PS1 originale', 'category' => 'jeux-video', 'price' => 14.9, 'condition' => 'usage', 'brand' => 'PlayStation', 'rarity' => null, 'stock' => 6, 'no_image' => true],
+            ['vendor' => 'popgoodies', 'title' => 'Console PSP-3000 + 5 jeux', 'category' => 'jeux-video', 'price' => 74, 'condition' => 'bon_etat', 'brand' => 'PlayStation', 'rarity' => null, 'stock' => 2, 'no_image' => true],
+            ['vendor' => 'popgoodies', 'title' => 'Console Dreamcast + Sonic Adventure', 'category' => 'jeux-video', 'price' => 99, 'condition' => 'bon_etat', 'brand' => null, 'rarity' => null, 'stock' => 1, 'no_image' => true],
 
-            // --- Manga supplémentaires (sans photo, coffrets et packs multi-tomes) ---
-            ['vendor' => 'mangacorner', 'title' => 'Coffret Dragon Ball Z complet', 'category' => 'manga', 'price' => 89, 'condition' => 'comme_neuf', 'brand' => null, 'rarity' => null, 'stock' => 1, 'no_image' => true],
-            ['vendor' => 'mangacorner', 'title' => "L'Attaque des Titans - Coffret complet", 'category' => 'manga', 'price' => 145, 'condition' => 'comme_neuf', 'brand' => null, 'rarity' => null, 'stock' => 1, 'no_image' => true],
-            ['vendor' => 'mangacorner', 'title' => 'Death Note Tomes 1 à 5', 'category' => 'manga', 'price' => 38, 'condition' => 'bon_etat', 'brand' => null, 'rarity' => null, 'stock' => 2, 'no_image' => true],
-            ['vendor' => 'mangacorner', 'title' => 'Fullmetal Alchemist - Coffret intégral', 'category' => 'manga', 'price' => 120, 'condition' => 'comme_neuf', 'brand' => null, 'rarity' => null, 'stock' => 1, 'no_image' => true],
-            ['vendor' => 'admin', 'title' => 'My Hero Academia Tomes 1 à 3', 'category' => 'manga', 'price' => 22, 'condition' => 'bon_etat', 'brand' => null, 'rarity' => null, 'stock' => 3, 'no_image' => true],
+            // --- Manga supplémentaires (sans photo, coffrets et packs multi-tomes — vendeur PopGoodies) ---
+            ['vendor' => 'popgoodies', 'title' => 'Coffret Dragon Ball Z complet', 'category' => 'manga', 'price' => 89, 'condition' => 'comme_neuf', 'brand' => null, 'rarity' => null, 'stock' => 1, 'no_image' => true],
+            ['vendor' => 'popgoodies', 'title' => "L'Attaque des Titans - Coffret complet", 'category' => 'manga', 'price' => 145, 'condition' => 'comme_neuf', 'brand' => null, 'rarity' => null, 'stock' => 1, 'no_image' => true],
+            ['vendor' => 'popgoodies', 'title' => 'Death Note Tomes 1 à 5', 'category' => 'manga', 'price' => 38, 'condition' => 'bon_etat', 'brand' => null, 'rarity' => null, 'stock' => 2, 'no_image' => true],
+            ['vendor' => 'popgoodies', 'title' => 'Fullmetal Alchemist - Coffret intégral', 'category' => 'manga', 'price' => 120, 'condition' => 'comme_neuf', 'brand' => null, 'rarity' => null, 'stock' => 1, 'no_image' => true],
+            ['vendor' => 'popgoodies', 'title' => 'My Hero Academia Tomes 1 à 3', 'category' => 'manga', 'price' => 22, 'condition' => 'bon_etat', 'brand' => null, 'rarity' => null, 'stock' => 3, 'no_image' => true],
         ];
 
         foreach ($products as $data) {
