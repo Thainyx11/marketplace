@@ -76,7 +76,7 @@ Les emails (réinitialisation de mot de passe, futures notifications) partent r�
 | Vendeur en attente | `vendeur.pending@marketplace.test` | `password` |
 | Acheteur | `acheteur@marketplace.test` | `password` |
 
-`php artisan migrate:fresh --seed` régénère une base propre avec ces comptes, 5 catégories, 105 produits (2 photos réelles chacun via LoremFlickr, en portrait pour les cartes à collectionner) répartis sur les 6 boutiques vendeur + la boutique "Sélection Officielle" tenue par l'admin (toujours du stock disponible même sans vendeur externe), et une commande livrée avec avis pour avoir tout de suite des données à l'écran.
+`php artisan migrate:fresh --seed` régénère une base propre avec ces comptes, 5 catégories, 105 produits répartis sur les 6 boutiques vendeur + la boutique "Sélection Officielle" tenue par l'admin (toujours du stock disponible même sans vendeur externe), et une commande livrée avec avis pour avoir tout de suite des données à l'écran. Images produits : la plupart viennent de LoremFlickr (photos génériques mais réelles, thème de la catégorie, portrait pour les cartes à collectionner) ; 21 des 29 cartes à collectionner vendues à l'unité (hors boosters/displays scellés) ont en plus leur **vraie photo exacte** — résolue via [TCGdex](https://tcgdex.dev) (Pokémon) et [Scryfall](https://scryfall.com) (Magic), deux API publiques sans clé, voir `DemoDataSeeder::CARD_IMAGE_OVERRIDES`.
 
 ## Tests
 

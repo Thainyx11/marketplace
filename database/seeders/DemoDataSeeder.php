@@ -30,6 +30,39 @@ class DemoDataSeeder extends Seeder
         'goodies' => ['goodies', 'souvenir'],
     ];
 
+    /**
+     * Real, exact card photos for single-card listings, resolved once from
+     * TCGdex (Pokémon, open data, no key) and Scryfall (Magic, open data, no
+     * key) and hardcoded here — matches this seeder's existing pattern of
+     * storing static external URLs rather than fetching live at seed time.
+     * Sealed products (boosters/decks/displays) and the one card these APIs
+     * don't carry (Pikachu Illustrator, itself sold as "(reproduction)") are
+     * intentionally left out and keep the generic LoremFlickr photo below.
+     */
+    private const CARD_IMAGE_OVERRIDES = [
+        'Charizard VMAX' => 'https://assets.tcgdex.net/en/swsh/swsh3/20/high.png',
+        'Blastoise EX' => 'https://assets.tcgdex.net/en/xy/g1/17/high.png',
+        'Dracaufeu Reverse Édition Française' => 'https://assets.tcgdex.net/fr/base/base1/4/high.png',
+        'Mewtwo GX' => 'https://assets.tcgdex.net/en/sm/sm115/31/high.png',
+        'Dracaufeu VSTAR Rainbow Rare' => 'https://assets.tcgdex.net/fr/swsh/swsh9/018/high.png',
+        'Mew EX Full Art' => 'https://assets.tcgdex.net/en/tcgp/A1a/032/high.png',
+        'Salamence VMAX' => 'https://assets.tcgdex.net/en/swsh/swsh3/144/high.png',
+        'Umbreon VMAX Alt Art' => 'https://assets.tcgdex.net/en/swsh/swsh7/215/high.png',
+        'Lugia Neo Genesis 1er Édition' => 'https://assets.tcgdex.net/en/neo/neo1/9/high.png',
+        'Snorlax Holo - Jungle' => 'https://assets.tcgdex.net/en/base/base2/11/high.png',
+        'Rayquaza VMAX Alt Art' => 'https://assets.tcgdex.net/en/swsh/swsh7/218/high.png',
+        'Dracaufeu ex - Écarlate et Violet' => 'https://assets.tcgdex.net/fr/sv/sv03.5/006/high.png',
+        'Venusaur Holo - Base Set' => 'https://assets.tcgdex.net/en/base/base1/15/high.png',
+        'Gyarados 1ère Édition Shadowless' => 'https://assets.tcgdex.net/en/base/base1/6/high.png',
+        'Charizard Base Set Shadowless' => 'https://assets.tcgdex.net/en/base/base1/4/high.png',
+        'Eevee GX - Soleil et Lune' => 'https://assets.tcgdex.net/en/sm/smp/SM174/high.png',
+        'Espeon VMAX Alt Art' => 'https://assets.tcgdex.net/en/swsh/swsh8/270/high.png',
+        'Black Lotus Alpha (reproduction certifiée)' => 'https://cards.scryfall.io/normal/front/b/0/b0faa7f2-b547-42c4-a810-839da50dadfe.jpg',
+        'Jace the Mind Sculptor - Magic' => 'https://cards.scryfall.io/normal/front/c/8/c8817585-0d32-4d56-9142-0d29512e86a9.jpg',
+        'Sol Ring - Magic Commander' => 'https://cards.scryfall.io/normal/front/9/1/91fdb56b-54d5-4272-8319-505ff987fe9b.jpg',
+        'Force of Will - Carte Magic rare' => 'https://cards.scryfall.io/normal/front/8/9/89f612d6-7c59-4a7b-a87d-45f789e88ba5.jpg',
+    ];
+
     public function run(): void
     {
         if (! Setting::where('key', 'legal_notice')->exists()) {
@@ -229,13 +262,18 @@ class DemoDataSeeder extends Seeder
             );
 
             if ($product->wasRecentlyCreated) {
-                $keywords = self::CATEGORY_KEYWORDS[$data['category']];
-                $keyword = $keywords[$product->id % count($keywords)];
-                // Portrait ratio for cards to match real trading-card proportions (~63x88mm); square elsewhere.
-                $dimensions = $data['category'] === 'cartes-a-collectionner' ? '560/800' : '800/800';
+                if ($realPhoto = self::CARD_IMAGE_OVERRIDES[$data['title']] ?? null) {
+                    ProductImage::create(['product_id' => $product->id, 'path' => $realPhoto, 'position' => 0]);
+                    ProductImage::create(['product_id' => $product->id, 'path' => $realPhoto, 'position' => 1]);
+                } else {
+                    $keywords = self::CATEGORY_KEYWORDS[$data['category']];
+                    $keyword = $keywords[$product->id % count($keywords)];
+                    // Portrait ratio for cards to match real trading-card proportions (~63x88mm); square elsewhere.
+                    $dimensions = $data['category'] === 'cartes-a-collectionner' ? '560/800' : '800/800';
 
-                ProductImage::create(['product_id' => $product->id, 'path' => "https://loremflickr.com/{$dimensions}/{$keyword}?lock={$product->id}", 'position' => 0]);
-                ProductImage::create(['product_id' => $product->id, 'path' => "https://loremflickr.com/{$dimensions}/{$keyword}?lock=".($product->id + 1000), 'position' => 1]);
+                    ProductImage::create(['product_id' => $product->id, 'path' => "https://loremflickr.com/{$dimensions}/{$keyword}?lock={$product->id}", 'position' => 0]);
+                    ProductImage::create(['product_id' => $product->id, 'path' => "https://loremflickr.com/{$dimensions}/{$keyword}?lock=".($product->id + 1000), 'position' => 1]);
+                }
             }
         }
 
