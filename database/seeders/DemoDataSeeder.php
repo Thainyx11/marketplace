@@ -46,6 +46,12 @@ class DemoDataSeeder extends Seeder
      * Illustrator, Zelda BOTW - no Switch box-art repo, Demon Slayer absent
      * du dataset Funko) sont intentionnellement laissés sur la photo
      * générique LoremFlickr ci-dessous.
+     *
+     * Les entrées de $products marquées 'no_image' => true (goodies, une
+     * partie des jeux vidéo/manga) sont volontairement créées sans aucune
+     * ProductImage : les photos de ces produits seront ajoutées à la main
+     * séparément, inutile d'y mettre un placeholder trompeur — l'UI affiche
+     * déjà proprement l'icône "pas d'image" pour un produit sans photo.
      */
     private const IMAGE_OVERRIDES = [
         // Cartes à collectionner
@@ -70,6 +76,21 @@ class DemoDataSeeder extends Seeder
         'Jace the Mind Sculptor - Magic' => 'https://cards.scryfall.io/normal/front/c/8/c8817585-0d32-4d56-9142-0d29512e86a9.jpg',
         'Sol Ring - Magic Commander' => 'https://cards.scryfall.io/normal/front/9/1/91fdb56b-54d5-4272-8319-505ff987fe9b.jpg',
         'Force of Will - Carte Magic rare' => 'https://cards.scryfall.io/normal/front/8/9/89f612d6-7c59-4a7b-a87d-45f789e88ba5.jpg',
+        'Gengar Holo - Fossil' => 'https://assets.tcgdex.net/en/base/base3/5/high.png',
+        'Blaziken EX - Team Magma vs Team Aqua' => 'https://assets.tcgdex.net/en/ex/ex9/1/high.png',
+        'Greninja - XY' => 'https://assets.tcgdex.net/en/xy/xy1/41/high.png',
+        'Lucario - Diamond & Pearl' => 'https://assets.tcgdex.net/en/dp/dp1/6/high.png',
+        'Tyranitar Holo - Neo Discovery' => 'https://assets.tcgdex.net/en/neo/neo2/12/high.png',
+        'Garchomp - Trésors Mystérieux' => 'https://assets.tcgdex.net/en/dp/dp2/9/high.png',
+        'Vaporeon Holo - Jungle' => 'https://assets.tcgdex.net/en/base/base2/12/high.png',
+        'Jolteon Holo - Jungle' => 'https://assets.tcgdex.net/en/base/base2/4/high.png',
+        'Flareon Holo - Jungle' => 'https://assets.tcgdex.net/en/base/base2/3/high.png',
+        'Alakazam Holo - Base Set' => 'https://assets.tcgdex.net/en/base/base1/1/high.png',
+        'Dragonite Holo - Fossil' => 'https://assets.tcgdex.net/en/base/base3/4/high.png',
+        'Lightning Bolt - Magic' => 'https://cards.scryfall.io/normal/front/7/6/7673784e-db4b-43a1-8d55-1bb9fc1e284f.jpg',
+        'Counterspell - Magic' => 'https://cards.scryfall.io/normal/front/4/f/4f616706-ec97-4923-bb1e-11a69fbaa1f8.jpg',
+        'Tarmogoyf - Magic Modern' => 'https://cards.scryfall.io/normal/front/6/9/69daba76-96e8-4bcc-ab79-2f00189ad8fb.jpg',
+        'Llanowar Elves - Magic' => 'https://cards.scryfall.io/normal/front/6/a/6a0b230b-d391-4998-a3f7-7b158a0ec2cd.jpg',
 
         // Jeux vidéo
         'Super Mario 64 - Nintendo 64' => 'https://raw.githubusercontent.com/libretro-thumbnails/Nintendo_-_Nintendo_64/master/Named_Boxarts/Super%20Mario%2064%20%28Europe%29%20%28En%2CFr%2CDe%29.png',
@@ -114,6 +135,15 @@ class DemoDataSeeder extends Seeder
         'Funko Pop Naruto Shippuden - Sasuke' => 'https://images.hobbydb.com/processed_uploads/catalog_item_photo/catalog_item_photo/image/800813/Sasuke_Uchiha_Vinyl_Art_Toys_8fbc155a-5fc2-4fd6-ae55-f57fea8b0cf1.png',
         'Figurine articulée Dragon Ball - Vegeta' => 'https://images.hobbydb.com/processed_uploads/catalog_item_photo/catalog_item_photo/image/457992/Vegeta_Vinyl_Art_Toys_c6cdb4d7-4c09-44ad-89c9-0a85e1e460df_large.jpg',
         'Figurine Ichiban Kuji - Naruto Uzumaki' => 'https://images.hobbydb.com/processed_uploads/catalog_item_photo/catalog_item_photo/image/768623/Naruto_%2528Hokage%2529_Vinyl_Art_Toys_a72e51c9-21aa-4edd-b920-45a92e86419c_large.jpg',
+        'Funko Pop Star Wars - Yoda' => 'https://images.hobbydb.com/processed_uploads/catalog_item_photo/catalog_item_photo/image/459851/Yoda_Vinyl_Art_Toys_aeb31fcb-d3ea-4d47-b76f-b24835bc6ab8_large.jpg',
+        'Funko Pop Star Wars - Darth Vader' => 'https://images.hobbydb.com/processed_uploads/catalog_item_photo/catalog_item_photo/image/254884/Darth_Vader_Pop%2521_Vinyl_Figure_Vinyl_Art_Toys_40ec6681-3499-4884-9039-54581c554b64.PNG',
+        'Funko Pop Simpson - Homer' => 'https://images.hobbydb.com/processed_uploads/catalog_item_photo/catalog_item_photo/image/459893/Homer_Simpson_Vinyl_Art_Toys_c1c42bcc-7cbf-4491-8532-84ba491b74b1_large.jpg',
+        'Funko Pop Marvel - Iron Man' => 'https://images.hobbydb.com/processed_uploads/catalog_item_photo/catalog_item_photo/image/797113/Iron_Man_Vinyl_Art_Toys_91bdae28-e9a4-4672-b423-5f1a1f9fdb7a_large.jpg',
+        'Funko Pop Harry Potter' => 'https://images.hobbydb.com/processed_uploads/catalog_item_photo/catalog_item_photo/image/460554/Harry_Potter_Vinyl_Art_Toys_9d7abc17-d595-4ca1-b01f-6c73aa0a3b3a_large.jpg',
+        'Funko Pop Marvel - Groot' => 'https://images.hobbydb.com/processed_uploads/catalog_item_photo/catalog_item_photo/image/896249/Groot_Vinyl_Art_Toys_beeec64d-751e-40e0-8eed-263ad965a27f.jpg',
+        'Funko Pop Marvel - Deadpool' => 'https://images.hobbydb.com/processed_uploads/catalog_item_photo/catalog_item_photo/image/458428/Deadpool_Vinyl_Art_Toys_db1ef690-e098-4afb-867b-6ccca1b723cc_large.jpg',
+        'Figurine Sonic the Hedgehog' => 'https://images.hobbydb.com/processed_uploads/catalog_item_photo/catalog_item_photo/image/458180/Sonic_Vinyl_Art_Toys_72abe4d4-9fbf-4acc-9c52-1ee66d440873_large.jpg',
+        'Funko Pop Horror - Pennywise' => 'https://images.hobbydb.com/processed_uploads/catalog_item_photo/catalog_item_photo/image/459672/Pennywise_Vinyl_Art_Toys_16e8a715-44e7-466e-b38e-2bde9e63f4a8_large.jpg',
     ];
 
     public function run(): void
@@ -247,6 +277,69 @@ class DemoDataSeeder extends Seeder
             ['vendor' => 'admin', 'title' => 'Figurine Ichiban Kuji - Naruto Uzumaki', 'category' => 'figurines', 'price' => 31, 'condition' => 'neuf', 'brand' => null, 'rarity' => null, 'stock' => 4],
             ['vendor' => 'admin', 'title' => 'Bleach Tome 1', 'category' => 'manga', 'price' => 7.5, 'condition' => 'neuf', 'brand' => null, 'rarity' => null, 'stock' => 9],
             ['vendor' => 'tck', 'title' => 'Espeon VMAX Alt Art', 'category' => 'cartes-a-collectionner', 'price' => 68, 'condition' => 'comme_neuf', 'brand' => 'Pokemon', 'rarity' => 'secrete', 'stock' => 2],
+
+            // --- Nouvelles cartes (photos réelles TCGdex/Scryfall) ---
+            ['vendor' => 'leo', 'title' => 'Gengar Holo - Fossil', 'category' => 'cartes-a-collectionner', 'price' => 32, 'condition' => 'bon_etat', 'brand' => 'Pokemon', 'rarity' => 'holo', 'stock' => 3],
+            ['vendor' => 'tck', 'title' => 'Blaziken EX - Team Magma vs Team Aqua', 'category' => 'cartes-a-collectionner', 'price' => 26.5, 'condition' => 'bon_etat', 'brand' => 'Pokemon', 'rarity' => 'holo', 'stock' => 4],
+            ['vendor' => 'leo', 'title' => 'Greninja - XY', 'category' => 'cartes-a-collectionner', 'price' => 14.9, 'condition' => 'neuf', 'brand' => 'Pokemon', 'rarity' => 'rare', 'stock' => 6],
+            ['vendor' => 'admin', 'title' => 'Lucario - Diamond & Pearl', 'category' => 'cartes-a-collectionner', 'price' => 16.5, 'condition' => 'neuf', 'brand' => 'Pokemon', 'rarity' => 'rare', 'stock' => 5],
+            ['vendor' => 'tck', 'title' => 'Tyranitar Holo - Neo Discovery', 'category' => 'cartes-a-collectionner', 'price' => 48, 'condition' => 'bon_etat', 'brand' => 'Pokemon', 'rarity' => 'holo', 'stock' => 2],
+            ['vendor' => 'leo', 'title' => 'Garchomp - Trésors Mystérieux', 'category' => 'cartes-a-collectionner', 'price' => 21, 'condition' => 'neuf', 'brand' => 'Pokemon', 'rarity' => 'rare', 'stock' => 4],
+            ['vendor' => 'admin', 'title' => 'Vaporeon Holo - Jungle', 'category' => 'cartes-a-collectionner', 'price' => 29.9, 'condition' => 'bon_etat', 'brand' => 'Pokemon', 'rarity' => 'holo', 'stock' => 3],
+            ['vendor' => 'admin', 'title' => 'Jolteon Holo - Jungle', 'category' => 'cartes-a-collectionner', 'price' => 27.9, 'condition' => 'bon_etat', 'brand' => 'Pokemon', 'rarity' => 'holo', 'stock' => 3],
+            ['vendor' => 'leo', 'title' => 'Flareon Holo - Jungle', 'category' => 'cartes-a-collectionner', 'price' => 27.9, 'condition' => 'bon_etat', 'brand' => 'Pokemon', 'rarity' => 'holo', 'stock' => 3],
+            ['vendor' => 'tck', 'title' => 'Alakazam Holo - Base Set', 'category' => 'cartes-a-collectionner', 'price' => 55, 'condition' => 'bon_etat', 'brand' => 'Pokemon', 'rarity' => 'holo', 'stock' => 2],
+            ['vendor' => 'admin', 'title' => 'Dragonite Holo - Fossil', 'category' => 'cartes-a-collectionner', 'price' => 58, 'condition' => 'bon_etat', 'brand' => 'Pokemon', 'rarity' => 'holo', 'stock' => 2],
+            ['vendor' => 'tck', 'title' => 'Lightning Bolt - Magic', 'category' => 'cartes-a-collectionner', 'price' => 3.9, 'condition' => 'neuf', 'brand' => null, 'rarity' => 'commune', 'stock' => 15],
+            ['vendor' => 'tck', 'title' => 'Counterspell - Magic', 'category' => 'cartes-a-collectionner', 'price' => 5.5, 'condition' => 'neuf', 'brand' => null, 'rarity' => 'rare', 'stock' => 10],
+            ['vendor' => 'admin', 'title' => 'Tarmogoyf - Magic Modern', 'category' => 'cartes-a-collectionner', 'price' => 34, 'condition' => 'bon_etat', 'brand' => null, 'rarity' => 'rare', 'stock' => 3],
+            ['vendor' => 'leo', 'title' => 'Llanowar Elves - Magic', 'category' => 'cartes-a-collectionner', 'price' => 2.9, 'condition' => 'neuf', 'brand' => null, 'rarity' => 'commune', 'stock' => 18],
+
+            // --- Nouvelles figurines (photos réelles Funko Pop) ---
+            ['vendor' => 'funko', 'title' => 'Funko Pop Star Wars - Yoda', 'category' => 'figurines', 'price' => 15.9, 'condition' => 'neuf', 'brand' => 'Funko', 'rarity' => null, 'stock' => 9],
+            ['vendor' => 'funko', 'title' => 'Funko Pop Star Wars - Darth Vader', 'category' => 'figurines', 'price' => 16.9, 'condition' => 'neuf', 'brand' => 'Funko', 'rarity' => null, 'stock' => 7],
+            ['vendor' => 'funko', 'title' => 'Funko Pop Simpson - Homer', 'category' => 'figurines', 'price' => 13.5, 'condition' => 'neuf', 'brand' => 'Funko', 'rarity' => null, 'stock' => 10],
+            ['vendor' => 'funko', 'title' => 'Funko Pop Marvel - Iron Man', 'category' => 'figurines', 'price' => 14.9, 'condition' => 'neuf', 'brand' => 'Funko', 'rarity' => null, 'stock' => 12],
+            ['vendor' => 'leo', 'title' => 'Funko Pop Harry Potter', 'category' => 'figurines', 'price' => 13.9, 'condition' => 'neuf', 'brand' => 'Funko', 'rarity' => null, 'stock' => 8],
+            ['vendor' => 'funko', 'title' => 'Funko Pop Marvel - Groot', 'category' => 'figurines', 'price' => 15.5, 'condition' => 'neuf', 'brand' => 'Funko', 'rarity' => null, 'stock' => 11],
+            ['vendor' => 'funko', 'title' => 'Funko Pop Marvel - Deadpool', 'category' => 'figurines', 'price' => 14.9, 'condition' => 'neuf', 'brand' => 'Funko', 'rarity' => null, 'stock' => 9],
+            ['vendor' => 'admin', 'title' => 'Figurine Sonic the Hedgehog', 'category' => 'figurines', 'price' => 17.9, 'condition' => 'neuf', 'brand' => null, 'rarity' => null, 'stock' => 6],
+            ['vendor' => 'admin', 'title' => 'Funko Pop Horror - Pennywise', 'category' => 'figurines', 'price' => 16.5, 'condition' => 'neuf', 'brand' => 'Funko', 'rarity' => null, 'stock' => 5],
+
+            // --- Goodies : PopGoodies (sans photo — visuels ajoutés à la main séparément) ---
+            ['vendor' => 'popgoodies', 'title' => 'Porte-clés Pokéball lumineux', 'category' => 'goodies', 'price' => 6.5, 'condition' => 'neuf', 'brand' => 'Pokemon', 'rarity' => null, 'stock' => 15, 'no_image' => true],
+            ['vendor' => 'popgoodies', 'title' => 'Mug Zelda Triforce', 'category' => 'goodies', 'price' => 11.9, 'condition' => 'neuf', 'brand' => 'Nintendo', 'rarity' => null, 'stock' => 8, 'no_image' => true],
+            ['vendor' => 'popgoodies', 'title' => 'Peluche Pikachu 30cm', 'category' => 'goodies', 'price' => 19.9, 'condition' => 'neuf', 'brand' => 'Pokemon', 'rarity' => null, 'stock' => 10, 'no_image' => true],
+            ['vendor' => 'popgoodies', 'title' => "Poster L'Attaque des Titans", 'category' => 'goodies', 'price' => 8.9, 'condition' => 'neuf', 'brand' => null, 'rarity' => null, 'stock' => 20, 'no_image' => true],
+            ['vendor' => 'popgoodies', 'title' => "Set de pin's Pokémon", 'category' => 'goodies', 'price' => 9.5, 'condition' => 'neuf', 'brand' => 'Pokemon', 'rarity' => null, 'stock' => 12, 'no_image' => true],
+            ['vendor' => 'popgoodies', 'title' => 'Coussin Totoro', 'category' => 'goodies', 'price' => 17.9, 'condition' => 'neuf', 'brand' => null, 'rarity' => null, 'stock' => 6, 'no_image' => true],
+            ['vendor' => 'popgoodies', 'title' => 'Gourde Harry Potter Poudlard', 'category' => 'goodies', 'price' => 13.5, 'condition' => 'neuf', 'brand' => null, 'rarity' => null, 'stock' => 9, 'no_image' => true],
+            ['vendor' => 'popgoodies', 'title' => 'Casquette Super Mario', 'category' => 'goodies', 'price' => 15, 'condition' => 'neuf', 'brand' => 'Nintendo', 'rarity' => null, 'stock' => 7, 'no_image' => true],
+            ['vendor' => 'popgoodies', 'title' => 'Sac à dos Naruto Akatsuki', 'category' => 'goodies', 'price' => 32, 'condition' => 'neuf', 'brand' => null, 'rarity' => null, 'stock' => 4, 'no_image' => true],
+            ['vendor' => 'popgoodies', 'title' => 'Tapis de souris One Piece XXL', 'category' => 'goodies', 'price' => 14.9, 'condition' => 'neuf', 'brand' => null, 'rarity' => null, 'stock' => 10, 'no_image' => true],
+            ['vendor' => 'popgoodies', 'title' => 'Plaid polaire Pokémon', 'category' => 'goodies', 'price' => 22, 'condition' => 'neuf', 'brand' => 'Pokemon', 'rarity' => null, 'stock' => 8, 'no_image' => true],
+            ['vendor' => 'popgoodies', 'title' => 'Lampe Pokéball veilleuse', 'category' => 'goodies', 'price' => 18.9, 'condition' => 'neuf', 'brand' => 'Pokemon', 'rarity' => null, 'stock' => 10, 'no_image' => true],
+
+            // --- Jeux vidéo supplémentaires (sans photo, consoles/manettes + Switch) ---
+            ['vendor' => 'retropixel', 'title' => 'Manette GameCube violette', 'category' => 'jeux-video', 'price' => 25, 'condition' => 'usage', 'brand' => 'Nintendo', 'rarity' => null, 'stock' => 4, 'no_image' => true],
+            ['vendor' => 'retropixel', 'title' => 'Console Game Boy Color transparente', 'category' => 'jeux-video', 'price' => 55, 'condition' => 'bon_etat', 'brand' => 'Nintendo', 'rarity' => null, 'stock' => 2, 'no_image' => true],
+            ['vendor' => 'retropixel', 'title' => 'Manette Xbox 360 sans fil', 'category' => 'jeux-video', 'price' => 18, 'condition' => 'usage', 'brand' => null, 'rarity' => null, 'stock' => 5, 'no_image' => true],
+            ['vendor' => 'retropixel', 'title' => 'Console Nintendo 64 grise + câbles', 'category' => 'jeux-video', 'price' => 79, 'condition' => 'bon_etat', 'brand' => 'Nintendo', 'rarity' => null, 'stock' => 1, 'no_image' => true],
+            ['vendor' => 'admin', 'title' => 'Console PS2 Slim + 2 manettes', 'category' => 'jeux-video', 'price' => 89, 'condition' => 'bon_etat', 'brand' => 'PlayStation', 'rarity' => null, 'stock' => 2, 'no_image' => true],
+            ['vendor' => 'admin', 'title' => 'The Legend of Zelda: Breath of the Wild - Switch', 'category' => 'jeux-video', 'price' => 42, 'condition' => 'comme_neuf', 'brand' => 'Nintendo', 'rarity' => null, 'stock' => 5, 'no_image' => true],
+            ['vendor' => 'admin', 'title' => 'Console Sega Mega Drive II', 'category' => 'jeux-video', 'price' => 65, 'condition' => 'bon_etat', 'brand' => null, 'rarity' => null, 'stock' => 1, 'no_image' => true],
+            ['vendor' => 'admin', 'title' => 'Manette Nintendo Switch Pro', 'category' => 'jeux-video', 'price' => 39.9, 'condition' => 'comme_neuf', 'brand' => 'Nintendo', 'rarity' => null, 'stock' => 6, 'no_image' => true],
+            ['vendor' => 'retropixel', 'title' => 'Console Wii blanche + Wii Sports', 'category' => 'jeux-video', 'price' => 45, 'condition' => 'bon_etat', 'brand' => 'Nintendo', 'rarity' => null, 'stock' => 2, 'no_image' => true],
+            ['vendor' => 'retropixel', 'title' => 'Manette PS1 originale', 'category' => 'jeux-video', 'price' => 14.9, 'condition' => 'usage', 'brand' => 'PlayStation', 'rarity' => null, 'stock' => 6, 'no_image' => true],
+            ['vendor' => 'admin', 'title' => 'Console PSP-3000 + 5 jeux', 'category' => 'jeux-video', 'price' => 74, 'condition' => 'bon_etat', 'brand' => 'PlayStation', 'rarity' => null, 'stock' => 2, 'no_image' => true],
+            ['vendor' => 'retropixel', 'title' => 'Console Dreamcast + Sonic Adventure', 'category' => 'jeux-video', 'price' => 99, 'condition' => 'bon_etat', 'brand' => null, 'rarity' => null, 'stock' => 1, 'no_image' => true],
+
+            // --- Manga supplémentaires (sans photo, coffrets et packs multi-tomes) ---
+            ['vendor' => 'mangacorner', 'title' => 'Coffret Dragon Ball Z complet', 'category' => 'manga', 'price' => 89, 'condition' => 'comme_neuf', 'brand' => null, 'rarity' => null, 'stock' => 1, 'no_image' => true],
+            ['vendor' => 'mangacorner', 'title' => "L'Attaque des Titans - Coffret complet", 'category' => 'manga', 'price' => 145, 'condition' => 'comme_neuf', 'brand' => null, 'rarity' => null, 'stock' => 1, 'no_image' => true],
+            ['vendor' => 'mangacorner', 'title' => 'Death Note Tomes 1 à 5', 'category' => 'manga', 'price' => 38, 'condition' => 'bon_etat', 'brand' => null, 'rarity' => null, 'stock' => 2, 'no_image' => true],
+            ['vendor' => 'mangacorner', 'title' => 'Fullmetal Alchemist - Coffret intégral', 'category' => 'manga', 'price' => 120, 'condition' => 'comme_neuf', 'brand' => null, 'rarity' => null, 'stock' => 1, 'no_image' => true],
+            ['vendor' => 'admin', 'title' => 'My Hero Academia Tomes 1 à 3', 'category' => 'manga', 'price' => 22, 'condition' => 'bon_etat', 'brand' => null, 'rarity' => null, 'stock' => 3, 'no_image' => true],
         ];
 
         foreach ($products as $data) {
@@ -266,7 +359,7 @@ class DemoDataSeeder extends Seeder
                 ],
             );
 
-            if ($product->wasRecentlyCreated) {
+            if ($product->wasRecentlyCreated && empty($data['no_image'])) {
                 if ($realPhoto = self::IMAGE_OVERRIDES[$data['title']] ?? null) {
                     ProductImage::create(['product_id' => $product->id, 'path' => $realPhoto, 'position' => 0]);
                     ProductImage::create(['product_id' => $product->id, 'path' => $realPhoto, 'position' => 1]);
