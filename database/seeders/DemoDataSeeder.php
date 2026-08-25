@@ -31,15 +31,19 @@ class DemoDataSeeder extends Seeder
     ];
 
     /**
-     * Real, exact card photos for single-card listings, resolved once from
-     * TCGdex (Pokémon, open data, no key) and Scryfall (Magic, open data, no
-     * key) and hardcoded here — matches this seeder's existing pattern of
-     * storing static external URLs rather than fetching live at seed time.
-     * Sealed products (boosters/decks/displays) and the one card these APIs
-     * don't carry (Pikachu Illustrator, itself sold as "(reproduction)") are
-     * intentionally left out and keep the generic LoremFlickr photo below.
+     * Real, exact product photos resolved once from open/keyless data APIs
+     * and hardcoded here — matches this seeder's existing pattern of storing
+     * static external URLs rather than fetching live at seed time:
+     *   - Cards: TCGdex (Pokémon) and Scryfall (Magic)
+     *   - Jeux vidéo: libretro-thumbnails (curated box-art, GitHub-hosted)
+     *   - Manga: MangaDex (volume-1 / tome-1 covers)
+     * Sealed/bundle products (boosters, coffrets, multi-tome packs, consoles,
+     * controllers) and the few titles these sources don't carry (Pikachu
+     * Illustrator, Zelda BOTW - no Switch box-art repo) are intentionally
+     * left out and keep the generic LoremFlickr photo below.
      */
-    private const CARD_IMAGE_OVERRIDES = [
+    private const IMAGE_OVERRIDES = [
+        // Cartes à collectionner
         'Charizard VMAX' => 'https://assets.tcgdex.net/en/swsh/swsh3/20/high.png',
         'Blastoise EX' => 'https://assets.tcgdex.net/en/xy/g1/17/high.png',
         'Dracaufeu Reverse Édition Française' => 'https://assets.tcgdex.net/fr/base/base1/4/high.png',
@@ -61,6 +65,31 @@ class DemoDataSeeder extends Seeder
         'Jace the Mind Sculptor - Magic' => 'https://cards.scryfall.io/normal/front/c/8/c8817585-0d32-4d56-9142-0d29512e86a9.jpg',
         'Sol Ring - Magic Commander' => 'https://cards.scryfall.io/normal/front/9/1/91fdb56b-54d5-4272-8319-505ff987fe9b.jpg',
         'Force of Will - Carte Magic rare' => 'https://cards.scryfall.io/normal/front/8/9/89f612d6-7c59-4a7b-a87d-45f789e88ba5.jpg',
+
+        // Jeux vidéo
+        'Super Mario 64 - Nintendo 64' => 'https://raw.githubusercontent.com/libretro-thumbnails/Nintendo_-_Nintendo_64/master/Named_Boxarts/Super%20Mario%2064%20%28Europe%29%20%28En%2CFr%2CDe%29.png',
+        'Final Fantasy VII - PS1 (complet)' => 'https://raw.githubusercontent.com/libretro-thumbnails/Sony_-_PlayStation/master/Named_Boxarts/Final%20Fantasy%20VII%20%28France%29%20%28Disc%201%29.png',
+        'Zelda Ocarina of Time - Nintendo 64' => 'https://raw.githubusercontent.com/libretro-thumbnails/Nintendo_-_Nintendo_64/master/Named_Boxarts/Legend%20of%20Zelda%2C%20The%20-%20Ocarina%20of%20Time%20%28Europe%29%20%28En%2CFr%2CDe%29.png',
+        'Sonic Adventure 2 - Dreamcast' => 'https://raw.githubusercontent.com/libretro-thumbnails/Sega_-_Dreamcast/master/Named_Boxarts/Sonic%20Adventure%202%20%28Europe%29%20%28En%2CJa%2CFr%2CDe%2CEs%29.png',
+        'Metal Gear Solid - PS1' => 'https://raw.githubusercontent.com/libretro-thumbnails/Sony_-_PlayStation/master/Named_Boxarts/Metal%20Gear%20Solid%20%28France%29%20%28Disc%201%29.png',
+        'Pokémon Version Or HeartGold - DS' => 'https://raw.githubusercontent.com/libretro-thumbnails/Nintendo_-_Nintendo_DS/master/Named_Boxarts/Pokemon%20-%20Version%20Or%20HeartGold%20%28France%29.png',
+        'Crash Bandicoot 3 - PS1' => 'https://raw.githubusercontent.com/libretro-thumbnails/Sony_-_PlayStation/master/Named_Boxarts/Crash%20Bandicoot%203%20-%20Warped%20%28Europe%29%20%28En%2CFr%2CDe%2CEs%2CIt%29.png',
+        'Super Smash Bros Melee - GameCube' => 'https://raw.githubusercontent.com/libretro-thumbnails/Nintendo_-_GameCube/master/Named_Boxarts/Super%20Smash%20Bros.%20Melee%20%28Europe%29%20%28En%2CFr%2CDe%2CEs%2CIt%29.png',
+        'Chrono Trigger - SNES' => 'https://raw.githubusercontent.com/libretro-thumbnails/Nintendo_-_Super_Nintendo_Entertainment_System/master/Named_Boxarts/Chrono%20Trigger%20%28USA%29.png',
+
+        // Manga (couverture du tome 1 / premier tome du coffret)
+        'One Piece Tome 1 - édition originale' => 'https://uploads.mangadex.org/covers/a1c7c817-4e59-43b7-9365-09675a149a6f/2f4aca53-64c7-46ac-ae85-3bc9b3169890.png',
+        'Naruto Tome 1 - édition originale' => 'https://uploads.mangadex.org/covers/6b1eb93e-473a-4ab3-9922-1a66d2a29a4a/c5a3090c-4ca0-40a2-9102-e0ee0c6dac15.jpg',
+        'Demon Slayer Tome 1' => 'https://uploads.mangadex.org/covers/789642f8-ca89-4e4e-8f7b-eee4d17ea08b/28b64721-11b1-4936-a1c4-1b5bef7815ab.jpg',
+        'One Punch Man Tome 1' => 'https://uploads.mangadex.org/covers/d8a959f7-648e-4c8d-8f23-f1f3f8e129f3/dfc14954-f855-47a3-9401-4abe2a78621a.jpg',
+        'Chainsaw Man Tome 1' => 'https://uploads.mangadex.org/covers/a77742b1-befd-49a4-bff5-1ad4e6b0ef7b/07b6e139-194a-4438-b07a-57db2f4f22f8.jpg',
+        'Jujutsu Kaisen Tome 1' => 'https://uploads.mangadex.org/covers/c52b2ce3-7f95-469c-96b0-479524fb7a1a/258999da-cbcf-4dd9-8786-91f5eaa968b8.png',
+        'Spy x Family Tome 1' => 'https://uploads.mangadex.org/covers/6b958848-c885-4735-9201-12ee77abcb3c/930499de-1241-41d5-a329-6f35f861720b.jpg',
+        'Berserk - Coffret Deluxe Vol.1' => 'https://uploads.mangadex.org/covers/801513ba-a712-498c-8f57-cae55b38cc92/88b10820-0309-44c5-9a40-c799865ad968.jpg',
+        'Vinland Saga Tome 1' => 'https://uploads.mangadex.org/covers/5d1fc77e-706a-4fc5-bea8-486c9be0145d/47e19a12-b0fb-4b52-b105-c202c555b966.jpg',
+        'Vagabond Tome 1' => 'https://uploads.mangadex.org/covers/d1a9fdeb-f713-407f-960c-8326b586e6fd/00cf99f7-5145-44ea-a068-0a8a5cd4dc76.jpg',
+        'Tokyo Ghoul Tome 1' => 'https://uploads.mangadex.org/covers/6a1d1cb1-ecd5-40d9-89ff-9d88e40b136b/040e8ae9-4ddd-49d2-8986-56782b391714.jpg',
+        'Bleach Tome 1' => 'https://uploads.mangadex.org/covers/239d6260-d71f-43b0-afff-074e3619e3de/3cbb1b1c-6630-4971-b2b1-e24e6cbf4f40.jpg',
     ];
 
     public function run(): void
@@ -262,7 +291,7 @@ class DemoDataSeeder extends Seeder
             );
 
             if ($product->wasRecentlyCreated) {
-                if ($realPhoto = self::CARD_IMAGE_OVERRIDES[$data['title']] ?? null) {
+                if ($realPhoto = self::IMAGE_OVERRIDES[$data['title']] ?? null) {
                     ProductImage::create(['product_id' => $product->id, 'path' => $realPhoto, 'position' => 0]);
                     ProductImage::create(['product_id' => $product->id, 'path' => $realPhoto, 'position' => 1]);
                 } else {

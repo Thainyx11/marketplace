@@ -76,12 +76,12 @@ Les emails (réinitialisation de mot de passe, futures notifications) partent r�
 | Vendeur en attente | `vendeur.pending@marketplace.test` | `password` |
 | Acheteur | `acheteur@marketplace.test` | `password` |
 
-`php artisan migrate:fresh --seed` régénère une base propre avec ces comptes, 5 catégories, 105 produits répartis sur les 6 boutiques vendeur + la boutique "Sélection Officielle" tenue par l'admin (toujours du stock disponible même sans vendeur externe), et une commande livrée avec avis pour avoir tout de suite des données à l'écran. Images produits : la plupart viennent de LoremFlickr (photos génériques mais réelles, thème de la catégorie, portrait pour les cartes à collectionner) ; 21 des 29 cartes à collectionner vendues à l'unité (hors boosters/displays scellés) ont en plus leur **vraie photo exacte** — résolue via [TCGdex](https://tcgdex.dev) (Pokémon) et [Scryfall](https://scryfall.com) (Magic), deux API publiques sans clé, voir `DemoDataSeeder::CARD_IMAGE_OVERRIDES`.
+`php artisan migrate:fresh --seed` régénère une base propre avec ces comptes, 5 catégories, 105 produits répartis sur les 6 boutiques vendeur + la boutique "Sélection Officielle" tenue par l'admin (toujours du stock disponible même sans vendeur externe), et une commande livrée avec avis pour avoir tout de suite des données à l'écran. Images produits : la plupart viennent de LoremFlickr (photos génériques mais réelles, thème de la catégorie, portrait pour les cartes à collectionner) ; 42 produits ont en plus leur **vraie photo exacte** — 21 cartes à collectionner vendues à l'unité via [TCGdex](https://tcgdex.dev) (Pokémon) et [Scryfall](https://scryfall.com) (Magic), 9 jeux vidéo via [libretro-thumbnails](https://github.com/libretro-thumbnails) (jaquettes officielles) et 12 mangas (couverture du tome 1) via [MangaDex](https://mangadex.org) — trois sources publiques sans clé API, voir `DemoDataSeeder::IMAGE_OVERRIDES`. Les produits scellés (boosters, coffrets multi-tomes), les consoles/manettes et les rares titres non couverts par ces sources (Pikachu Illustrator, Zelda BOTW sur Switch) gardent la photo générique.
 
 ## Tests
 
 ```bash
-php artisan test           # 53 tests (auth, autorisation par rôle, profil, panier, webhook Stripe, export RGPD, favoris, recherches...)
+php artisan test           # 54 tests (auth, autorisation par rôle, profil, panier, webhook Stripe, export RGPD, favoris, recherches...)
 ./vendor/bin/pint --test   # style de code
 npm run build               # build production, doit sortir sans erreur ni warning
 ```
