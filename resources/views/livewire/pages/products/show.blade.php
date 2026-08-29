@@ -27,10 +27,18 @@ new #[Layout('layouts.app')] class extends Component
     @php $isCard = $product->category->slug === 'cartes-a-collectionner'; @endphp
 
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
-        <div x-data="{ active: 0, images: {{ $product->images->map(fn ($i) => $i->url)->toJson() }} }">
+        <div x-data="{ active: 0, zoomed: false, images: {{ $product->images->map(fn ($i) => $i->url)->toJson() }} }"
+             @keydown.escape.window="zoomed = false">
             <div class="relative {{ $isCard ? 'aspect-[5/7]' : 'aspect-square' }} bg-gray-100 dark:bg-gray-800 rounded-2xl overflow-hidden flex items-center justify-center">
                 <template x-if="images.length">
-                    <img :src="images[active]" alt="{{ $product->title }}" class="object-cover w-full h-full">
+                    <button type="button" @click="zoomed = true" class="w-full h-full cursor-zoom-in group/zoom" aria-label="{{ __('Agrandir la photo') }}">
+                        <img :src="images[active]" alt="{{ $product->title }}" class="object-cover w-full h-full">
+                        <span class="absolute bottom-3 right-3 bg-black/60 text-white rounded-full p-2 opacity-0 group-hover/zoom:opacity-100 transition-opacity">
+                            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35M18 10.5a7.5 7.5 0 11-15 0 7.5 7.5 0 0115 0zM10.5 7.5v6m-3-3h6" />
+                            </svg>
+                        </span>
+                    </button>
                 </template>
                 @if ($product->images->isEmpty())
                     <div class="flex flex-col items-center gap-2 text-gray-300 dark:text-gray-600">
@@ -57,6 +65,26 @@ new #[Layout('layouts.app')] class extends Component
                     @endforeach
                 </div>
             @endif
+
+            {{-- Zoom lightbox: for a collectible, seeing a card's edges or a figure's
+                 paint detail up close is a trust feature, not just a nicety. --}}
+            {{-- Plain x-show, deliberately no x-cloak or x-transition here: both were
+                 tested and, combined with x-show on this element, left the lightbox
+                 permanently stuck at display:none after opening (a known Alpine
+                 x-cloak/x-show interaction) — verified by toggling the reactive state
+                 directly and reading computed style before settling on this. --}}
+            <div x-show="zoomed"
+                 class="fixed inset-0 z-50 bg-black/90 flex items-center justify-center p-4 sm:p-10"
+                 @click="zoomed = false" role="dialog" aria-modal="true">
+                <button type="button" @click.stop="zoomed = false"
+                        class="absolute top-4 right-4 sm:top-6 sm:right-6 text-white/80 hover:text-white bg-white/10 hover:bg-white/20 rounded-full p-2.5 transition"
+                        aria-label="{{ __('Fermer') }}">
+                    <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+                <img :src="images[active]" @click.stop alt="{{ $product->title }}" class="max-h-full max-w-full object-contain rounded-lg">
+            </div>
         </div>
 
         <div>
