@@ -10,14 +10,26 @@ new #[Layout('layouts.app')] class extends Component
 {
     public function with(): array
     {
-        $popular = Product::active()->with(['images', 'seller', 'category'])
-            ->withCount('orderItems')->orderByDesc('order_items_count')->take(3)->get();
+        $categories = Category::withCount(['products' => fn ($q) => $q->active()])->whereNull('parent_id')->get();
 
         $latest = Product::active()->with(['images', 'seller', 'category'])->latest()->take(4)->get();
 
+        // FIX: one product per category rather than "popular ∪ latest" — on a young
+        // catalog both queries return nearly the same rows, so the hero used to show
+        // the same 3-4 cards as the "Nouveautés" grid right below it. Restricted to
+        // products that actually have a photo — the hero has no "photo à venir"
+        // fallback like the product card does, so an imageless product here would
+        // render as a blank background behind the gradient overlay.
+        $heroProducts = $categories
+            ->map(fn (Category $category) => Product::active()->where('category_id', $category->id)
+                ->whereHas('images')
+                ->with(['images', 'seller', 'category'])->withCount('orderItems')->latest()->first())
+            ->filter()
+            ->values();
+
         return [
-            'categories' => Category::withCount(['products' => fn ($q) => $q->active()])->whereNull('parent_id')->get(),
-            'heroProducts' => $popular->concat($latest)->unique('id')->take(6)->values(),
+            'categories' => $categories,
+            'heroProducts' => $heroProducts,
             'latestProducts' => $latest,
             'productsCount' => Product::active()->count(),
             'vendorsCount' => User::whereIn('role', ['vendeur', 'admin'])->where('is_approved', true)->whereNotNull('shop_slug')->count(),
@@ -75,8 +87,10 @@ new #[Layout('layouts.app')] class extends Component
                                 <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/40 to-black/5"></div>
 
                                 <div class="absolute inset-0 flex flex-col justify-end p-6 sm:p-10">
-                                    <span class="inline-flex items-center gap-1 self-start bg-gradient-to-r from-brand-700 to-brand-900 text-white text-xs font-bold px-3 py-1 rounded-full">
-                                        {{ $index < 3 && $product->order_items_count > 0 ? '🔥 '.__('Populaire') : '🆕 '.__('Nouveauté') }}
+                                    @php $isPopular = $index < 3 && $product->order_items_count > 0; @endphp
+                                    <span class="inline-flex items-center gap-1.5 self-start bg-white/10 backdrop-blur-sm border border-white/20 text-white text-xs font-bold uppercase tracking-wide px-3 py-1.5 rounded-full">
+                                        <span class="h-1.5 w-1.5 rounded-full {{ $isPopular ? 'bg-amber-400' : 'bg-brand-400' }}"></span>
+                                        {{ $isPopular ? __('Populaire') : __('Nouveauté') }}
                                     </span>
                                     <h2 class="text-2xl sm:text-4xl font-extrabold mt-3 max-w-2xl">{{ $product->title }}</h2>
                                     <p class="text-gray-300 text-sm sm:text-base mt-1">{{ $product->seller->shop_name ?? $product->seller->name }}</p>
@@ -100,20 +114,13 @@ new #[Layout('layouts.app')] class extends Component
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <h2 class="text-lg font-bold text-gray-900 dark:text-gray-100 mb-5">{{ __('Catégories') }}</h2>
         <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
-            @php
-                $icons = [
-                    'cartes-a-collectionner' => '🃏',
-                    'jeux-video' => '🎮',
-                    'figurines' => '🧸',
-                    'manga' => '📚',
-                    'goodies' => '🎁',
-                ];
-            @endphp
             @foreach ($categories as $category)
                 <a href="{{ route('products.index', ['categorie' => $category->slug]) }}" wire:navigate
                    class="group bg-white dark:bg-gray-800 rounded-2xl shadow-sm p-5 text-center hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200">
-                    <span class="text-3xl">{{ $icons[$category->slug] ?? '📦' }}</span>
-                    <p class="font-semibold text-gray-900 dark:text-gray-100 mt-2 group-hover:text-brand-600 dark:group-hover:text-brand-400 transition">{{ $category->name }}</p>
+                    <span class="inline-flex items-center justify-center h-11 w-11 rounded-xl bg-brand-50 dark:bg-brand-900/40 text-brand-600 dark:text-brand-300">
+                        <x-category-icon :slug="$category->slug" class="h-6 w-6" />
+                    </span>
+                    <p class="font-semibold text-gray-900 dark:text-gray-100 mt-2.5 group-hover:text-brand-600 dark:group-hover:text-brand-400 transition">{{ $category->name }}</p>
                     <p class="text-xs text-gray-500 dark:text-gray-400">{{ $category->products_count }} {{ __('articles') }}</p>
                 </a>
             @endforeach
@@ -147,18 +154,18 @@ new #[Layout('layouts.app')] class extends Component
                 <x-carousel-slide>
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-5">
                         <div class="bg-gray-50 dark:bg-gray-800 rounded-2xl p-6 text-center">
-                            <span class="text-3xl">🔍</span>
-                            <p class="font-bold text-gray-900 dark:text-gray-100 mt-3">1. {{ __('Parcourez') }}</p>
+                            <span class="inline-flex items-center justify-center h-9 w-9 rounded-full bg-brand-600 text-white font-bold text-sm">1</span>
+                            <p class="font-bold text-gray-900 dark:text-gray-100 mt-3">{{ __('Parcourez') }}</p>
                             <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">{{ __('Filtrez par catégorie, marque, état ou rareté pour trouver la pièce qui vous manque.') }}</p>
                         </div>
                         <div class="bg-gray-50 dark:bg-gray-800 rounded-2xl p-6 text-center">
-                            <span class="text-3xl">💳</span>
-                            <p class="font-bold text-gray-900 dark:text-gray-100 mt-3">2. {{ __('Achetez en sécurité') }}</p>
+                            <span class="inline-flex items-center justify-center h-9 w-9 rounded-full bg-brand-600 text-white font-bold text-sm">2</span>
+                            <p class="font-bold text-gray-900 dark:text-gray-100 mt-3">{{ __('Achetez en sécurité') }}</p>
                             <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">{{ __('Paiement protégé par Stripe : aucune donnée bancaire ne transite par nos serveurs.') }}</p>
                         </div>
                         <div class="bg-gray-50 dark:bg-gray-800 rounded-2xl p-6 text-center">
-                            <span class="text-3xl">⭐</span>
-                            <p class="font-bold text-gray-900 dark:text-gray-100 mt-3">3. {{ __('Recevez et notez') }}</p>
+                            <span class="inline-flex items-center justify-center h-9 w-9 rounded-full bg-brand-600 text-white font-bold text-sm">3</span>
+                            <p class="font-bold text-gray-900 dark:text-gray-100 mt-3">{{ __('Recevez et notez') }}</p>
                             <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">{{ __('Suivez votre livraison puis laissez un avis pour aider la communauté.') }}</p>
                         </div>
                     </div>
@@ -168,18 +175,18 @@ new #[Layout('layouts.app')] class extends Component
                 <x-carousel-slide>
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-5">
                         <div class="bg-gray-50 dark:bg-gray-800 rounded-2xl p-6 text-center">
-                            <span class="text-3xl">🏪</span>
-                            <p class="font-bold text-gray-900 dark:text-gray-100 mt-3">1. {{ __('Créez votre boutique') }}</p>
+                            <span class="inline-flex items-center justify-center h-9 w-9 rounded-full bg-brand-600 text-white font-bold text-sm">1</span>
+                            <p class="font-bold text-gray-900 dark:text-gray-100 mt-3">{{ __('Créez votre boutique') }}</p>
                             <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">{{ __("Inscrivez-vous en tant que vendeur — votre compte est validé rapidement par l'équipe.") }}</p>
                         </div>
                         <div class="bg-gray-50 dark:bg-gray-800 rounded-2xl p-6 text-center">
-                            <span class="text-3xl">📸</span>
-                            <p class="font-bold text-gray-900 dark:text-gray-100 mt-3">2. {{ __('Publiez vos articles') }}</p>
+                            <span class="inline-flex items-center justify-center h-9 w-9 rounded-full bg-brand-600 text-white font-bold text-sm">2</span>
+                            <p class="font-bold text-gray-900 dark:text-gray-100 mt-3">{{ __('Publiez vos articles') }}</p>
                             <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">{{ __('Photos, état, prix, rareté : décrivez vos objets en quelques minutes.') }}</p>
                         </div>
                         <div class="bg-gray-50 dark:bg-gray-800 rounded-2xl p-6 text-center">
-                            <span class="text-3xl">💶</span>
-                            <p class="font-bold text-gray-900 dark:text-gray-100 mt-3">3. {{ __('Encaissez vos ventes') }}</p>
+                            <span class="inline-flex items-center justify-center h-9 w-9 rounded-full bg-brand-600 text-white font-bold text-sm">3</span>
+                            <p class="font-bold text-gray-900 dark:text-gray-100 mt-3">{{ __('Encaissez vos ventes') }}</p>
                             <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">{{ __('Une commission raisonnable est prélevée par vente, le reste est à vous.') }}</p>
                         </div>
                     </div>

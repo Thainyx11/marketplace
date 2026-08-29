@@ -90,11 +90,20 @@ new #[Layout('layouts.app')] class extends Component
             default => $query->latest(),
         };
 
+        // FIX: brand/rarity options used to list every value across the whole
+        // catalog regardless of the selected category — e.g. "Rareté" (Holo,
+        // Rare...) still showed up while browsing "Goodies", where no product
+        // has a rarity at all. Scope both to the category actually being browsed.
+        $facetQuery = Product::active();
+        if ($this->category) {
+            $facetQuery->whereHas('category', fn ($q) => $q->where('slug', $this->category));
+        }
+
         return [
             'products' => $query->paginate(12),
             'categories' => Category::orderBy('name')->get(),
-            'brands' => Product::active()->whereNotNull('brand')->distinct()->orderBy('brand')->pluck('brand'),
-            'rarities' => Product::active()->whereNotNull('rarity')->distinct()->orderBy('rarity')->pluck('rarity'),
+            'brands' => (clone $facetQuery)->whereNotNull('brand')->distinct()->orderBy('brand')->pluck('brand'),
+            'rarities' => (clone $facetQuery)->whereNotNull('rarity')->distinct()->orderBy('rarity')->pluck('rarity'),
         ];
     }
 }; ?>
@@ -190,7 +199,9 @@ new #[Layout('layouts.app')] class extends Component
             <div wire:loading.class="opacity-50" wire:target="search,category,brand,condition,rarity,minPrice,maxPrice,sort" class="transition-opacity">
                 @if ($products->isEmpty())
                     <div class="py-16 text-center">
-                        <div class="text-5xl mb-3">🔍</div>
+                        <svg class="h-12 w-12 mx-auto mb-3 text-gray-300 dark:text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35M18 10.5a7.5 7.5 0 11-15 0 7.5 7.5 0 0115 0z" />
+                        </svg>
                         <p class="text-gray-500 dark:text-gray-400">{{ __('Aucun produit ne correspond à votre recherche.') }}</p>
                     </div>
                 @else

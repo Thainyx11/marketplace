@@ -33,9 +33,12 @@ new #[Layout('layouts.app')] class extends Component
                     <img :src="images[active]" alt="{{ $product->title }}" class="object-cover w-full h-full">
                 </template>
                 @if ($product->images->isEmpty())
-                    <svg class="h-16 w-16 text-gray-300 dark:text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909M3 8.25V18a2.25 2.25 0 002.25 2.25h13.5A2.25 2.25 0 0021 18V8.25M3 8.25V6a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 6v2.25m-18 0h18M8.25 6h.008v.008H8.25V6z" />
-                    </svg>
+                    <div class="flex flex-col items-center gap-2 text-gray-300 dark:text-gray-600">
+                        <svg class="h-14 w-14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909M3 8.25V18a2.25 2.25 0 002.25 2.25h13.5A2.25 2.25 0 0021 18V8.25M3 8.25V6a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 6v2.25m-18 0h18M8.25 6h.008v.008H8.25V6z" />
+                        </svg>
+                        <span class="text-xs font-medium uppercase tracking-wide">{{ __('Photo à venir') }}</span>
+                    </div>
                 @endif
 
                 @if ($product->rarity)

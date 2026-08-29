@@ -349,7 +349,15 @@ class DemoDataSeeder extends Seeder
                     'user_id' => $vendors[$data['vendor']]->id,
                     'category_id' => $categories[$data['category']]->id,
                     'title' => $data['title'],
-                    'description' => "Article d'occasion / collection vendu en l'état. {$data['title']}, en parfait état de fonctionnement.",
+                    // FIX: the description used to say "article d'occasion" for every
+                    // product regardless of its actual condition, contradicting a
+                    // "Neuf" badge shown right next to it on the same page.
+                    'description' => match ($data['condition']) {
+                        'neuf' => "Article neuf, jamais utilisé, vendu avec son emballage d'origine. {$data['title']}.",
+                        'comme_neuf' => "Article comme neuf, très peu utilisé, aucun défaut visible. {$data['title']}.",
+                        'bon_etat' => "Article d'occasion en bon état général, quelques traces d'usage normales. {$data['title']}.",
+                        default => "Article d'occasion vendu en l'état, avec des traces d'usage visibles. {$data['title']}.",
+                    },
                     'price' => $data['price'],
                     'stock' => $data['stock'],
                     'condition' => $data['condition'],
