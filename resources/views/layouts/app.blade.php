@@ -5,6 +5,8 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
+        @include('partials.theme-init')
+
         <title>{{ config('app.name', 'Laravel') }}</title>
 
         <link rel="icon" type="image/svg+xml" href="/favicon.svg">
@@ -48,5 +50,6 @@
         </div>
 
         <x-cookie-banner />
+        <x-back-to-top />
     </body>
 </html>

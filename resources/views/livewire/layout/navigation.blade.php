@@ -95,6 +95,8 @@ new class extends Component
 
             <!-- Right side -->
             <div class="hidden lg:flex lg:items-center gap-1 shrink-0">
+                <x-theme-toggle />
+
                 @auth
                     <a href="{{ route('wishlist.index') }}" wire:navigate class="relative inline-flex items-center justify-center h-9 w-9 rounded-full text-gray-300 hover:text-white hover:bg-white/10 transition">
                         <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -150,7 +152,9 @@ new class extends Component
             </div>
 
             <!-- Hamburger -->
-            <div class="-me-2 flex items-center lg:hidden">
+            <div class="-me-2 flex items-center gap-1 lg:hidden">
+                <x-theme-toggle />
+
                 <button @click="open = ! open" class="inline-flex items-center justify-center p-2 rounded-md text-gray-300 hover:text-white hover:bg-white/10 focus:outline-none transition">
                     <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
                         <path :class="{'hidden': open, 'inline-flex': ! open }" class="inline-flex" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
