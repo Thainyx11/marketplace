@@ -38,18 +38,21 @@ new #[Layout('layouts.app')] class extends Component
 }; ?>
 
 <div>
-    <div class="relative overflow-hidden bg-gradient-to-br from-brand-950 via-gray-950 to-gray-900 text-white">
-        <div class="absolute inset-0 opacity-20" style="background-image: radial-gradient(circle at 20% 20%, #5082F1 0, transparent 35%), radial-gradient(circle at 80% 60%, #012169 0, transparent 30%);"></div>
+    {{-- FIX: this whole hero used to be hardcoded dark navy regardless of the
+         theme toggle — the only section on the homepage that didn't respond
+         to switching to light mode. Now light by default, dark: for dark mode. --}}
+    <div class="relative overflow-hidden bg-gradient-to-br from-brand-50 via-white to-brand-100 dark:from-brand-950 dark:via-gray-950 dark:to-gray-900 text-gray-900 dark:text-white">
+        <div class="absolute inset-0 opacity-10 dark:opacity-20" style="background-image: radial-gradient(circle at 20% 20%, #5082F1 0, transparent 35%), radial-gradient(circle at 80% 60%, #012169 0, transparent 30%);"></div>
 
         <div class="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 sm:pt-20 pb-10 text-center">
-            <span class="inline-flex items-center gap-1.5 bg-white/10 text-brand-200 text-xs font-semibold px-3 py-1 rounded-full mb-6">
+            <span class="inline-flex items-center gap-1.5 bg-brand-100 text-brand-700 dark:bg-white/10 dark:text-brand-200 text-xs font-semibold px-3 py-1 rounded-full mb-6">
                 ✨ {{ __('Cartes, jeux rétro, figurines & plus') }}
             </span>
 
             <h1 class="text-4xl sm:text-5xl font-extrabold tracking-tight">
-                {{ __('La marketplace des passionnés de') }} <span class="bg-gradient-to-r from-brand-300 to-brand-500 bg-clip-text text-transparent">{{ __('pop culture') }}</span>
+                {{ __('La marketplace des passionnés de') }} <span class="bg-gradient-to-r from-brand-600 to-brand-800 dark:from-brand-300 dark:to-brand-500 bg-clip-text text-transparent">{{ __('pop culture') }}</span>
             </h1>
-            <p class="mt-5 text-gray-300 max-w-xl mx-auto">
+            <p class="mt-5 text-gray-600 dark:text-gray-300 max-w-xl mx-auto">
                 {{ __('Achetez et vendez entre particuliers en toute confiance : cartes à collectionner, jeux vidéo rétro, figurines, manga et goodies.') }}
             </p>
 
@@ -59,17 +62,17 @@ new #[Layout('layouts.app')] class extends Component
                         <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35M18 10.5a7.5 7.5 0 11-15 0 7.5 7.5 0 0115 0z" />
                     </svg>
                     <input type="text" name="q" placeholder="{{ __('Rechercher un Charizard, une Switch...') }}"
-                           class="w-full bg-white text-gray-900 placeholder-gray-400 rounded-full pl-12 pr-32 py-4 shadow-xl focus:ring-2 focus:ring-brand-400 border-transparent">
+                           class="w-full bg-white dark:bg-white text-gray-900 placeholder-gray-400 rounded-full pl-12 pr-32 py-4 shadow-xl border border-gray-200 dark:border-transparent focus:ring-2 focus:ring-brand-400 focus:border-transparent">
                     <button type="submit" class="absolute right-1.5 top-1.5 bottom-1.5 bg-brand-800 hover:bg-brand-700 text-white font-semibold px-5 rounded-full transition">
                         {{ __('Rechercher') }}
                     </button>
                 </div>
             </form>
 
-            <div class="mt-8 flex items-center justify-center gap-8 text-sm text-gray-400">
-                <span><span class="text-white font-bold">{{ $productsCount }}</span> {{ __('articles en vente') }}</span>
-                <span class="h-1 w-1 rounded-full bg-gray-600"></span>
-                <span><span class="text-white font-bold">{{ $vendorsCount }}</span> {{ __('vendeurs') }}</span>
+            <div class="mt-8 flex items-center justify-center gap-8 text-sm text-gray-500 dark:text-gray-400">
+                <span><span class="text-gray-900 dark:text-white font-bold">{{ $productsCount }}</span> {{ __('articles en vente') }}</span>
+                <span class="h-1 w-1 rounded-full bg-gray-300 dark:bg-gray-600"></span>
+                <span><span class="text-gray-900 dark:text-white font-bold">{{ $vendorsCount }}</span> {{ __('vendeurs') }}</span>
             </div>
         </div>
 
