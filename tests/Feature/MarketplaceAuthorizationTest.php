@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\Category;
 use App\Models\Product;
 use App\Models\User;
 use Database\Seeders\RoleSeeder;
@@ -44,9 +45,23 @@ class MarketplaceAuthorizationTest extends TestCase
 
     public function test_approved_vendor_can_create_products(): void
     {
-        $vendor = User::factory()->create(['role' => 'vendeur', 'is_approved' => true]);
+        // is_active must be explicit: the DB column defaults to true, but
+        // Model::create() doesn't backfill that default onto the in-memory
+        // instance, so leaving it out reads as null/false here even though
+        // a real freshly-registered vendor is active in the database.
+        $vendor = User::factory()->create(['role' => 'vendeur', 'is_approved' => true, 'is_active' => true]);
 
         $this->assertTrue($vendor->can('create', Product::class));
+    }
+
+    public function test_suspended_vendor_cannot_create_or_edit_products(): void
+    {
+        $vendor = User::factory()->create(['role' => 'vendeur', 'is_approved' => true, 'is_active' => false]);
+        $category = Category::factory()->create();
+        $product = Product::factory()->for($vendor, 'seller')->for($category)->create();
+
+        $this->assertFalse($vendor->can('create', Product::class));
+        $this->assertFalse($vendor->can('update', $product));
     }
 
     public function test_non_admin_cannot_reach_admin_area(): void

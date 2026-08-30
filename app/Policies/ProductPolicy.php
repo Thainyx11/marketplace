@@ -23,12 +23,17 @@ class ProductPolicy
 
     public function create(User $user): bool
     {
-        return ($user->isVendeur() && $user->is_approved) || $user->isAdmin();
+        // FIX: a suspended vendor (is_active = false, toggled from the admin
+        // back-office) could still publish new products — only is_approved
+        // was checked here.
+        return ($user->isVendeur() && $user->is_approved && $user->is_active) || $user->isAdmin();
     }
 
     public function update(User $user, Product $product): bool
     {
-        return $user->id === $product->user_id || $user->isAdmin();
+        // FIX: same gap as create() — a suspended vendor could still edit
+        // their existing listings.
+        return ($user->id === $product->user_id && $user->is_active) || $user->isAdmin();
     }
 
     public function delete(User $user, Product $product): bool
