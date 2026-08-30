@@ -10,8 +10,13 @@ FROM node:20-slim AS assets
 WORKDIR /app
 COPY package.json package-lock.json ./
 RUN npm install
-COPY resources resources
-COPY vite.config.js ./
+# Copy the whole repo rather than naming individual files: an earlier
+# version only copied resources/ + vite.config.js and missed
+# tailwind.config.js + postcss.config.js. Without them Vite's PostCSS step
+# never expands the @tailwind at-rules, so the "compiled" CSS shipped to
+# the browser was just the literal `@tailwind base;@tailwind components;
+# @tailwind utilities;` source — the live site rendered fully unstyled.
+COPY . .
 # VITE_* vars are compiled into the JS bundle at build time (Vite reads
 # import.meta.env then, not at runtime) — unlike Nixpacks, Railway's
 # Dockerfile builder doesn't expose service variables to RUN steps unless
