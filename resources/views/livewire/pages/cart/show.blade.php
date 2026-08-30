@@ -25,13 +25,20 @@ new #[Layout('layouts.app')] class extends Component
         }
 
         if (! auth()->user()->isAcheteur()) {
-            session()->flash('error', __('Seuls les comptes acheteur peuvent passer commande.'));
+            $message = __('Seuls les comptes acheteur peuvent passer commande.');
+            session()->flash('error', $message);
+            // FIX: no redirect follows, so this is a pure Livewire AJAX
+            // action — session()->flash() alone never reaches the user (see
+            // resources/views/components/flash-messages.blade.php).
+            $this->dispatch('flash-message', message: $message, type: 'error');
 
             return null;
         }
 
         if ($this->manager()->items()->isEmpty()) {
-            session()->flash('error', __('Votre panier est vide.'));
+            $message = __('Votre panier est vide.');
+            session()->flash('error', $message);
+            $this->dispatch('flash-message', message: $message, type: 'error');
 
             return null;
         }

@@ -31,7 +31,15 @@ new #[Layout('layouts.app')] class extends Component
         try {
             $product->delete();
         } catch (\Illuminate\Database\QueryException $e) {
-            session()->flash('error', __('Ce produit a déjà été vendu et ne peut pas être supprimé — vous pouvez le masquer à la place en le modifiant.'));
+            // FIX: this friendly error explaining *why* the delete was
+            // refused never actually reached the vendor — no redirect
+            // follows, so it's a pure Livewire AJAX action, and
+            // session()->flash() alone never reaches the user (see
+            // resources/views/components/flash-messages.blade.php). The
+            // vendor just saw the delete silently do nothing.
+            $message = __('Ce produit a déjà été vendu et ne peut pas être supprimé — vous pouvez le masquer à la place en le modifiant.');
+            session()->flash('error', $message);
+            $this->dispatch('flash-message', message: $message, type: 'error');
 
             return;
         }
@@ -40,7 +48,9 @@ new #[Layout('layouts.app')] class extends Component
             \Illuminate\Support\Facades\Storage::disk('public')->delete($image->path);
         }
 
-        session()->flash('status', __('Produit supprimé.'));
+        $message = __('Produit supprimé.');
+        session()->flash('status', $message);
+        $this->dispatch('flash-message', message: $message, type: 'status');
     }
 
     public function with(): array

@@ -63,7 +63,12 @@ new #[Layout('layouts.app')] class extends Component
             'reported_by' => auth()->id(),
         ]);
 
-        session()->flash('status', __('Message signalé aux administrateurs.'));
+        $flashMessage = __('Message signalé aux administrateurs.');
+        session()->flash('status', $flashMessage);
+        // FIX: no redirect follows, so this is a pure Livewire AJAX action —
+        // session()->flash() alone never reaches the user (see
+        // resources/views/components/flash-messages.blade.php).
+        $this->dispatch('flash-message', message: $flashMessage, type: 'status');
     }
 
     public function receiveMessage(): void

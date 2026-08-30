@@ -13,12 +13,16 @@ use Livewire\Volt\Volt;
 use Tests\TestCase;
 
 /**
- * Regression tests for two bugs found while auditing the codebase (not
+ * Regression tests for three bugs found while auditing the codebase (not
  * caught by the existing suite, which is why they went unnoticed):
  *
  *  - Deleting a product that has already been sold threw an uncaught
  *    QueryException (order_items.product_id is a RESTRICT foreign key)
  *    instead of a friendly error.
+ *  - That friendly error was itself invisible: session()->flash('error', ...)
+ *    never reaches the user from a pure Livewire AJAX action with no
+ *    redirect (see resources/views/components/flash-messages.blade.php) —
+ *    the vendor just saw the delete silently do nothing.
  *  - A vendor who sold only one item in a multi-seller order could see
  *    every other vendor's line, the buyer's shipping total, and download
  *    the full invoice — OrderPolicy::view() only checks that the viewer
@@ -67,7 +71,8 @@ class OrderVisibilityTest extends TestCase
 
         // No exception should propagate out of call() — that's the bug being guarded against.
         Volt::actingAs($vendor)->test('pages.vendor.products.index')
-            ->call('delete', $product->id);
+            ->call('delete', $product->id)
+            ->assertDispatched('flash-message', message: __('Ce produit a déjà été vendu et ne peut pas être supprimé — vous pouvez le masquer à la place en le modifiant.'), type: 'error');
 
         $this->assertDatabaseHas('products', ['id' => $product->id]);
         $this->assertDatabaseHas('order_items', ['product_id' => $product->id]);
