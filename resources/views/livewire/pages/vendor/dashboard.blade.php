@@ -74,13 +74,25 @@ new #[Layout('layouts.app')] class extends Component
     <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm p-5"
          x-data="{
             init() {
+                // FIX: Chart.js default tick/grid colors are tuned for a light background and
+                // become nearly illegible on the dark-mode card — pick colors from the theme.
+                const isDark = document.documentElement.classList.contains('dark');
+                const tickColor = isDark ? '#9CA3AF' : '#4B5563';
+                const gridColor = isDark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(0, 0, 0, 0.08)';
                 new Chart(this.$refs.canvas, {
                     type: 'bar',
                     data: {
                         labels: @js($chartLabels),
                         datasets: [{ label: @js(__('Chiffre d\'affaires (€)')), data: @js($chartData), backgroundColor: '#012169', borderRadius: 6 }],
                     },
-                    options: { responsive: true, plugins: { legend: { display: false } } },
+                    options: {
+                        responsive: true,
+                        plugins: { legend: { display: false } },
+                        scales: {
+                            x: { ticks: { color: tickColor }, grid: { color: gridColor } },
+                            y: { ticks: { color: tickColor }, grid: { color: gridColor } },
+                        },
+                    },
                 });
             }
          }">

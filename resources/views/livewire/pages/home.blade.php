@@ -95,7 +95,7 @@ new #[Layout('layouts.app')] class extends Component
                                         <span class="h-1.5 w-1.5 rounded-full {{ $isPopular ? 'bg-amber-400' : 'bg-brand-400' }}"></span>
                                         {{ $isPopular ? __('Populaire') : __('Nouveauté') }}
                                     </span>
-                                    <h2 class="text-2xl sm:text-4xl font-extrabold mt-3 max-w-2xl">{{ $product->title }}</h2>
+                                    <h2 class="text-2xl sm:text-4xl font-extrabold mt-3 max-w-2xl text-white">{{ $product->title }}</h2>
                                     <p class="text-gray-300 text-sm sm:text-base mt-1">{{ $product->seller->shop_name ?? $product->seller->name }}</p>
                                     <div class="flex items-center gap-4 mt-4">
                                         <p class="text-2xl sm:text-3xl font-extrabold bg-gradient-to-r from-brand-300 to-brand-500 bg-clip-text text-transparent">
