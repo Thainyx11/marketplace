@@ -13,7 +13,7 @@
                         <x-badge color="gray" class="mt-1.5">{{ $order->shipping_method === 'express' ? __('Livraison express') : __('Livraison standard') }}</x-badge>
                     </div>
 
-                    @if ($order->payment?->status === 'paid')
+                    @if ($isBuyerOrAdmin && $order->payment?->status === 'paid')
                         <a href="{{ route('orders.invoice', $order) }}" target="_blank" class="text-sm font-semibold text-brand-600 dark:text-brand-400 hover:underline shrink-0">
                             {{ __('Télécharger la facture') }}
                         </a>
@@ -21,7 +21,7 @@
                 </div>
 
                 <div class="divide-y divide-gray-100 dark:divide-gray-700">
-                    @foreach ($order->items as $item)
+                    @foreach ($visibleItems as $item)
                         <div class="py-4">
                             <div class="flex items-center justify-between">
                                 <div>
@@ -40,14 +40,18 @@
                     @endforeach
                 </div>
 
-                <div class="flex items-center justify-between pt-4 mt-2 border-t border-gray-200 dark:border-gray-700">
-                    @if ($order->discount_amount > 0)
-                        <span class="text-sm text-gray-500 dark:text-gray-400">{{ __('Remise appliquée') }} : -{{ number_format($order->discount_amount, 2, ',', ' ') }} €</span>
-                    @else
-                        <span></span>
-                    @endif
-                    <span class="font-extrabold text-lg text-gray-900 dark:text-gray-100">{{ __('Total') }} : {{ number_format($order->total, 2, ',', ' ') }} €</span>
-                </div>
+                @if ($isBuyerOrAdmin)
+                    {{-- FIX: this total sums every vendor's line in the order — showing
+                         it to a single vendor would leak how much the others charged. --}}
+                    <div class="flex items-center justify-between pt-4 mt-2 border-t border-gray-200 dark:border-gray-700">
+                        @if ($order->discount_amount > 0)
+                            <span class="text-sm text-gray-500 dark:text-gray-400">{{ __('Remise appliquée') }} : -{{ number_format($order->discount_amount, 2, ',', ' ') }} €</span>
+                        @else
+                            <span></span>
+                        @endif
+                        <span class="font-extrabold text-lg text-gray-900 dark:text-gray-100">{{ __('Total') }} : {{ number_format($order->total, 2, ',', ' ') }} €</span>
+                    </div>
+                @endif
             </div>
         </div>
     </div>

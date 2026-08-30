@@ -24,13 +24,28 @@ class OrderController extends Controller
 
         $order->load(['items.product', 'items.seller', 'payment', 'buyer']);
 
-        return view('orders.show', ['order' => $order]);
+        // FIX: OrderPolicy::view() only checks that the viewer owns at least
+        // one line of the order — it doesn't scope *which* lines they then
+        // see. A vendor who sold a single item in a multi-seller order used
+        // to see every other vendor's product, price and quantity here too
+        // (the view rendered $order->items in full, unfiltered).
+        $isBuyerOrAdmin = auth()->id() === $order->buyer_id || auth()->user()->isAdmin();
+        $visibleItems = $isBuyerOrAdmin
+            ? $order->items
+            : $order->items->where('seller_id', auth()->id());
+
+        return view('orders.show', ['order' => $order, 'visibleItems' => $visibleItems, 'isBuyerOrAdmin' => $isBuyerOrAdmin]);
     }
 
     public function invoice(Order $order)
     {
         Gate::authorize('view', $order);
 
+        // FIX: same leak as show() but worse — the PDF is the buyer's full
+        // purchase invoice across every vendor in the order. Restricted to
+        // the buyer/admin; a seller has their own payout view instead
+        // (vendor.orders), not the buyer's consolidated invoice.
+        abort_unless(auth()->id() === $order->buyer_id || auth()->user()->isAdmin(), 403);
         abort_unless($order->payment && $order->payment->status === 'paid', 404);
 
         $order->load(['items.product', 'buyer', 'payment']);

@@ -19,11 +19,27 @@ new #[Layout('layouts.app')] class extends Component
     {
         Gate::authorize('delete', $product);
 
-        foreach ($product->images as $image) {
+        // FIX: order_items.product_id is a RESTRICT foreign key (a product
+        // that has ever been sold must keep its history) — deleting a sold
+        // product used to throw an uncaught QueryException, surfacing as a
+        // raw 500. Images were also deleted from disk *before* the DB delete
+        // was even attempted, so a failed delete left orphaned ProductImage
+        // rows pointing at files that no longer existed. Load the images
+        // first, only touch disk once the DB delete has actually succeeded.
+        $images = $product->images()->get();
+
+        try {
+            $product->delete();
+        } catch (\Illuminate\Database\QueryException $e) {
+            session()->flash('error', __('Ce produit a déjà été vendu et ne peut pas être supprimé — vous pouvez le masquer à la place en le modifiant.'));
+
+            return;
+        }
+
+        foreach ($images as $image) {
             \Illuminate\Support\Facades\Storage::disk('public')->delete($image->path);
         }
 
-        $product->delete();
         session()->flash('status', __('Produit supprimé.'));
     }
 
