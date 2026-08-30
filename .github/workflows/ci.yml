@@ -35,8 +35,11 @@ jobs:
       - name: Generate app key
         run: php artisan key:generate
 
+      # npm ci failed here (lockfile-sync strictness stricter than npm install
+      # tolerates) — same issue already hit and fixed the same way in the
+      # deployment Dockerfile's asset-build stage.
       - name: Install Node dependencies
-        run: npm ci
+        run: npm install
 
       - name: Build frontend assets
         run: npm run build
