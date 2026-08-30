@@ -33,7 +33,12 @@ new #[Layout('layouts.app')] class extends Component
     public function delete(Category $category): void
     {
         if ($category->products()->exists() || $category->children()->exists()) {
-            session()->flash('error', __('Impossible de supprimer : catégorie utilisée par des produits ou sous-catégories.'));
+            $message = __('Impossible de supprimer : catégorie utilisée par des produits ou sous-catégories.');
+            session()->flash('error', $message);
+            // FIX: a pure Livewire action never reaches <x-flash-messages>
+            // (it lives outside this component's AJAX render boundary) — see
+            // resources/views/components/flash-messages.blade.php.
+            $this->dispatch('flash-message', message: $message, type: 'error');
 
             return;
         }

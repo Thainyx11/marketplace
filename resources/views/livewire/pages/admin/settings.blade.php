@@ -29,7 +29,12 @@ new #[Layout('layouts.app')] class extends Component
         Setting::set('commission_rate', $this->commission_rate);
         Setting::set('legal_notice', $this->legal_notice);
 
-        session()->flash('status', __('Paramètres enregistrés.'));
+        $message = __('Paramètres enregistrés.');
+        session()->flash('status', $message);
+        // FIX: a pure Livewire action never reaches <x-flash-messages> (it
+        // lives outside this component's AJAX render boundary) — see
+        // resources/views/components/flash-messages.blade.php.
+        $this->dispatch('flash-message', message: $message, type: 'status');
     }
 }; ?>
 

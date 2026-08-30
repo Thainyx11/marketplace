@@ -60,7 +60,13 @@ new #[Layout('layouts.app')] class extends Component
 
         $this->reset(['newName', 'newEmail', 'newPassword', 'newRole']);
         $this->newRole = 'acheteur';
-        session()->flash('status', __('Utilisateur créé.'));
+
+        $message = __('Utilisateur créé.');
+        session()->flash('status', $message);
+        // FIX: a pure Livewire action never reaches <x-flash-messages> (it
+        // lives outside this component's AJAX render boundary) — see
+        // resources/views/components/flash-messages.blade.php.
+        $this->dispatch('flash-message', message: $message, type: 'status');
     }
 
     public function editUser(User $user): void
@@ -93,7 +99,13 @@ new #[Layout('layouts.app')] class extends Component
         ]);
 
         $this->editingUserId = null;
-        session()->flash('status', __('Utilisateur modifié.'));
+
+        $message = __('Utilisateur modifié.');
+        session()->flash('status', $message);
+        // FIX: a pure Livewire action never reaches <x-flash-messages> (it
+        // lives outside this component's AJAX render boundary) — see
+        // resources/views/components/flash-messages.blade.php.
+        $this->dispatch('flash-message', message: $message, type: 'status');
     }
 
     public function toggleActive(User $user): void

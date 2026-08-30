@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Order;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Livewire\Attributes\Layout;
 use Livewire\Volt\Component;
@@ -19,12 +20,35 @@ new #[Layout('layouts.app')] class extends Component
         $this->status = $order->status;
     }
 
+    // FIX: this used to update only orders.status, but the buyer-facing order
+    // list reads orders.status while the order detail page reads each line's
+    // order_items.status — updating only one left them contradicting each
+    // other on screen (e.g. "Livrée" in the list, "En attente" on the same
+    // order's detail page), and the override was silently reverted the next
+    // time a vendor updated their own line, since Order::recomputeStatus()
+    // derives orders.status from order_items.status, never the reverse. An
+    // admin override now forces every line to the same status so the two
+    // stay consistent, matching how the rest of the app expects this data
+    // to relate.
     public function overrideStatus(): void
     {
         Gate::authorize('update', $this->order);
 
-        $this->order->update(['status' => $this->status]);
-        session()->flash('status', __('Statut de la commande mis à jour (intervention manuelle).'));
+        DB::transaction(function () {
+            $this->order->items()->update(['status' => $this->status]);
+            $this->order->update(['status' => $this->status]);
+        });
+
+        $this->order->refresh()->load('items');
+
+        $message = __('Statut de la commande mis à jour (intervention manuelle).');
+        session()->flash('status', $message);
+        // FIX: this Livewire action never triggers a full page load, so the
+        // flash above was never actually visible — <x-flash-messages> lives
+        // in the layout, outside this component's AJAX re-render boundary.
+        // Dispatching a browser event reaches it regardless of which
+        // component fired it (see resources/views/components/flash-messages.blade.php).
+        $this->dispatch('flash-message', message: $message, type: 'status');
     }
 
     public function with(): array
