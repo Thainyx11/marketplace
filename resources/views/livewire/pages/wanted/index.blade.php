@@ -61,7 +61,7 @@ new #[Layout('layouts.app')] class extends Component
                             </p>
                         </div>
                         <div class="shrink-0 text-sm font-semibold text-brand-600 dark:text-brand-400 whitespace-nowrap">
-                            {{ __(':count réponses', ['count' => $item->responses_count]) }}
+                            {{ trans_choice(':count réponse|:count réponses', $item->responses_count, ['count' => $item->responses_count]) }}
                         </div>
                     </div>
                 </a>

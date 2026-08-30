@@ -131,7 +131,7 @@ new #[Layout('layouts.app')] class extends Component
     @endauth
 
     <div class="mt-6">
-        <h2 class="font-bold text-gray-900 dark:text-gray-100 mb-3">{{ __(':count réponses', ['count' => $wantedItem->responses->count()]) }}</h2>
+        <h2 class="font-bold text-gray-900 dark:text-gray-100 mb-3">{{ trans_choice(':count réponse|:count réponses', $wantedItem->responses->count(), ['count' => $wantedItem->responses->count()]) }}</h2>
 
         @if ($wantedItem->responses->isEmpty())
             <p class="text-sm text-gray-500 dark:text-gray-400">{{ __('Aucune réponse pour le moment.') }}</p>

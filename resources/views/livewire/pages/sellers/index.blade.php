@@ -54,7 +54,7 @@ new #[Layout('layouts.app')] class extends Component
                     @if ($seller->bio)
                         <p class="text-sm text-gray-500 dark:text-gray-400 mt-0.5 line-clamp-2">{{ $seller->bio }}</p>
                     @endif
-                    <x-badge color="brand" class="mt-2">{{ __(':count articles', ['count' => $seller->products_count]) }}</x-badge>
+                    <x-badge color="brand" class="mt-2">{{ trans_choice(':count article|:count articles', $seller->products_count, ['count' => $seller->products_count]) }}</x-badge>
                 </div>
             </a>
         @endforeach
