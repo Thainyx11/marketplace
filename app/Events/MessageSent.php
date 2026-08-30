@@ -5,11 +5,16 @@ namespace App\Events;
 use App\Models\Message;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PrivateChannel;
-use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
+use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class MessageSent implements ShouldBroadcast
+// FIX: was ShouldBroadcast (queued) — nothing in this app ever runs `queue:work`
+// (QUEUE_CONNECTION=database, no worker documented or started anywhere), so the
+// broadcast job just sat in the `jobs` table forever and the recipient never got
+// the live message. ShouldBroadcastNow dispatches synchronously within the same
+// request, which is all a single queued job (this one) needs.
+class MessageSent implements ShouldBroadcastNow
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
