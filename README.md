@@ -81,7 +81,7 @@ Les emails (réinitialisation de mot de passe, futures notifications) partent r�
 ## Tests
 
 ```bash
-php artisan test           # 54 tests (auth, autorisation par rôle, profil, panier, webhook Stripe, export RGPD, favoris, recherches...)
+php artisan test           # 69 tests (auth, autorisation par rôle, profil, panier, webhook Stripe, export RGPD, favoris, recherches, messagerie, litiges admin, persistance du thème...)
 ./vendor/bin/pint --test   # style de code
 npm run build               # build production, doit sortir sans erreur ni warning
 ```
@@ -91,8 +91,23 @@ Points notables couverts par les tests :
 - `CartManagerTest` : panier invité (session) et connecté (base de données), respect du stock, fusion à la connexion
 - `StripeWebhookTest` : non-régression sur les deux bugs trouvés lors de l'audit de cette itération — le webhook rejette (503/400) tout paiement non signé ou signé avec un mauvais secret, et un webhook valide crée bien la commande/le paiement et vide le panier (c'est ce deuxième cas précis qui avait silencieusement échoué avant correction : le paiement passait côté Stripe mais aucune commande n'était créée)
 - `ProfileDataExportTest` : l'export RGPD ne contient que les données du compte connecté
+- `MessagingTest` : un message se diffuse immédiatement en temps réel (pas mis en file), un utilisateur désactivé ne peut pas écrire
+- `AdminOrderOverrideTest` : forcer le statut d'une commande (résolution de litige) force aussi chaque ligne, et est réservé à l'admin
 
-Une CI GitHub Actions (`.github/workflows/ci.yml`) exécute ces trois commandes à chaque push — inactive tant que ce dépôt n'a pas de remote GitHub.
+Une CI GitHub Actions (`.github/workflows/ci.yml`) exécute ces trois commandes à chaque push sur `master` ou pull request — active depuis la mise en ligne du dépôt sur GitHub (elle ciblait `main` et PHP 8.3 par défaut, un déclencheur qui ne correspondait ni à la branche réelle du dépôt ni à la contrainte PHP `^8.4` de `composer.json` : corrigé au passage).
+
+## Déploiement
+
+L'application tourne en production sur [Railway](https://railway.com), en clés Stripe **test** (voir section suivante) : **https://web-production-2292c.up.railway.app**
+
+Trois services partagent un même projet Railway :
+- **web** — sert l'application HTTP (`php -S 0.0.0.0:$PORT -t public`), construite depuis le `Dockerfile` à la racine du dépôt (image PHP 8.4 + assets Vite compilés) ; un volume persistant est monté sur `storage/app/public` pour que les images uploadées survivent aux redéploiements
+- **reverb** — le serveur WebSocket de messagerie temps réel (`php artisan reverb:start`), même image Docker, exposé sur son propre domaine public pour les connexions du navigateur et joignable en interne (`*.railway.internal`) par le service web
+- **MySQL** — base de données managée avec volume persistant
+
+Le déploiement est automatique : chaque `git push` sur `master` déclenche un rebuild + redéploiement des deux services applicatifs via l'intégration GitHub de Railway. Les migrations tournent avant chaque déploiement (`php artisan migrate --force`).
+
+Ce que ça implique pour la suite : toute modification du code (bug fix, ajustement) suit le flux normal `commit` → `push` → déploiement automatique, sans étape manuelle supplémentaire.
 
 ## Périmètre fonctionnel réalisé
 
@@ -115,9 +130,9 @@ Une CI GitHub Actions (`.github/workflows/ci.yml`) exécute ces trois commandes 
 
 ## Non couvert dans cette itération
 
-- Déploiement réel (hébergement type Railway/Render/o2switch) — nécessite la création d'un compte hébergeur par le commanditaire ; le code est prêt (voir `.github/workflows/ci.yml` pour la suite de build/tests automatisée, inactive tant que ce dépôt n'est pas poussé sur GitHub)
-- Clés Stripe/Reverb de production — à créer par le commanditaire (les clés de test fonctionnent en local, voir section Stripe ci-dessus)
-- Suite de tests exhaustive à 100% — la couverture actuelle (voir section Tests) couvre l'autorisation par rôle, le panier, le webhook Stripe (y compris des tests de non-régression sur les deux bugs trouvés lors de l'audit) et l'export RGPD ; certains flows secondaires (messagerie temps réel, litiges admin) restent non testés
+- Déploiement réel : fait — voir section Déploiement ci-dessus (Railway, https://web-production-2292c.up.railway.app)
+- Clés Stripe/Reverb de production : fait — clés Stripe **test** actives en production (webhook signé, checkout complet vérifié de bout en bout) ; Reverb tourne en production sur son propre service. Emails réels (réinitialisation de mot de passe) envoyés via l'API Mailtrap, vérifié en production.
+- Suite de tests exhaustive à 100% — la couverture actuelle (voir section Tests, 69 tests) couvre l'autorisation par rôle, le panier, le webhook Stripe (y compris des tests de non-régression), l'export RGPD, la messagerie temps réel et les litiges admin ; certains flows secondaires (modération produits/avis par l'admin, statistiques vendeur) restent non testés
 - API REST (Sanctum) : le stack technique du cahier des charges la mentionne, mais aucune app externe (mobile, SPA) ne consomme l'application — tout est rendu côté serveur (Blade/Livewire). Sanctum peut être activé sans changement d'architecture si un besoin apparaît.
 - RGPD : le droit à l'effacement (suppression de compte) et le droit à la portabilité (export JSON de ses données depuis Profil) sont couverts ; les mentions légales détaillent les droits de l'utilisateur ; une bannière de consentement cookies est présente (purement informative — seuls des cookies de session strictement nécessaires sont posés, il n'y a rien à opter-out).
 
