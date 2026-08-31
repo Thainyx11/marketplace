@@ -181,6 +181,16 @@ return [
         'shop_name' => 'nom de la boutique',
         'code' => 'code',
         'value' => 'valeur',
+        // FIX: admin/utilisateurs create+edit forms use newX/editX-prefixed
+        // property names, which Laravel humanizes verbatim ("Cette valeur
+        // pour new email est déjà utilisée.") without an entry here.
+        'newName' => 'nom',
+        'newEmail' => 'email',
+        'newPassword' => 'mot de passe',
+        'newRole' => 'rôle',
+        'editName' => 'nom',
+        'editEmail' => 'email',
+        'editRole' => 'rôle',
     ],
 
 ];
