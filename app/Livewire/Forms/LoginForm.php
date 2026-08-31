@@ -38,6 +38,20 @@ class LoginForm extends Form
             ]);
         }
 
+        // FIX: Auth::attempt() only checks email/password — it never looked at
+        // is_active, so an admin "Désactiver"-ing a user in /admin/utilisateurs
+        // didn't actually stop them from logging in (only from the actions
+        // that check is_active in ProductPolicy/MessagePolicy/WantedItemPolicy
+        // afterward). Reject the login itself for a disabled account.
+        if (! Auth::user()->is_active) {
+            Auth::logout();
+            RateLimiter::hit($this->throttleKey());
+
+            throw ValidationException::withMessages([
+                'form.email' => trans('auth.disabled'),
+            ]);
+        }
+
         RateLimiter::clear($this->throttleKey());
     }
 

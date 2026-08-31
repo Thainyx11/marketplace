@@ -54,6 +54,27 @@ class AuthenticationTest extends TestCase
         $this->assertGuest();
     }
 
+    public function test_disabled_users_can_not_authenticate(): void
+    {
+        // Regression guard: Auth::attempt() only checks email/password, so
+        // admin-deactivating a user (is_active = false) in /admin/utilisateurs
+        // didn't actually stop them from logging in — only from actions that
+        // separately check is_active (creating a product/message/...).
+        $user = User::factory()->create(['is_active' => false]);
+
+        $component = Volt::test('pages.auth.login')
+            ->set('form.email', $user->email)
+            ->set('form.password', 'password');
+
+        $component->call('login');
+
+        $component
+            ->assertHasErrors('form.email')
+            ->assertNoRedirect();
+
+        $this->assertGuest();
+    }
+
     public function test_navigation_menu_can_be_rendered(): void
     {
         $user = User::factory()->create();
