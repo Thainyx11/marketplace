@@ -224,7 +224,7 @@ class DemoDataSeeder extends Seeder
             'tck' => ['name' => 'Antoine Roche', 'shop_name' => 'Trading Card Kingdom', 'shop_slug' => 'trading-card-kingdom', 'bio' => 'Spécialiste Magic, Pokémon et Yu-Gi-Oh — cartes gradées et éditions rares.'],
             'retropixel' => ['name' => 'Julien Faure', 'shop_name' => 'RetroPixel Games', 'shop_slug' => 'retropixel-games', 'bio' => 'Consoles et jeux rétro testés et fonctionnels, du NES à la Dreamcast.'],
             'mangacorner' => ['name' => 'Sofia Marchetti', 'shop_name' => 'Manga Corner', 'shop_slug' => 'manga-corner', 'bio' => "Mangas d'occasion en bon état, éditions originales et coffrets complets."],
-            'popgoodies' => ['name' => 'Nora Bensaid', 'shop_name' => 'PopGoodies Boutique', 'shop_slug' => 'popgoodies-boutique', 'bio' => 'Goodies, jeux vidéo et mangas en tout genre — photos à venir sous peu !'],
+            'popgoodies' => ['name' => 'Nora Bensaid', 'shop_name' => 'PopGoodies Boutique', 'shop_slug' => 'popgoodies-boutique', 'bio' => 'Goodies, jeux vidéo et mangas en tout genre — quelques photos encore à venir.'],
             'funko' => ['name' => 'Maxime Girard', 'shop_name' => 'Funko & Friends', 'shop_slug' => 'funko-and-friends', 'bio' => 'Collection de Funko Pop et figurines articulées, neuves sous boîte.'],
         ];
 
