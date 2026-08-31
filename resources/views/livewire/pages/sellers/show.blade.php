@@ -17,6 +17,15 @@ new #[Layout('layouts.app')] class extends Component
         $this->seller = $seller;
     }
 
+    // FIX: same SEO gap as the product page (§ products/show.blade.php) — a
+    // shop page ranking under its own shop name needs its own <title>.
+    public function render(): mixed
+    {
+        return parent::render()
+            ->title("{$this->seller->shop_name} — ".config('app.name'))
+            ->layoutData(['metaDescription' => "Découvrez la boutique {$this->seller->shop_name} sur ".config('app.name').' : cartes à collectionner, jeux vidéo rétro, figurines, manga et goodies vendus par un particulier passionné.']);
+    }
+
     public function with(): array
     {
         return [

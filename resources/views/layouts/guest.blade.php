@@ -7,7 +7,8 @@
 
         @include('partials.theme-init')
 
-        <title>{{ config('app.name', 'Laravel') }}</title>
+        <title>{{ $title ?? config('app.name', 'Laravel') }}</title>
+        <meta name="description" content="{{ $metaDescription ?? 'Marketplace Pop Culture — achetez et vendez entre particuliers cartes à collectionner, jeux vidéo rétro, figurines, manga et goodies.' }}">
 
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
         <link rel="icon" type="image/png" sizes="512x512" href="/favicon-512.png">

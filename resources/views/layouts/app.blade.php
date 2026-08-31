@@ -7,7 +7,17 @@
 
         @include('partials.theme-init')
 
-        <title>{{ config('app.name', 'Laravel') }}</title>
+        {{-- FIX: <title> and description were static site-wide, on every page — a real SEO gap
+             (a product page ranking under its own name needs its own title). Livewire's full-page
+             components can define a title() method; Livewire injects it into $title automatically
+             when rendering this layout, so no manual passing is needed per page. --}}
+        <title>{{ $title ?? config('app.name', 'Laravel') }}</title>
+        <meta name="description" content="{{ $metaDescription ?? 'Marketplace Pop Culture — achetez et vendez entre particuliers cartes à collectionner, jeux vidéo rétro, figurines, manga et goodies.' }}">
+        <meta property="og:type" content="website">
+        <meta property="og:site_name" content="{{ config('app.name') }}">
+        <meta property="og:title" content="{{ $title ?? config('app.name', 'Laravel') }}">
+        <meta property="og:description" content="{{ $metaDescription ?? 'Marketplace Pop Culture — achetez et vendez entre particuliers cartes à collectionner, jeux vidéo rétro, figurines, manga et goodies.' }}">
+        @stack('meta')
 
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
         <link rel="icon" type="image/png" sizes="512x512" href="/favicon-512.png">

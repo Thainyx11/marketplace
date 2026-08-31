@@ -4,11 +4,50 @@ use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProfileDataExportController;
 use App\Http\Controllers\StripeWebhookController;
+use App\Models\Product;
 use App\Models\Setting;
+use App\Models\User;
 use Illuminate\Support\Facades\Route;
 use Livewire\Volt\Volt;
 
 Volt::route('/', 'pages.home')->name('home');
+
+// FIX: no sitemap existed at all — a real gap for a catalog site meant to be
+// found by search engines. Lists every URL a crawler should actually index:
+// static pages, every active product, every approved shop. robots.txt was a
+// static public/ file with no Sitemap: line (and couldn't have one — it needs
+// an absolute URL, which a static file can't know per-environment), so it's
+// now a route too, built from the same url() helper as the sitemap itself.
+Route::get('sitemap.xml', function () {
+    $urls = collect([
+        ['loc' => url('/'), 'priority' => '1.0'],
+        ['loc' => route('products.index'), 'priority' => '0.9'],
+        ['loc' => route('sellers.index'), 'priority' => '0.7'],
+        ['loc' => route('wanted.index'), 'priority' => '0.5'],
+    ]);
+
+    $urls = $urls
+        ->concat(Product::active()->select('id', 'slug', 'updated_at')->get()->map(fn (Product $p) => [
+            'loc' => route('products.show', $p->slug),
+            'lastmod' => $p->updated_at->toAtomString(),
+            'priority' => '0.8',
+        ]))
+        ->concat(User::whereIn('role', ['vendeur', 'admin'])
+            ->where('is_approved', true)->where('is_active', true)->whereNotNull('shop_slug')
+            ->get()->map(fn (User $u) => [
+                'loc' => route('sellers.show', $u->shop_slug),
+                'priority' => '0.6',
+            ]));
+
+    return response()
+        ->view('sitemap', ['urls' => $urls])
+        ->header('Content-Type', 'application/xml');
+})->name('sitemap');
+
+Route::get('robots.txt', function () {
+    return response("User-agent: *\nDisallow: /admin\nDisallow: /login\nDisallow: /register\nSitemap: ".route('sitemap')."\n")
+        ->header('Content-Type', 'text/plain');
+});
 
 Volt::route('produits', 'pages.products.index')->name('products.index');
 Volt::route('produits/{product:slug}', 'pages.products.show')->name('products.show');

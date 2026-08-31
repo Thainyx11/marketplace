@@ -2,6 +2,7 @@
 
 use App\Models\Product;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Str;
 use Livewire\Attributes\Layout;
 use Livewire\Volt\Component;
 
@@ -15,7 +16,30 @@ new #[Layout('layouts.app')] class extends Component
 
         $this->product = $product->load(['images', 'seller', 'category', 'reviews' => fn ($q) => $q->latest()]);
     }
+
+    // FIX: product pages all shared the same site-wide <title> — the single most
+    // SEO-valuable page on a marketplace (one per listing) had no way to rank on
+    // its own product name. Volt's class-based syntax has no title() convention
+    // (that only exists for the functional API, checked in vendor/livewire/volt's
+    // Component::render() — it's null for anything that isn't a FunctionalComponent);
+    // the officially supported way for a class component is to chain the same
+    // View::title()/layoutData() macros Volt itself uses, via a render() override.
+    public function render(): mixed
+    {
+        return parent::render()
+            ->title("{$this->product->title} — ".config('app.name'))
+            ->layoutData(['metaDescription' => Str::limit(strip_tags($this->product->description), 155)]);
+    }
 }; ?>
+
+@push('meta')
+    <meta property="og:type" content="product">
+    @if ($product->images->isNotEmpty())
+        <meta property="og:image" content="{{ $product->images->first()->url }}">
+    @endif
+    <meta property="product:price:amount" content="{{ $product->price }}">
+    <meta property="product:price:currency" content="EUR">
+@endpush
 
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
     <nav class="text-sm text-gray-500 dark:text-gray-400 mb-6">

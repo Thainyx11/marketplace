@@ -49,6 +49,20 @@ new #[Layout('layouts.app')] class extends Component
         $this->resetPage();
     }
 
+    // FIX: same SEO gap as the product/shop pages — a category listing (e.g.
+    // "Cartes à collectionner") ranking under its own name needs its own
+    // <title>, instead of every filter combination sharing "Produits".
+    public function render(): mixed
+    {
+        $categoryName = $this->category
+            ? Category::where('slug', $this->category)->value('name')
+            : null;
+
+        $title = $categoryName ? "{$categoryName} — Catalogue" : 'Catalogue';
+
+        return parent::render()->title("{$title} — ".config('app.name'));
+    }
+
     public function with(): array
     {
         $query = Product::active()->with(['images', 'seller', 'category']);
