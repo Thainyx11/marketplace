@@ -41,17 +41,25 @@ class DemoDataSeeder extends Seeder
      *     hébergée sur GitHub/hobbydb) — la figurine n'est pas toujours de
      *     la même gamme que l'annonce (Ichiban Kuji, Pokémon Center,
      *     statuette...), mais reste le bon personnage ; accepté comme tel.
-     * Sealed/bundle products (boosters, coffrets, multi-tome packs, consoles,
-     * controllers) and the few titles these sources don't carry (Pikachu
-     * Illustrator, Zelda BOTW - no Switch box-art repo, Demon Slayer absent
-     * du dataset Funko) sont intentionnellement laissés sur la photo
-     * générique LoremFlickr ci-dessous.
+     * Sealed/bundle products (boosters) and the few titles these sources
+     * don't carry (Pikachu Illustrator, Demon Slayer absent du dataset
+     * Funko) sont intentionnellement laissés sur la photo générique
+     * LoremFlickr ci-dessous.
      *
-     * Les entrées de $products marquées 'no_image' => true (goodies, une
-     * partie des jeux vidéo/manga) sont volontairement créées sans aucune
-     * ProductImage : les photos de ces produits seront ajoutées à la main
-     * séparément, inutile d'y mettre un placeholder trompeur — l'UI affiche
-     * déjà proprement l'icône "pas d'image" pour un produit sans photo.
+     * Complété une deuxième fois (recherche manuelle, sources ouvertes
+     * vérifiées une à une : Wikimedia Commons pour le matériel, Openverse —
+     * moteur dédié aux images en licence libre — pour le reste) pour 18 des
+     * 29 produits initialement laissés sans photo : consoles/manettes,
+     * quelques goodies, et deux mangas. Détail des licences et attribution
+     * dans SOURCES.txt (livré séparément, pas versionné dans ce dépôt).
+     *
+     * Les entrées de $products marquées 'no_image' => true (11 restantes :
+     * porte-clés, mug, gourde, sac à dos, plaid, lampe, set de pin's, et
+     * trois coffrets manga) sont volontairement créées sans aucune
+     * ProductImage — aucune source en licence libre trouvée pour ces
+     * produits dérivés génériques ou coffrets multi-tomes, et mieux vaut
+     * aucune photo qu'une photo de revendeur sous droits ou trompeuse.
+     * L'UI affiche déjà proprement l'icône "pas d'image" pour ce cas.
      */
     private const IMAGE_OVERRIDES = [
         // Cartes à collectionner
@@ -144,6 +152,37 @@ class DemoDataSeeder extends Seeder
         'Funko Pop Marvel - Deadpool' => 'https://images.hobbydb.com/processed_uploads/catalog_item_photo/catalog_item_photo/image/458428/Deadpool_Vinyl_Art_Toys_db1ef690-e098-4afb-867b-6ccca1b723cc_large.jpg',
         'Figurine Sonic the Hedgehog' => 'https://images.hobbydb.com/processed_uploads/catalog_item_photo/catalog_item_photo/image/458180/Sonic_Vinyl_Art_Toys_72abe4d4-9fbf-4acc-9c52-1ee66d440873_large.jpg',
         'Funko Pop Horror - Pennywise' => 'https://images.hobbydb.com/processed_uploads/catalog_item_photo/catalog_item_photo/image/459672/Pennywise_Vinyl_Art_Toys_16e8a715-44e7-466e-b38e-2bde9e63f4a8_large.jpg',
+
+        // Jeux vidéo — consoles et manettes (Wikimedia Commons, domaine public
+        // ou CC BY-SA, photos Evan-Amos sauf mention contraire) + jaquette du
+        // seul jeu de ce lot (Zelda BOTW, absent des dépôts libretro-thumbnails
+        // utilisés ci-dessus : aucune couverture Switch n'y existe — sourcé sur
+        // Openverse à la place)
+        'Manette GameCube violette' => 'https://upload.wikimedia.org/wikipedia/commons/a/a5/GameCube_controller.png',
+        'Console Game Boy Color transparente' => 'https://upload.wikimedia.org/wikipedia/commons/7/76/Nintendo-Game-Boy-Color-FL.jpg',
+        'Manette Xbox 360 sans fil' => 'https://upload.wikimedia.org/wikipedia/commons/4/4d/Xbox-360-Wireless-Controller-White.jpg',
+        'Console Nintendo 64 grise + câbles' => 'https://upload.wikimedia.org/wikipedia/commons/8/88/Nintendo-64-Console-FL.jpg',
+        'Console PS2 Slim + 2 manettes' => 'https://upload.wikimedia.org/wikipedia/commons/0/03/PS2-Slim-Console-Set.jpg',
+        'The Legend of Zelda: Breath of the Wild - Switch' => 'https://live.staticflickr.com/306/32131581172_8159070f4f_b.jpg',
+        'Console Sega Mega Drive II' => 'https://upload.wikimedia.org/wikipedia/commons/f/fe/SegaMegadrive2.jpg',
+        'Manette Nintendo Switch Pro' => 'https://upload.wikimedia.org/wikipedia/commons/d/d5/Nintendo-Switch-Pro-Controller-FL.jpg',
+        'Console Wii blanche + Wii Sports' => 'https://upload.wikimedia.org/wikipedia/commons/8/83/Wii_console.png',
+        'Manette PS1 originale' => 'https://upload.wikimedia.org/wikipedia/commons/f/f9/PSX-Original-Controller.jpg',
+        'Console PSP-3000 + 5 jeux' => 'https://upload.wikimedia.org/wikipedia/commons/8/84/PSP-3000-Silver.jpg',
+        'Console Dreamcast + Sonic Adventure' => 'https://upload.wikimedia.org/wikipedia/commons/8/81/Dreamcast-Console-Set.jpg',
+
+        // Goodies et manga trouvés via Openverse (moteur de recherche dédié aux
+        // images en licence libre, agrège Wikimedia/Flickr Commons/etc.) — pas
+        // de correspondance exacte pour ces catégories de produits dérivés
+        // génériques, donc photo la plus proche disponible en licence libre
+        // plutôt qu'un placeholder trompeur (voir SOURCES.txt pour le détail
+        // de chaque licence)
+        'Peluche Pikachu 30cm' => 'https://live.staticflickr.com/5059/5572538618_0f488374e1_m.jpg',
+        'Casquette Super Mario' => 'https://media.sketchfab.com/models/82bcc48237ec4ff98ce770de60913d26/thumbnails/e699308a08314c6489c4397128a59ddb/57ec46e1789a4c499e27a41f58b5ee1c.jpeg',
+        'Tapis de souris One Piece XXL' => 'https://live.staticflickr.com/6074/6143937546_b852892a26_b.jpg',
+        "Poster L'Attaque des Titans" => 'https://live.staticflickr.com/3888/15044360020_85dd20ff35_b.jpg',
+        'Coussin Totoro' => 'https://live.staticflickr.com/3135/2697466403_7a127cf76d_b.jpg',
+        'Death Note Tomes 1 à 5' => 'https://live.staticflickr.com/5264/5556644739_85fa04e070.jpg',
     ];
 
     public function run(): void
@@ -309,35 +348,35 @@ class DemoDataSeeder extends Seeder
             // --- Goodies : PopGoodies, seul vendeur des produits "no_image" (voir plus bas) ---
             ['vendor' => 'popgoodies', 'title' => 'Porte-clés Pokéball lumineux', 'category' => 'goodies', 'price' => 6.5, 'condition' => 'neuf', 'brand' => 'Pokemon', 'rarity' => null, 'stock' => 15, 'no_image' => true],
             ['vendor' => 'popgoodies', 'title' => 'Mug Zelda Triforce', 'category' => 'goodies', 'price' => 11.9, 'condition' => 'neuf', 'brand' => 'Nintendo', 'rarity' => null, 'stock' => 8, 'no_image' => true],
-            ['vendor' => 'popgoodies', 'title' => 'Peluche Pikachu 30cm', 'category' => 'goodies', 'price' => 19.9, 'condition' => 'neuf', 'brand' => 'Pokemon', 'rarity' => null, 'stock' => 10, 'no_image' => true],
-            ['vendor' => 'popgoodies', 'title' => "Poster L'Attaque des Titans", 'category' => 'goodies', 'price' => 8.9, 'condition' => 'neuf', 'brand' => null, 'rarity' => null, 'stock' => 20, 'no_image' => true],
+            ['vendor' => 'popgoodies', 'title' => 'Peluche Pikachu 30cm', 'category' => 'goodies', 'price' => 19.9, 'condition' => 'neuf', 'brand' => 'Pokemon', 'rarity' => null, 'stock' => 10],
+            ['vendor' => 'popgoodies', 'title' => "Poster L'Attaque des Titans", 'category' => 'goodies', 'price' => 8.9, 'condition' => 'neuf', 'brand' => null, 'rarity' => null, 'stock' => 20],
             ['vendor' => 'popgoodies', 'title' => "Set de pin's Pokémon", 'category' => 'goodies', 'price' => 9.5, 'condition' => 'neuf', 'brand' => 'Pokemon', 'rarity' => null, 'stock' => 12, 'no_image' => true],
-            ['vendor' => 'popgoodies', 'title' => 'Coussin Totoro', 'category' => 'goodies', 'price' => 17.9, 'condition' => 'neuf', 'brand' => null, 'rarity' => null, 'stock' => 6, 'no_image' => true],
+            ['vendor' => 'popgoodies', 'title' => 'Coussin Totoro', 'category' => 'goodies', 'price' => 17.9, 'condition' => 'neuf', 'brand' => null, 'rarity' => null, 'stock' => 6],
             ['vendor' => 'popgoodies', 'title' => 'Gourde Harry Potter Poudlard', 'category' => 'goodies', 'price' => 13.5, 'condition' => 'neuf', 'brand' => null, 'rarity' => null, 'stock' => 9, 'no_image' => true],
-            ['vendor' => 'popgoodies', 'title' => 'Casquette Super Mario', 'category' => 'goodies', 'price' => 15, 'condition' => 'neuf', 'brand' => 'Nintendo', 'rarity' => null, 'stock' => 7, 'no_image' => true],
+            ['vendor' => 'popgoodies', 'title' => 'Casquette Super Mario', 'category' => 'goodies', 'price' => 15, 'condition' => 'neuf', 'brand' => 'Nintendo', 'rarity' => null, 'stock' => 7],
             ['vendor' => 'popgoodies', 'title' => 'Sac à dos Naruto Akatsuki', 'category' => 'goodies', 'price' => 32, 'condition' => 'neuf', 'brand' => null, 'rarity' => null, 'stock' => 4, 'no_image' => true],
-            ['vendor' => 'popgoodies', 'title' => 'Tapis de souris One Piece XXL', 'category' => 'goodies', 'price' => 14.9, 'condition' => 'neuf', 'brand' => null, 'rarity' => null, 'stock' => 10, 'no_image' => true],
+            ['vendor' => 'popgoodies', 'title' => 'Tapis de souris One Piece XXL', 'category' => 'goodies', 'price' => 14.9, 'condition' => 'neuf', 'brand' => null, 'rarity' => null, 'stock' => 10],
             ['vendor' => 'popgoodies', 'title' => 'Plaid polaire Pokémon', 'category' => 'goodies', 'price' => 22, 'condition' => 'neuf', 'brand' => 'Pokemon', 'rarity' => null, 'stock' => 8, 'no_image' => true],
             ['vendor' => 'popgoodies', 'title' => 'Lampe Pokéball veilleuse', 'category' => 'goodies', 'price' => 18.9, 'condition' => 'neuf', 'brand' => 'Pokemon', 'rarity' => null, 'stock' => 10, 'no_image' => true],
 
-            // --- Jeux vidéo supplémentaires (sans photo, consoles/manettes + Switch — vendeur PopGoodies) ---
-            ['vendor' => 'popgoodies', 'title' => 'Manette GameCube violette', 'category' => 'jeux-video', 'price' => 25, 'condition' => 'usage', 'brand' => 'Nintendo', 'rarity' => null, 'stock' => 4, 'no_image' => true],
-            ['vendor' => 'popgoodies', 'title' => 'Console Game Boy Color transparente', 'category' => 'jeux-video', 'price' => 55, 'condition' => 'bon_etat', 'brand' => 'Nintendo', 'rarity' => null, 'stock' => 2, 'no_image' => true],
-            ['vendor' => 'popgoodies', 'title' => 'Manette Xbox 360 sans fil', 'category' => 'jeux-video', 'price' => 18, 'condition' => 'usage', 'brand' => null, 'rarity' => null, 'stock' => 5, 'no_image' => true],
-            ['vendor' => 'popgoodies', 'title' => 'Console Nintendo 64 grise + câbles', 'category' => 'jeux-video', 'price' => 79, 'condition' => 'bon_etat', 'brand' => 'Nintendo', 'rarity' => null, 'stock' => 1, 'no_image' => true],
-            ['vendor' => 'popgoodies', 'title' => 'Console PS2 Slim + 2 manettes', 'category' => 'jeux-video', 'price' => 89, 'condition' => 'bon_etat', 'brand' => 'PlayStation', 'rarity' => null, 'stock' => 2, 'no_image' => true],
-            ['vendor' => 'popgoodies', 'title' => 'The Legend of Zelda: Breath of the Wild - Switch', 'category' => 'jeux-video', 'price' => 42, 'condition' => 'comme_neuf', 'brand' => 'Nintendo', 'rarity' => null, 'stock' => 5, 'no_image' => true],
-            ['vendor' => 'popgoodies', 'title' => 'Console Sega Mega Drive II', 'category' => 'jeux-video', 'price' => 65, 'condition' => 'bon_etat', 'brand' => null, 'rarity' => null, 'stock' => 1, 'no_image' => true],
-            ['vendor' => 'popgoodies', 'title' => 'Manette Nintendo Switch Pro', 'category' => 'jeux-video', 'price' => 39.9, 'condition' => 'comme_neuf', 'brand' => 'Nintendo', 'rarity' => null, 'stock' => 6, 'no_image' => true],
-            ['vendor' => 'popgoodies', 'title' => 'Console Wii blanche + Wii Sports', 'category' => 'jeux-video', 'price' => 45, 'condition' => 'bon_etat', 'brand' => 'Nintendo', 'rarity' => null, 'stock' => 2, 'no_image' => true],
-            ['vendor' => 'popgoodies', 'title' => 'Manette PS1 originale', 'category' => 'jeux-video', 'price' => 14.9, 'condition' => 'usage', 'brand' => 'PlayStation', 'rarity' => null, 'stock' => 6, 'no_image' => true],
-            ['vendor' => 'popgoodies', 'title' => 'Console PSP-3000 + 5 jeux', 'category' => 'jeux-video', 'price' => 74, 'condition' => 'bon_etat', 'brand' => 'PlayStation', 'rarity' => null, 'stock' => 2, 'no_image' => true],
-            ['vendor' => 'popgoodies', 'title' => 'Console Dreamcast + Sonic Adventure', 'category' => 'jeux-video', 'price' => 99, 'condition' => 'bon_etat', 'brand' => null, 'rarity' => null, 'stock' => 1, 'no_image' => true],
+            // --- Jeux vidéo supplémentaires (consoles/manettes + Switch — vendeur PopGoodies) ---
+            ['vendor' => 'popgoodies', 'title' => 'Manette GameCube violette', 'category' => 'jeux-video', 'price' => 25, 'condition' => 'usage', 'brand' => 'Nintendo', 'rarity' => null, 'stock' => 4],
+            ['vendor' => 'popgoodies', 'title' => 'Console Game Boy Color transparente', 'category' => 'jeux-video', 'price' => 55, 'condition' => 'bon_etat', 'brand' => 'Nintendo', 'rarity' => null, 'stock' => 2],
+            ['vendor' => 'popgoodies', 'title' => 'Manette Xbox 360 sans fil', 'category' => 'jeux-video', 'price' => 18, 'condition' => 'usage', 'brand' => null, 'rarity' => null, 'stock' => 5],
+            ['vendor' => 'popgoodies', 'title' => 'Console Nintendo 64 grise + câbles', 'category' => 'jeux-video', 'price' => 79, 'condition' => 'bon_etat', 'brand' => 'Nintendo', 'rarity' => null, 'stock' => 1],
+            ['vendor' => 'popgoodies', 'title' => 'Console PS2 Slim + 2 manettes', 'category' => 'jeux-video', 'price' => 89, 'condition' => 'bon_etat', 'brand' => 'PlayStation', 'rarity' => null, 'stock' => 2],
+            ['vendor' => 'popgoodies', 'title' => 'The Legend of Zelda: Breath of the Wild - Switch', 'category' => 'jeux-video', 'price' => 42, 'condition' => 'comme_neuf', 'brand' => 'Nintendo', 'rarity' => null, 'stock' => 5],
+            ['vendor' => 'popgoodies', 'title' => 'Console Sega Mega Drive II', 'category' => 'jeux-video', 'price' => 65, 'condition' => 'bon_etat', 'brand' => null, 'rarity' => null, 'stock' => 1],
+            ['vendor' => 'popgoodies', 'title' => 'Manette Nintendo Switch Pro', 'category' => 'jeux-video', 'price' => 39.9, 'condition' => 'comme_neuf', 'brand' => 'Nintendo', 'rarity' => null, 'stock' => 6],
+            ['vendor' => 'popgoodies', 'title' => 'Console Wii blanche + Wii Sports', 'category' => 'jeux-video', 'price' => 45, 'condition' => 'bon_etat', 'brand' => 'Nintendo', 'rarity' => null, 'stock' => 2],
+            ['vendor' => 'popgoodies', 'title' => 'Manette PS1 originale', 'category' => 'jeux-video', 'price' => 14.9, 'condition' => 'usage', 'brand' => 'PlayStation', 'rarity' => null, 'stock' => 6],
+            ['vendor' => 'popgoodies', 'title' => 'Console PSP-3000 + 5 jeux', 'category' => 'jeux-video', 'price' => 74, 'condition' => 'bon_etat', 'brand' => 'PlayStation', 'rarity' => null, 'stock' => 2],
+            ['vendor' => 'popgoodies', 'title' => 'Console Dreamcast + Sonic Adventure', 'category' => 'jeux-video', 'price' => 99, 'condition' => 'bon_etat', 'brand' => null, 'rarity' => null, 'stock' => 1],
 
-            // --- Manga supplémentaires (sans photo, coffrets et packs multi-tomes — vendeur PopGoodies) ---
+            // --- Manga supplémentaires (coffrets et packs multi-tomes — vendeur PopGoodies) ---
             ['vendor' => 'popgoodies', 'title' => 'Coffret Dragon Ball Z complet', 'category' => 'manga', 'price' => 89, 'condition' => 'comme_neuf', 'brand' => null, 'rarity' => null, 'stock' => 1, 'no_image' => true],
             ['vendor' => 'popgoodies', 'title' => "L'Attaque des Titans - Coffret complet", 'category' => 'manga', 'price' => 145, 'condition' => 'comme_neuf', 'brand' => null, 'rarity' => null, 'stock' => 1, 'no_image' => true],
-            ['vendor' => 'popgoodies', 'title' => 'Death Note Tomes 1 à 5', 'category' => 'manga', 'price' => 38, 'condition' => 'bon_etat', 'brand' => null, 'rarity' => null, 'stock' => 2, 'no_image' => true],
+            ['vendor' => 'popgoodies', 'title' => 'Death Note Tomes 1 à 5', 'category' => 'manga', 'price' => 38, 'condition' => 'bon_etat', 'brand' => null, 'rarity' => null, 'stock' => 2],
             ['vendor' => 'popgoodies', 'title' => 'Fullmetal Alchemist - Coffret intégral', 'category' => 'manga', 'price' => 120, 'condition' => 'comme_neuf', 'brand' => null, 'rarity' => null, 'stock' => 1, 'no_image' => true],
             ['vendor' => 'popgoodies', 'title' => 'My Hero Academia Tomes 1 à 3', 'category' => 'manga', 'price' => 22, 'condition' => 'bon_etat', 'brand' => null, 'rarity' => null, 'stock' => 3, 'no_image' => true],
         ];
@@ -380,6 +419,24 @@ class DemoDataSeeder extends Seeder
                     ProductImage::create(['product_id' => $product->id, 'path' => "https://loremflickr.com/{$dimensions}/{$keyword}?lock={$product->id}", 'position' => 0]);
                     ProductImage::create(['product_id' => $product->id, 'path' => "https://loremflickr.com/{$dimensions}/{$keyword}?lock=".($product->id + 1000), 'position' => 1]);
                 }
+            }
+        }
+
+        // FIX: backfill for products seeded before their IMAGE_OVERRIDES entry
+        // existed. The block above only assigns a photo when a product row is
+        // first created (wasRecentlyCreated) — on a database already seeded
+        // (including production), 18 products stayed on 'no_image' forever
+        // even after gaining a real photo above, since updateOrCreate() found
+        // them already existing and never re-ran the image logic. Runs
+        // unconditionally and checks images()->doesntExist() itself, so it's
+        // safe to re-run on every seed (fresh or already-seeded) without
+        // duplicating images on products that already have one.
+        foreach (self::IMAGE_OVERRIDES as $title => $url) {
+            $product = Product::where('title', $title)->first();
+
+            if ($product && $product->images()->doesntExist()) {
+                ProductImage::create(['product_id' => $product->id, 'path' => $url, 'position' => 0]);
+                ProductImage::create(['product_id' => $product->id, 'path' => $url, 'position' => 1]);
             }
         }
 
