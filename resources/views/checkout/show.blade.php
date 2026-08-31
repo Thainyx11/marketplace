@@ -3,7 +3,16 @@
         <h2 class="font-extrabold text-2xl text-gray-900 dark:text-gray-100 leading-tight">{{ __('Commande') }}</h2>
     </x-slot>
 
-    <div class="py-10" x-data="{ shippingMethod: 'standard', base: {{ $total }}, fee: {{ \App\Http\Controllers\CheckoutController::EXPRESS_FEE }} }">
+    {{-- FIX: shippingMethod defaulted to a hardcoded 'standard' regardless of
+         what was submitted, while shipping_address and promo_code below both
+         correctly use old(). Reproduced live: pick Express, submit with an
+         invalid promo code, get redirected back with the input flashed
+         server-side (the controller does call ->withInput()) — but the radio
+         still silently shows Standard selected, because this literal never
+         looked at old('shipping_method') in the first place. Someone who
+         doesn't re-notice ends up paying for standard shipping while
+         believing they're still getting express. --}}
+    <div class="py-10" x-data="{ shippingMethod: '{{ old('shipping_method', 'standard') }}', base: {{ $total }}, fee: {{ \App\Http\Controllers\CheckoutController::EXPRESS_FEE }} }">
         <div class="max-w-3xl mx-auto sm:px-6 lg:px-8 space-y-6">
             @if ($errors->any())
                 <div class="bg-red-50 dark:bg-red-900/40 border border-red-200 dark:border-red-800 text-red-800 dark:text-red-200 rounded-2xl p-4 text-sm">
