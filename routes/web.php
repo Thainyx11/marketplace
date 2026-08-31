@@ -39,8 +39,20 @@ Route::get('sitemap.xml', function () {
                 'priority' => '0.6',
             ]));
 
-    return response()
-        ->view('sitemap', ['urls' => $urls])
+    // FIX: the XML prolog used to live inside sitemap.blade.php and 500'd in
+    // production only ("syntax error, unexpected identifier 'version'").
+    // Blade's own compiler gets confused scanning the raw template text for
+    // an opening-tag-like sequence before it becomes a string literal,
+    // reproducibly only when short_open_tag is on (it is here, not on the
+    // local/CI PHP CLI the test suite runs under). Building it in plain PHP
+    // here instead means Blade's compiler never sees it at all — confirmed
+    // safe directly on production via tinker before this fix was written.
+    // (A single-line "//" comment ends early at a literal closing-tag
+    // sequence — the exact two characters XML's own prolog closes with —
+    // which is why this note stops short of spelling that sequence out.)
+    $xmlDeclaration = '<?xml version="1.0" encoding="UTF-8"?>'."\n";
+
+    return response($xmlDeclaration.view('sitemap', ['urls' => $urls])->render())
         ->header('Content-Type', 'application/xml');
 })->name('sitemap');
 
